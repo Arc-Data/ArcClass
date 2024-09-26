@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
+using backend.Dtos;
 using backend.Dtos.Account;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -13,11 +15,13 @@ namespace backend.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signInManager = signInManager;
         }
 
         [HttpPost("student")]
@@ -55,5 +59,28 @@ namespace backend.Controllers
             }
             return StatusCode(500, createdStudent.Errors);
         }
+
+        [HttpPost("student/login")]
+        public async Task<IActionResult> StudentLogin(LoginDto loginDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(x => x.Email == loginDto.Email);
+            if (student == null) return Unauthorized("Invalid Credentials");
+            
+            var result = await _signInManager.CheckPasswordSignInAsync(student, loginDto.Password, false);
+            
+            if (!result.Succeeded) return  Unauthorized("Invalid Credentials");
+
+            return Ok(new StudentDto 
+            {
+                Email = student.Email,
+                FirstName = student.FirstName,
+                MiddleName = student.MiddleName,
+                LastName = student.LastName,
+                Token = _tokenService.CreateToken(student)
+            });
+        }
+        
     }
 }
