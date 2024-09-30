@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.Interfaces;
+using backend.Middlewares;
 using backend.Models;
 using backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 builder.Services.AddControllers()
 .AddNewtonsoftJson(options => {
@@ -69,6 +72,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
 app.Run();

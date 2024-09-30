@@ -15,6 +15,8 @@ namespace backend.Service
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
+        // Iconfiguration is essentially passed whenever you need to access secrets present in your app's
+        // appsettings.json (this is basically environments in C#)
         public TokenService(IConfiguration config)
         {
             _config = config;
