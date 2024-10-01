@@ -6,6 +6,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace backend.Controllers
 {
@@ -56,7 +57,25 @@ namespace backend.Controllers
                 }
                 return StatusCode(500, roleResult.Errors);
             }
-            return StatusCode(500, createdStudent.Errors);
+
+            foreach (var error in createdStudent.Errors)
+            {
+                if (error.Code == "DuplicateEmail" || error.Code == "DuplicateUserName")
+                {
+                    ModelState.AddModelError("Email", "This email is already taken.");
+                }
+                else if (error.Code.StartsWith("Password"))
+                {
+                    ModelState.AddModelError("Password", error.Description);
+                }
+                else
+                {
+                    ModelState.AddModelError(error.Code, error.Description);
+                }
+
+            }
+
+            return BadRequest(ModelState);
         }
 
         [HttpPost("student/login")]

@@ -11,13 +11,12 @@ export const AuthProvider = ({ children }) => {
     }
 
     const registerUser = async (data) => {
-        console.log("Register supposedly")
         try {
             const response = await axios.post('api/account/student', data)
             console.log(response);
         }
         catch (error) {
-            console.log(error)
+            throw error;
         }
     }
     

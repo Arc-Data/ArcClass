@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+// builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
 builder.Services.AddControllers()
 .AddNewtonsoftJson(options => {
@@ -88,7 +88,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+// app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
 app.Run();
