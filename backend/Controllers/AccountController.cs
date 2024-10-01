@@ -37,7 +37,6 @@ namespace backend.Controllers
                 FirstName = studentDto.FirstName,
                 MiddleName = studentDto.MiddleName,
                 LastName = studentDto.LastName,
-                BirthDate = studentDto.BirthDate
             };
 
             var createdStudent = await _userManager.CreateAsync(student, studentDto.Password);
