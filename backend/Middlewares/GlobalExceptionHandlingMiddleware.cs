@@ -11,9 +11,9 @@ namespace backend.Middlewares
 {
     public class GlobalExceptionHandlingMiddleware : IMiddleware
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
 
-        public GlobalExceptionHandlingMiddleware(ILogger logger) 
+        public GlobalExceptionHandlingMiddleware(ILogger<GlobalExceptionHandlingMiddleware> logger) 
         {
             _logger = logger;
         }
