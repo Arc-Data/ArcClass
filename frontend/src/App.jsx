@@ -5,18 +5,21 @@ import Landing from "./pages/Landing/Landing"
 import AuthLayout from "./layouts/AuthLayout"
 import SignIn from "./pages/Landing/SignIn"
 import SignUp from "./pages/Landing/SignUp"
+import { AuthProvider } from "./context/AuthContext"
 
 function App() {
 	return (
 		<BrowserRouter>
 			<ScrollToTop/>
-			<Routes>
-				<Route path="/" element={<Landing/>} />
-				<Route element={<AuthLayout/>}>
-					<Route path="/signin" element={<SignIn/>} />
-					<Route path="/signup" element={<SignUp/>} />
-				</Route>
-			</Routes>
+			<AuthProvider>
+				<Routes>
+					<Route path="/" element={<Landing/>} />
+					<Route element={<AuthLayout/>}>
+						<Route path="/signin" element={<SignIn/>} />
+						<Route path="/signup" element={<SignUp/>} />
+					</Route>
+				</Routes>
+			</AuthProvider>
 		</BrowserRouter>
 	)
 }

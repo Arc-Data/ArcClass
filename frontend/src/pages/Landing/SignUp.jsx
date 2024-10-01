@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 const SignUp = () => {
+    const { registerUser } = useContext(AuthContext)
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -19,8 +21,9 @@ const SignUp = () => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+        e.preventDefault()
+        console.log(formData)
+        registerUser(formData)
     }
 
     return (
