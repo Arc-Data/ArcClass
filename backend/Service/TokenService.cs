@@ -48,5 +48,20 @@ namespace backend.Service
 
             return tokenHandler.WriteToken(token);
         }
+
+        public RefreshToken GenerateRefreshToken(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RevokeRefreshToken(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ValidateRefreshToken(string token, string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

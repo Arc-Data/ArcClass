@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241004125228_AddRefreshTokenTable")]
+    partial class AddRefreshTokenTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "40acc3a1-dce1-4f90-996a-65d3264928e0",
+                            Id = "94bb6be8-866a-4648-9914-dd9b0fb3a2b7",
                             Name = "Teacher",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3c6b6390-151f-48c0-a7ff-eeeb29bb755e",
+                            Id = "3d419d09-20ef-466e-b840-8129d173488b",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
