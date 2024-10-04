@@ -9,8 +9,6 @@ import AuthContext from "../../context/AuthContext";
 * Consider font sizing 
 */
 
-
-
 const SignUp = () => {
     const { registerUser } = useContext(AuthContext)
     const [ formData, setFormData ] = useState({
@@ -34,7 +32,6 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(formData)
         try {
             await registerUser(formData)
         }
@@ -67,7 +64,7 @@ const SignUp = () => {
 
     return (
         <form className="px-6 py-4 space-y-4" onSubmit={handleSubmit}>
-            <p className="font-heading text-2xl">Create Account</p>
+            <p className="text-2xl font-heading">Create Account</p>
             {errors?.general && <p className="text-red-500">{errors?.general}</p>} {/* General error message */}
 
 

@@ -7,7 +7,13 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
     const loginUser = async (data) => {
-        console.log("Login supposedly")
+        try {
+            const response = await axios.post('api/account/student/login', data)
+            console.log(response)
+        }
+        catch (error) {
+            throw error
+        }
     }
 
     const registerUser = async (data) => {

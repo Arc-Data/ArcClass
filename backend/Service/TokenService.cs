@@ -26,8 +26,9 @@ namespace backend.Service
         {
             var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Email, user.Email),
-                new(JwtRegisteredClaimNames.GivenName, user.FirstName)
+                new(JwtRegisteredClaimNames.Email, user.Email!),
+                new(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new(JwtRegisteredClaimNames.FamilyName, user.LastName)
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

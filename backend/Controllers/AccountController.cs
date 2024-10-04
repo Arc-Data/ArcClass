@@ -40,18 +40,13 @@ namespace backend.Controllers
                 LastName = studentDto.LastName,
             };
 
-            var createdStudent = await _userManager.CreateAsync(student, studentDto.Password);
+            var createdStudent = await _userManager.CreateAsync(student, studentDto.Password!);
             if (createdStudent.Succeeded)
             {
                 var roleResult = await _userManager.AddToRoleAsync(student, "Student");
                 if (roleResult.Succeeded)
                 {
-                    return Ok(new StudentDto
-                    {
-                        Email = student.Email,
-                        FirstName = student.FirstName,
-                        MiddleName = student.MiddleName,
-                        LastName = student.LastName,
+                    return Ok(new {
                         Token = _tokenService.CreateToken(student)
                     });
                 }
@@ -90,13 +85,8 @@ namespace backend.Controllers
             
             if (!result.Succeeded) return  Unauthorized("Invalid Credentials");
 
-            return Ok(new StudentDto 
-            {
-                Email = student.Email,
-                FirstName = student.FirstName,
-                MiddleName = student.MiddleName,
-                LastName = student.LastName,
-                Token = _tokenService.CreateToken(student)
+            return Ok(new {
+                Token =_tokenService.CreateToken(student)
             });
         }
         
