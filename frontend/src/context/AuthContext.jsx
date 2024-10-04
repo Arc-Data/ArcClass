@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
     const loginUser = async (data) => {
         try {
             const response = await axios.post('api/account/student/login', data)
-            console.log(response)
         }
         catch (error) {
             throw error
@@ -19,7 +18,6 @@ export const AuthProvider = ({ children }) => {
     const registerUser = async (data) => {
         try {
             const response = await axios.post('api/account/student', data)
-            console.log(response);
         }
         catch (error) {
             throw error;

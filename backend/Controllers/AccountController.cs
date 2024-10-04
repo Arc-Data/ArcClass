@@ -3,6 +3,7 @@ using backend.Dtos;
 using backend.Dtos.Account;
 using backend.Interfaces;
 using backend.Models;
+using backend.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,14 @@ namespace backend.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        private readonly IAccountService _accountService;
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
+        public AccountController(IAccountService accountService, UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
         {
+            _accountService = accountService;
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
@@ -31,46 +34,30 @@ namespace backend.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var student = new Student
+            var (succeeded, token, errors) = await _accountService.CreateStudentAsync(studentDto);
+        
+            if (succeeded) return Ok(new {Token = token});
+            
+            if (errors != null)
             {
-                UserName = studentDto.Email,
-                Email = studentDto.Email,
-                FirstName = studentDto.FirstName,
-                MiddleName = studentDto.MiddleName,
-                LastName = studentDto.LastName,
-            };
-
-            var createdStudent = await _userManager.CreateAsync(student, studentDto.Password!);
-            if (createdStudent.Succeeded)
-            {
-                var roleResult = await _userManager.AddToRoleAsync(student, "Student");
-                if (roleResult.Succeeded)
+                foreach (var error in errors)
                 {
-                    return Ok(new {
-                        Token = _tokenService.CreateToken(student)
-                    });
+                     if (error.Code == "DuplicateEmail" || error.Code == "DuplicateUserName")
+                    {
+                        ModelState.AddModelError("Email", "This email is already taken.");
+                    }
+                    else if (error.Code.StartsWith("Password"))
+                    {
+                        ModelState.AddModelError("Password", error.Description);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
                 }
-                return StatusCode(500, roleResult.Errors);
             }
 
-            foreach (var error in createdStudent.Errors)
-            {
-                if (error.Code == "DuplicateEmail" || error.Code == "DuplicateUserName")
-                {
-                    ModelState.AddModelError("Email", "This email is already taken.");
-                }
-                else if (error.Code.StartsWith("Password"))
-                {
-                    ModelState.AddModelError("Password", error.Description);
-                }
-                else
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-
-            }
-
-            return BadRequest(ModelState);
+            return StatusCode(500);
         }
 
         [HttpPost("student/login")]
@@ -78,16 +65,11 @@ namespace backend.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(x => x.Email == loginDto.Email);
-            if (student == null) return Unauthorized("Invalid Credentials");
-            
-            var result = await _signInManager.CheckPasswordSignInAsync(student, loginDto.Password, false);
-            
-            if (!result.Succeeded) return  Unauthorized("Invalid Credentials");
+            var (succeeded, token) = await _accountService.LoginStudentAsync(loginDto);
 
-            return Ok(new {
-                Token =_tokenService.CreateToken(student)
-            });
+            if (succeeded) return Ok(new { Token = token});
+
+            return Unauthorized("Invalid Credentials");
         }
         
     }
