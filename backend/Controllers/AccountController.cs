@@ -71,6 +71,21 @@ namespace backend.Controllers
 
             return Unauthorized("Invalid Credentials");
         }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+            if (string.IsNullOrWhiteSpace(refreshToken))  return BadRequest("Refresh token is required");
+            
+            var (succeeded, newToken, newRefreshToken) = await _accountService.RefreshTokenAsync(refreshToken);
+
+            if(!succeeded) return Unauthorized();
+
+            return Ok(new {
+                Token = newToken,
+                RefreshToken = newRefreshToken
+            });
+        }
         
     }
 }

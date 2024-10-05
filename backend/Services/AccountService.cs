@@ -71,9 +71,24 @@ namespace backend.Services
             return (true, token, refreshToken.Token);
         }
 
-        public Task<(bool Succeeded, string? newToken, string? NewREfreshToken)> RefreshTokenAsync(string refreshToken)
+        public async Task<(bool Succeeded, string? newToken, string? NewRefreshToken)> RefreshTokenAsync(string refreshToken)
         {
-            throw new NotImplementedException();
+            var existingToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == refreshToken && !t.IsRevoked);
+
+            if (existingToken == null || existingToken.ExpiryDate <= DateTime.UtcNow)
+            {
+                return (false, null, null);
+            }
+
+            var newToken = _tokenService.CreateToken(existingToken.AppUser!);
+            var newRefreshToken = _tokenService.GenerateRefreshToken(existingToken.UserId);
+            
+            existingToken.IsRevoked = true;
+
+            await _context.RefreshTokens.AddAsync(newRefreshToken);
+            await _context.SaveChangesAsync();
+            
+            return (true, newToken, newRefreshToken.Token);
         }
 
         public Task<bool> RevokeTokenAsync(string refreshToken)
