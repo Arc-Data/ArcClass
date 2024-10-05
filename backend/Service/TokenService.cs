@@ -51,7 +51,14 @@ namespace backend.Service
 
         public RefreshToken GenerateRefreshToken(string userId)
         {
-            throw new NotImplementedException();
+            return new RefreshToken
+            {
+                Token = Guid.NewGuid().ToString(),
+                ExpiryDate = DateTime.UtcNow.AddDays(7),
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false,
+                UserId = userId,
+            };
         }
 
         public void RevokeRefreshToken(string token)

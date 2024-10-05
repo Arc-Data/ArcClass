@@ -16,16 +16,10 @@ namespace backend.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly ITokenService _tokenService;
-        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(IAccountService accountService, UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _userManager = userManager;
-            _tokenService = tokenService;
-            _signInManager = signInManager;
         }
 
         [HttpPost("student")]
@@ -34,9 +28,12 @@ namespace backend.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var (succeeded, token, errors) = await _accountService.CreateStudentAsync(studentDto);
+            var (succeeded, token, refreshToken, errors) = await _accountService.CreateStudentAsync(studentDto);
         
-            if (succeeded) return Ok(new {Token = token});
+            if (succeeded) return Ok(new {
+                Token = token,
+                RefreshToken = refreshToken
+            });
             
             if (errors != null)
             {
@@ -65,9 +62,12 @@ namespace backend.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var (succeeded, token) = await _accountService.LoginStudentAsync(loginDto);
+            var (succeeded, token, refreshToken) = await _accountService.LoginStudentAsync(loginDto);
 
-            if (succeeded) return Ok(new { Token = token});
+            if (succeeded) return Ok(new { 
+                Token = token,
+                RefreshToken = refreshToken
+            });
 
             return Unauthorized("Invalid Credentials");
         }

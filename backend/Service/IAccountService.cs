@@ -12,7 +12,9 @@ namespace backend.Service
 {
     public interface IAccountService
     {
-        public Task<(bool Succeeded, string? Token, IEnumerable<IdentityError>? Errors)> CreateStudentAsync(CreateStudentDto studentDto);
+        public Task<(bool Succeeded, string? Token, string? RefreshToken, IEnumerable<IdentityError>? Errors)> CreateStudentAsync(CreateStudentDto studentDto);
         public Task<(bool Succeeded, string? Token)> LoginStudentAsync(LoginDto loginDto);
+        public Task<(bool Succeeded, string? newToken, string? NewREfreshToken)> RefreshTokenAsync(string refreshToken);
+        public Task<bool> RevokeTokenAsync(string refreshToken);
     }
 }
