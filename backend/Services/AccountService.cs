@@ -63,7 +63,12 @@ namespace backend.Services
             if (!result.Succeeded) return (false, null, null);
 
             var token = _tokenService.CreateToken(student);
-            return (true, token, null);
+            var refreshToken = _tokenService.GenerateRefreshToken(student.Id);
+
+            await _context.RefreshTokens.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
+
+            return (true, token, refreshToken.Token);
         }
 
         public Task<(bool Succeeded, string? newToken, string? NewREfreshToken)> RefreshTokenAsync(string refreshToken)

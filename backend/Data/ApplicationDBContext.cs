@@ -18,6 +18,7 @@ namespace backend.Data
 
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Student> Students { get; set; } = null!;
+        public DbSet<RefreshToken> RefreshTokens { get; set; }  
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
