@@ -31,8 +31,8 @@ namespace backend.Controllers
             var (succeeded, token, refreshToken, errors) = await _accountService.CreateStudentAsync(studentDto);
         
             if (succeeded) return Ok(new {
-                Token = token,
-                RefreshToken = refreshToken
+                Access = token,
+                Refresh = refreshToken
             });
             
             if (errors != null)
@@ -54,7 +54,7 @@ namespace backend.Controllers
                 }
             }
 
-            return StatusCode(500);
+            return BadRequest(ModelState);
         }
 
         [HttpPost("student/login")]
@@ -65,8 +65,8 @@ namespace backend.Controllers
             var (succeeded, token, refreshToken) = await _accountService.LoginStudentAsync(loginDto);
 
             if (succeeded) return Ok(new { 
-                Token = token,
-                RefreshToken = refreshToken
+                Access = token,
+                Refresh = refreshToken
             });
 
             return Unauthorized("Invalid Credentials");
@@ -76,14 +76,14 @@ namespace backend.Controllers
         public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))  return BadRequest("Refresh token is required");
-            
+
             var (succeeded, newToken, newRefreshToken) = await _accountService.RefreshTokenAsync(refreshToken);
 
             if(!succeeded) return Unauthorized();
 
             return Ok(new {
-                Token = newToken,
-                RefreshToken = newRefreshToken
+                Access = newToken,
+                Refresh = newRefreshToken
             });
         }
         

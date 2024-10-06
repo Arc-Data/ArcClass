@@ -30,14 +30,14 @@ const SignIn = () => {
         
         setErrors();
     }
-    
+
     return (
         <form className="px-6 py-4 space-y-4" onSubmit={handleSubmit}>
             <p className="text-2xl font-heading">Login</p>
             {errors && <p className="text-red-500">{errors}</p>} {/* General error message */}
 
             <div>
-                <label for="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
+                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
                 <input 
                     type="text" 
                     id="email"
@@ -47,7 +47,7 @@ const SignIn = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="johndoe@gmail.com" required />
             </div>
             <div>
-                <label for="last_name" className="block mb-2 text-sm font-medium text-gray-900">Password</label>
+                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Password</label>
                 <input 
                     type="password" 
                     id="password"

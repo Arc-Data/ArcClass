@@ -37,6 +37,7 @@ const SignUp = () => {
         }
         catch (error)
         {
+            console.log(error)
             if (error.response && error.response.data) {
                 const responseErrors = error.response.data
                 const newErrors = {};

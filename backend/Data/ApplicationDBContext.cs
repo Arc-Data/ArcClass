@@ -36,6 +36,12 @@ namespace backend.Data
                 }
             ];
             builder.Entity<IdentityRole>().HasData(roles);
+
+            builder.Entity<RefreshToken>()
+                .HasOne(r => r.AppUser)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
