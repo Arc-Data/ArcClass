@@ -43,10 +43,19 @@ export const AuthProvider = ({ children }) => {
             throw error;
         }
     }
+
+    const logoutUser = async() => {
+        setAuthTokens(null)
+        setUser(null)
+        localStorage.removeItem('authTokens')
+    }
     
     const contextData = {
         loginUser,
         registerUser,
+        logoutUser,
+        user,
+        authTokens
     }
 
     return (

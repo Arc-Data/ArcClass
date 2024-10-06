@@ -6,6 +6,9 @@ import AuthLayout from "./layouts/AuthLayout"
 import SignIn from "./pages/Landing/SignIn"
 import SignUp from "./pages/Landing/SignUp"
 import { AuthProvider } from "./context/AuthContext"
+import BaseRoutes from "./routes/BaseRoutes"
+import UserRoutes from "./routes/UserRoutes"
+import Home from "./pages/Home"
 
 function App() {
 	return (
@@ -13,11 +16,17 @@ function App() {
 			<ScrollToTop/>
 			<AuthProvider>
 				<Routes>
-					<Route path="/" element={<Landing/>} />
-					<Route element={<AuthLayout/>}>
-						<Route path="/signin" element={<SignIn/>} />
-						<Route path="/signup" element={<SignUp/>} />
+					<Route element={<BaseRoutes />}>
+						<Route path="/" element={<Landing/>} />
+						<Route element={<AuthLayout/>}>
+							<Route path="/signin" element={<SignIn/>} />
+							<Route path="/signup" element={<SignUp/>} />
+						</Route>
 					</Route>
+					<Route element={<UserRoutes/>}>
+						<Route path="/home" element={<Home/>} />					
+					</Route>
+					
 				</Routes>
 			</AuthProvider>
 		</BrowserRouter>
