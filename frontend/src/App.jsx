@@ -9,6 +9,7 @@ import { AuthProvider } from "./context/AuthContext"
 import BaseRoutes from "./routes/BaseRoutes"
 import UserRoutes from "./routes/UserRoutes"
 import Home from "./pages/Home"
+import DefaultLayout from "./layouts/DefaultLayout"
 
 function App() {
 	return (
@@ -24,7 +25,9 @@ function App() {
 						</Route>
 					</Route>
 					<Route element={<UserRoutes/>}>
-						<Route path="/home" element={<Home/>} />					
+						<Route element={<DefaultLayout />}>
+							<Route path="/home" element={<Home/>} />					
+						</Route>
 					</Route>
 					
 				</Routes>

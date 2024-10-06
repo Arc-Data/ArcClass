@@ -1,10 +1,17 @@
 import { Outlet } from "react-router-dom"
+import UserNav from "../components/UserNav"
+import Sidebar from "../components/Sidebar"
 
 const DefaultLayout = () => {
   return (
     <div>
-        <div>Default Layout in here</div>
-        <Outlet />
+        <UserNav/>
+        <div className="grid grid-cols-[280px_1fr] py-16 min-h-screen h-full">
+            <Sidebar />
+            <div className="">
+                <Outlet />
+            </div>
+        </div>
     </div>
   )
 }

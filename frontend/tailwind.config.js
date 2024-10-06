@@ -88,6 +88,7 @@ export default {
           950: 'var(--secondary-950)',
         },
         'accent': {
+          'default': 'var(--accent)',
           50: 'var(--accent-50)',
           100: 'var(--accent-100)',
           200: 'var(--accent-200)',
