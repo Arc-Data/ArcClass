@@ -1,5 +1,5 @@
 import axios from "../utils/axios";
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { jwtDecode } from "jwt-decode"
 
 const AuthContext = createContext()
@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
         const tokens = localStorage.getItem("authTokens")
         return tokens ? jwtDecode(JSON.parse(tokens).access) : null
     })
+    const role = useMemo(() => user?.role || null, [user])
 
     const saveTokenData = (response) => {
         setAuthTokens(response.data)
@@ -23,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         setUser(user)
         localStorage.setItem('authTokens', JSON.stringify(response.data))
     }
-
+    
     const loginUser = async (data) => {
         try {
             const response = await axios.post('api/account/student/login', data)
@@ -55,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         registerUser,
         logoutUser,
         user,
+        role,
         authTokens
     }
 

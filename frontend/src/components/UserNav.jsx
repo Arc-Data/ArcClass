@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa";
 
 
 const UserNav = () => {
-    const { logoutUser } = useContext(AuthContext)
+    const { logoutUser, role } = useContext(AuthContext)
     
     return (
         <div className="fixed top-0 w-full shadow bg-background-default">
@@ -13,11 +13,14 @@ const UserNav = () => {
                 <Link to="/" className="text-2xl font-heading">ArcClass</Link>
 
                 <div className="flex items-center gap-8 ml-auto">
+                    {role === "Teacher"
+                    &&
                     <div className="p-3 rounded-full bg-background-100">
                         <FaPlus />
                     </div>
+                    }
                     <button className="" onClick={logoutUser}>Logout</button>
-                </div>'
+                </div>
             </div>
         </div>
     )
