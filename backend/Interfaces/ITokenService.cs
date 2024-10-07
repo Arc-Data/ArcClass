@@ -8,7 +8,7 @@ namespace backend.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(AppUser user);
+        string CreateToken(AppUser user, IList<string> roles);
         RefreshToken GenerateRefreshToken(string userId);
         bool ValidateRefreshToken(string token, string userId);
         void RevokeRefreshToken(string token);

@@ -22,7 +22,7 @@ namespace backend.Service
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:SigningKey"]));
         }
-        public string CreateToken(AppUser user)
+        public string CreateToken(AppUser user, IList<string> roles)
         {
             var claims = new List<Claim>
             {
@@ -30,6 +30,11 @@ namespace backend.Service
                 new(JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new(JwtRegisteredClaimNames.FamilyName, user.LastName)
             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

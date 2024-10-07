@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Enums;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Dtos.Account
@@ -19,7 +20,8 @@ namespace backend.Dtos.Account
         [Required]
         public string MiddleName { get; set; } = String.Empty;
         [Required]
-        public string LastName { get; set; } = String.Empty;   
+        public string LastName { get; set; } = String.Empty;  
+        public AccountType Account { get; set; } 
     }
 
 }

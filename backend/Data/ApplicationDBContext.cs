@@ -33,6 +33,10 @@ namespace backend.Data
                 new() {
                     Name = "Student",
                     NormalizedName = "STUDENT"
+                },
+                new() {
+                    Name = "Teacher",
+                    NormalizedName = "TEACHER"
                 }
             ];
             builder.Entity<IdentityRole>().HasData(roles);

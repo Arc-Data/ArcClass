@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.Dtos;
 using backend.Dtos.Account;
+using backend.Enums;
 using backend.Interfaces;
 using backend.Models;
 using backend.Service;
@@ -30,23 +31,40 @@ namespace backend.Services
         }
         public async Task<(bool Succeeded, string? Token, string? refreshToken, IEnumerable<IdentityError>? Errors)> CreateStudentAsync(CreateStudentDto studentDto)
         {
-            var student = new Student
+            AppUser user;
+            if (studentDto.Account == AccountType.Student)
             {
-                UserName = studentDto.Email,
-                Email = studentDto.Email,
-                FirstName = studentDto.FirstName,
-                MiddleName = studentDto.MiddleName,
-                LastName = studentDto.LastName,
-            };
+                user = new Student
+                {
+                    UserName = studentDto.Email,
+                    Email = studentDto.Email,
+                    FirstName = studentDto.FirstName,
+                    MiddleName = studentDto.MiddleName,
+                    LastName = studentDto.LastName,
+                };
+            }
+            else 
+            {
+                user = new Teacher
+                {
+                    UserName = studentDto.Email,
+                    Email = studentDto.Email,
+                    FirstName = studentDto.FirstName,
+                    MiddleName = studentDto.MiddleName,
+                    LastName = studentDto.LastName,
+                };
+            }
 
-            var result = await _userManager.CreateAsync(student, studentDto.Password!);
+            var result = await _userManager.CreateAsync(user, studentDto.Password!);
             if (!result.Succeeded) return (false, null, null, result.Errors);
 
-            var roleResult = await _userManager.AddToRoleAsync(student, "Student");
+            var roleName = studentDto.Account == AccountType.Student ? "Student" : "Teacher";
+            var roleResult = await _userManager.AddToRoleAsync(user, roleName);
             if (!roleResult.Succeeded) return (false, null, null, roleResult.Errors);
 
-            var token = _tokenService.CreateToken(student);
-            var refreshToken = _tokenService.GenerateRefreshToken(student.Id);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _tokenService.CreateToken(user, roles);
+            var refreshToken = _tokenService.GenerateRefreshToken(user.Id);
 
             await _context.RefreshTokens.AddAsync(refreshToken);
             await _context.SaveChangesAsync();
@@ -62,7 +80,9 @@ namespace backend.Services
 
             if (!result.Succeeded) return (false, null, null);
 
-            var token = _tokenService.CreateToken(student);
+            var roles = await _userManager.GetRolesAsync(student);
+            
+            var token = _tokenService.CreateToken(student, roles);
             var refreshToken = _tokenService.GenerateRefreshToken(student.Id);
 
             await _context.RefreshTokens.AddAsync(refreshToken);
@@ -81,8 +101,10 @@ namespace backend.Services
             {
                 return (false, null, null);
             }
+            
+            var roles = await _userManager.GetRolesAsync(existingToken.AppUser);
 
-            var newToken = _tokenService.CreateToken(existingToken.AppUser);
+            var newToken = _tokenService.CreateToken(existingToken.AppUser, roles);
             var newRefreshToken = _tokenService.GenerateRefreshToken(existingToken.UserId);
             
             existingToken.IsRevoked = true;
