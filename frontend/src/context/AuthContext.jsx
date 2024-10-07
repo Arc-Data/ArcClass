@@ -27,17 +27,18 @@ export const AuthProvider = ({ children }) => {
     
     const loginUser = async (data) => {
         try {
-            const response = await axios.post('api/account/student/login', data)
+            const response = await axios.post('api/account/login', data)
             saveTokenData(response)
         }
         catch (error) {
+            console.log(error)
             throw error
         }
     }
 
     const registerUser = async (data) => {
         try {
-            const response = await axios.post('api/account/student', data)
+            const response = await axios.post('api/account', data)
             saveTokenData(response)
         }
         catch (error) {

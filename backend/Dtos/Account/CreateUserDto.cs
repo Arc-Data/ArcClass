@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace backend.Dtos.Account
 {
-    public class CreateStudentDto
+    public class CreateUserDto
     {
         [Required]
         [EmailAddress]

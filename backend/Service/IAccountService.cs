@@ -12,8 +12,8 @@ namespace backend.Service
 {
     public interface IAccountService
     {
-        public Task<(bool Succeeded, string? Token, string? refreshToken, IEnumerable<IdentityError>? Errors)> CreateStudentAsync(CreateStudentDto studentDto);
-        public Task<(bool Succeeded, string? Token, string? refreshToken)> LoginStudentAsync(LoginDto loginDto);
+        public Task<(bool Succeeded, string? Token, string? refreshToken, IEnumerable<IdentityError>? Errors)> CreateUserAsync(CreateUserDto userDto);
+        public Task<(bool Succeeded, string? Token, string? refreshToken)> LoginUserAsync(LoginDto loginDto);
         public Task<(bool Succeeded, string? newToken, string? NewRefreshToken)> RefreshTokenAsync(string refreshToken);
         public Task<bool> RevokeTokenAsync(string refreshToken);
     }

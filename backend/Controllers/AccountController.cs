@@ -22,13 +22,13 @@ namespace backend.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("student")]
-        public async Task<IActionResult> CreateStudent([FromBody] CreateStudentDto studentDto)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto studentDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var (succeeded, token, refreshToken, errors) = await _accountService.CreateStudentAsync(studentDto);
+            var (succeeded, token, refreshToken, errors) = await _accountService.CreateUserAsync(studentDto);
         
             if (succeeded) return Ok(new {
                 Access = token,
@@ -57,12 +57,12 @@ namespace backend.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPost("student/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> StudentLogin(LoginDto loginDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var (succeeded, token, refreshToken) = await _accountService.LoginStudentAsync(loginDto);
+            var (succeeded, token, refreshToken) = await _accountService.LoginUserAsync(loginDto);
 
             if (succeeded) return Ok(new { 
                 Access = token,

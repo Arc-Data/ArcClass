@@ -20,7 +20,7 @@ namespace backend.Service
         public TokenService(IConfiguration config)
         {
             _config = config;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:SigningKey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JWT:SigningKey"]!));
         }
         public string CreateToken(AppUser user, IList<string> roles)
         {

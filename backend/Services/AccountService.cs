@@ -29,36 +29,36 @@ namespace backend.Services
             _signInManager = signInManager;
             _context = context;
         }
-        public async Task<(bool Succeeded, string? Token, string? refreshToken, IEnumerable<IdentityError>? Errors)> CreateStudentAsync(CreateStudentDto studentDto)
+        public async Task<(bool Succeeded, string? Token, string? refreshToken, IEnumerable<IdentityError>? Errors)> CreateUserAsync(CreateUserDto userDto)
         {
             AppUser user;
-            if (studentDto.Account == AccountType.Student)
+            if (userDto.Account == AccountType.Student)
             {
                 user = new Student
                 {
-                    UserName = studentDto.Email,
-                    Email = studentDto.Email,
-                    FirstName = studentDto.FirstName,
-                    MiddleName = studentDto.MiddleName,
-                    LastName = studentDto.LastName,
+                    UserName = userDto.Email,
+                    Email = userDto.Email,
+                    FirstName = userDto.FirstName,
+                    MiddleName = userDto.MiddleName,
+                    LastName = userDto.LastName,
                 };
             }
             else 
             {
                 user = new Teacher
                 {
-                    UserName = studentDto.Email,
-                    Email = studentDto.Email,
-                    FirstName = studentDto.FirstName,
-                    MiddleName = studentDto.MiddleName,
-                    LastName = studentDto.LastName,
+                    UserName = userDto.Email,
+                    Email = userDto.Email,
+                    FirstName = userDto.FirstName,
+                    MiddleName = userDto.MiddleName,
+                    LastName = userDto.LastName,
                 };
             }
 
-            var result = await _userManager.CreateAsync(user, studentDto.Password!);
+            var result = await _userManager.CreateAsync(user, userDto.Password!);
             if (!result.Succeeded) return (false, null, null, result.Errors);
 
-            var roleName = studentDto.Account == AccountType.Student ? "Student" : "Teacher";
+            var roleName = userDto.Account == AccountType.Student ? "Student" : "Teacher";
             var roleResult = await _userManager.AddToRoleAsync(user, roleName);
             if (!roleResult.Succeeded) return (false, null, null, roleResult.Errors);
 
@@ -71,19 +71,19 @@ namespace backend.Services
             return (true, token, refreshToken.Token, null);
         }
 
-        public async Task<(bool Succeeded, string? Token, string? refreshToken)> LoginStudentAsync(LoginDto loginDto)
+        public async Task<(bool Succeeded, string? Token, string? refreshToken)> LoginUserAsync(LoginDto loginDto)
         {
-            var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(x => x.Email == loginDto.Email);
-            if (student == null) return (false, null, null);
+            var user = await _userManager.Users.OfType<AppUser>().FirstOrDefaultAsync(x => x.Email == loginDto.Email);
+            if (user == null) return (false, null, null);
 
-            var result = await _signInManager.CheckPasswordSignInAsync(student, loginDto.Password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded) return (false, null, null);
 
-            var roles = await _userManager.GetRolesAsync(student);
+            var roles = await _userManager.GetRolesAsync(user);
             
-            var token = _tokenService.CreateToken(student, roles);
-            var refreshToken = _tokenService.GenerateRefreshToken(student.Id);
+            var token = _tokenService.CreateToken(user, roles);
+            var refreshToken = _tokenService.GenerateRefreshToken(user.Id);
 
             await _context.RefreshTokens.AddAsync(refreshToken);
             await _context.SaveChangesAsync();
