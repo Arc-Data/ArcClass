@@ -16,10 +16,11 @@ namespace backend.Data
             
         }
 
-        public DbSet<Teacher> Teachers { get; set; } = null!;
-        public DbSet<Student> Students { get; set; } = null!;
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Student> Students { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }  
 
+        public DbSet<Classroom> Classrooms { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -27,7 +28,7 @@ namespace backend.Data
             List<IdentityRole> roles =
             [
                 new() {
-                    Name = "Teacher",
+                    Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
                 new() {
@@ -46,6 +47,12 @@ namespace backend.Data
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Classroom>()
+                .HasOne(c => c.Teacher)
+                .WithMany(t => t.Classrooms)
+                .HasForeignKey(c => c.TeacherId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
