@@ -81,7 +81,6 @@ namespace backend.Services
             if (!result.Succeeded) return (false, null, null);
 
             var roles = await _userManager.GetRolesAsync(user);
-            
             var token = _tokenService.CreateToken(user, roles);
             var refreshToken = _tokenService.GenerateRefreshToken(user.Id);
 

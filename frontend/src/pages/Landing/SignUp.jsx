@@ -72,7 +72,6 @@ const SignUp = () => {
 
     return (
         <div>
-            {/* Step 0 */}
             <div className={`${formStep === 0 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'} transition-opacity duration-300 transform`}>
                 {formStep === 0 && (
                     <div className="px-6 py-4"> 
@@ -97,7 +96,6 @@ const SignUp = () => {
                 )}
             </div>
     
-            {/* Step 1 */}
             <div className={`${formStep === 1 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'} transition-opacity duration-300 transform`}>
                 {formStep === 1 && (
                     <form className="px-6 py-4 space-y-4" onSubmit={handleSubmit}>
@@ -108,7 +106,6 @@ const SignUp = () => {
                         <p className="text-xl font-heading">Create {formData.account} Account</p>
                         {errors?.general && <p className="text-red-500">{errors?.general}</p>}
                         
-                        {/* First Name */}
                         <div>
                             <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900">First Name</label>
                             <input 
@@ -121,7 +118,6 @@ const SignUp = () => {
                             {errors?.firstName && <p className="mt-2 text-sm text-red-600">{errors.firstName}</p>}
                         </div>
 
-                        {/* Last Name */}
                         <div>
                             <label htmlFor="last_name" className="block mb-2 text-sm font-medium text-gray-900">Last Name</label>
                             <input 
@@ -134,7 +130,6 @@ const SignUp = () => {
                             {errors?.lastName && <p className="mt-2 text-sm text-red-600">{errors.lastName}</p>}
                         </div>
 
-                        {/* Middle Name */}
                         <div>
                             <label htmlFor="middle_name" className="block mb-2 text-sm font-medium text-gray-900">Middle Name</label>
                             <input 
@@ -147,7 +142,6 @@ const SignUp = () => {
                             {errors?.middleName && <p className="mt-2 text-sm text-red-600">{errors.middleName}</p>}
                         </div>
 
-                        {/* Email */}
                         <div>
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
                             <input 
@@ -160,7 +154,6 @@ const SignUp = () => {
                             {errors?.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
                         </div>
 
-                        {/* Password */}
                         <div>
                             <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Password</label>
                             <input 
