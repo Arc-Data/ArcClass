@@ -13,6 +13,8 @@ using System.Security.Claims;
 using backend.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using backend.Interfaces;
 
 namespace backend.Controllers
 {
@@ -22,11 +24,13 @@ namespace backend.Controllers
     {
         private readonly IClassroomService _classroomService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IClassroomRepository _classroomRepo;
 
-        public ClassroomController(IClassroomService classroomService, ApplicationDBContext context, UserManager<AppUser> userManager)
+        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo)
         {
             _classroomService = classroomService;
             _userManager = userManager;
+            _classroomRepo = classroomRepo;
         }
 
         [HttpPost]
@@ -42,9 +46,16 @@ namespace backend.Controllers
             }
 
             var uniqueId = await _classroomService.GenerateUniqueRandomId();
-            return Ok(new {
-                Id = uniqueId
-            });
+            var classroom = new Classroom {
+                Id = uniqueId,
+                Name = "Test Classroom",
+                TeacherId = teacher.Id,
+                SemesterStart = DateTime.UtcNow
+            };
+
+            await _classroomRepo.CreateAsync(classroom);
+
+            return Ok(classroom);
         }
 
         [HttpPost("join")]

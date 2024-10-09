@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using backend.Data;
 using backend.Interfaces;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
@@ -17,9 +18,17 @@ namespace backend.Repositories
         {
             _context = context;
         }
+
         public async Task<bool> ClassroomExists(string classroomId)
         {
             return await _context.Classrooms.AnyAsync(c => c.Id == classroomId);
+        }
+
+        public async Task<Classroom?> CreateAsync(Classroom classroom)
+        {
+            _context.Classrooms.Add(classroom);
+            await _context.SaveChangesAsync();
+            return classroom;
         }
     }
 }
