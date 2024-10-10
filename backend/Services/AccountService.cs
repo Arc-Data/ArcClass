@@ -12,7 +12,9 @@ using backend.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-
+/* TODO:
+    Create a background service that deletes tokens past expiry
+*/
 namespace backend.Services
 {
     public class AccountService : IAccountService
@@ -93,17 +95,22 @@ namespace backend.Services
         public async Task<(bool Succeeded, string? newToken, string? NewRefreshToken)> RefreshTokenAsync(string refreshToken)
         {
             var existingToken = await _context.RefreshTokens
-                .Include(t => t.AppUser)
                 .FirstOrDefaultAsync(t => t.Token == refreshToken && !t.IsRevoked);
 
-            if (existingToken == null || existingToken.ExpiryDate <= DateTime.UtcNow || existingToken.AppUser == null)
+            if (existingToken == null || existingToken.ExpiryDate <= DateTime.UtcNow)
+            {
+                return (false, null, null);
+            }
+
+            var appUser = await _context.Users.FindAsync(existingToken.UserId);
+            if (appUser == null)
             {
                 return (false, null, null);
             }
             
-            var roles = await _userManager.GetRolesAsync(existingToken.AppUser);
+            var roles = await _userManager.GetRolesAsync(appUser);
 
-            var newToken = _tokenService.CreateToken(existingToken.AppUser, roles);
+            var newToken = _tokenService.CreateToken(appUser, roles);
             var newRefreshToken = _tokenService.GenerateRefreshToken(existingToken.UserId);
             
             existingToken.IsRevoked = true;

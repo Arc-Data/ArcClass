@@ -73,11 +73,12 @@ namespace backend.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto requestDto)
         {
-            if (string.IsNullOrWhiteSpace(refreshToken))  return BadRequest("Refresh token is required");
+            Console.WriteLine(requestDto.Refresh);
+            if (string.IsNullOrWhiteSpace(requestDto.Refresh))  return BadRequest("Refresh token is required");
 
-            var (succeeded, newToken, newRefreshToken) = await _accountService.RefreshTokenAsync(refreshToken);
+            var (succeeded, newToken, newRefreshToken) = await _accountService.RefreshTokenAsync(requestDto.Refresh);
 
             if(!succeeded) return Unauthorized();
 

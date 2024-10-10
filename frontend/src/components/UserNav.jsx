@@ -15,7 +15,7 @@ const UserNav = () => {
                 <div className="flex items-center gap-8 ml-auto">
                     {role === "Teacher"
                     &&
-                    <div className="p-3 rounded-full bg-background-100">
+                    <div className="p-3 rounded-full bg-background-100"> 
                         <FaPlus />
                     </div>
                     }
