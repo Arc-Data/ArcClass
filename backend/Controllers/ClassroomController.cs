@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using backend.Interfaces;
+using backend.Mappers;
 
 namespace backend.Controllers
 {
@@ -55,7 +56,7 @@ namespace backend.Controllers
 
             await _classroomRepo.CreateAsync(classroom);
 
-            return Ok(classroom);
+            return Ok(classroom.ToClassroomDto());
         }
 
         [HttpPost("join")]

@@ -6,6 +6,10 @@ const AuthContext = createContext()
 
 export default AuthContext;
 
+/* TODO:
+Add refresh token mechanism 
+*/
+
 export const AuthProvider = ({ children }) => {
     const [ authTokens, setAuthTokens ] = useState(() => {
         const tokens = localStorage.getItem("authTokens")

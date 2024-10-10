@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace backend.Dtos.Account
 {
-    public class StudentDto
+    public class UserLoginDto
     {
         public string Email { get; set; } = String.Empty;
         public string FirstName { get; set; } = String.Empty;

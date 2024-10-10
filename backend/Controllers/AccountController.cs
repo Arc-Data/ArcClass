@@ -23,12 +23,12 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto studentDto)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var (succeeded, token, refreshToken, errors) = await _accountService.CreateUserAsync(studentDto);
+            var (succeeded, token, refreshToken, errors) = await _accountService.CreateUserAsync(userDto);
         
             if (succeeded) return Ok(new {
                 Access = token,
