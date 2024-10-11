@@ -26,6 +26,7 @@ namespace backend.Service
         {
             var claims = new List<Claim>
             {
+                new(ClaimTypes.NameIdentifier, user.Id),
                 new(JwtRegisteredClaimNames.Email, user.Email!),
                 new(JwtRegisteredClaimNames.GivenName, user.FirstName),
                 new(JwtRegisteredClaimNames.FamilyName, user.LastName)
@@ -66,14 +67,10 @@ namespace backend.Service
             };
         }
 
-        public void RevokeRefreshToken(string token)
+        public Task<bool> RevokeRefreshToken(string userId)
         {
             throw new NotImplementedException();
         }
 
-        public bool ValidateRefreshToken(string token, string userId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

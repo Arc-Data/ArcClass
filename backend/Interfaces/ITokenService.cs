@@ -10,7 +10,6 @@ namespace backend.Interfaces
     {
         string CreateToken(AppUser user, IList<string> roles);
         RefreshToken GenerateRefreshToken(string userId);
-        bool ValidateRefreshToken(string token, string userId);
-        void RevokeRefreshToken(string token);
+        Task<bool> RevokeRefreshToken(string userId);
     }
 }
