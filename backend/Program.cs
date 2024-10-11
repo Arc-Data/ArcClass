@@ -103,6 +103,13 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 
+/* NOTE: 
+// Consider uncommenting the line down below when hosted. Haven't tried it yet if it works
+// ================================================================
+// builder.Services.AddHostedService<RefreshTokenCleanupService>();
+// ================================================================
+*/
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
