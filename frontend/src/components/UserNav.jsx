@@ -1,11 +1,42 @@
 import { useContext } from "react"
 import AuthContext from "../context/AuthContext"
 import { Link } from "react-router-dom"
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaUser } from "react-icons/fa";
+import { HR, Popover } from "flowbite-react";
+import customPopoverTheme from "./FlowbiteCustom/CustomPopoverTheme";
+import { FaArrowRightFromBracket, FaGear } from "react-icons/fa6";
+
 
 
 const UserNav = () => {
-    const { logoutUser, role } = useContext(AuthContext)
+    const { logoutUser, role, user } = useContext(AuthContext)
+    console.log(user)
+
+    const PopoverContent = () => {
+        return (
+            <div className="flex flex-col  bg-background-default w-[240px] border *:p-2.5">
+                <div className="flex items-center gap-2">
+                    <div className="cursor-pointer">
+                        <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
+                            <FaUser size={18}/>
+                        </div>
+                    </div>
+                    <div className="truncate text-ellipsis">
+                        <p className="text-sm font-thin">{user.given_name} {user.family_name}</p>
+                        <p className="text-sm font-thin">{user.email}</p>
+                    </div>
+                </div>
+                <button className="mt-4 flex gap-4 items-center font-medium py-2.5 outline-none hover:bg-primary-default" >
+                    <FaGear/>
+                    <span>Settings</span>
+                </button>
+                <button className="flex gap-4 items-center font-medium py-2.5 outline-none hover:bg-primary-default" onClick={logoutUser}>
+                    <FaArrowRightFromBracket/>
+                    <span>Logout</span>
+                </button>
+            </div>
+        )
+    }
     
     return (
         <div className="fixed top-0 w-full shadow bg-background-default">
@@ -19,7 +50,13 @@ const UserNav = () => {
                         <FaPlus />
                     </div>
                     }
-                    <button className="" onClick={logoutUser}>Logout</button>
+                        <Popover theme={customPopoverTheme} content={<PopoverContent/>} placement="bottom" arrow={false} trigger="hover" className="">
+                            <div className="cursor-pointer">
+                                <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
+                                    <FaUser size={18}/>
+                                </div>
+                            </div>
+                        </Popover>
                 </div>
             </div>
         </div>

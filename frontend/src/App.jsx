@@ -10,6 +10,7 @@ import BaseRoutes from "./routes/BaseRoutes"
 import UserRoutes from "./routes/UserRoutes"
 import Home from "./pages/Home"
 import DefaultLayout from "./layouts/DefaultLayout"
+import Calendar from "./pages/Calendar"
 
 function App() {
 	return (
@@ -26,7 +27,8 @@ function App() {
 					</Route>
 					<Route element={<UserRoutes/>}>
 						<Route element={<DefaultLayout />}>
-							<Route path="/home" element={<Home/>} />					
+							<Route path="/home" element={<Home/>} />	
+							<Route path="/calendar" element={<Calendar/>} />				
 						</Route>
 					</Route>
 					

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 const Home = () => {
     return (
-        <div className="p-4 border-l">
+        <div>
             Main content goes here
         </div>
     )
