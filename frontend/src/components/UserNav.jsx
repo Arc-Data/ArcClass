@@ -1,16 +1,15 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import AuthContext from "../context/AuthContext"
 import { Link } from "react-router-dom"
 import { FaPlus, FaUser } from "react-icons/fa";
-import { HR, Popover } from "flowbite-react";
+import { HR, Modal, Popover } from "flowbite-react";
 import customPopoverTheme from "./FlowbiteCustom/CustomPopoverTheme";
 import { FaArrowRightFromBracket, FaGear } from "react-icons/fa6";
-
-
+import CreateClassroomModal from "../modals/CreateClassroomModal";
 
 const UserNav = () => {
     const { logoutUser, role, user } = useContext(AuthContext)
-    console.log(user)
+    const [openModal, setOpenModal] = useState(false)
 
     const PopoverContent = () => {
         return (
@@ -46,19 +45,22 @@ const UserNav = () => {
                 <div className="flex items-center gap-8 ml-auto">
                     {role === "Teacher"
                     &&
-                    <div className="p-3 rounded-full bg-background-100"> 
+                    <div className="p-3 rounded-full cursor-pointer bg-background-100" onClick={() => setOpenModal(prev => !prev)}> 
                         <FaPlus />
                     </div>
                     }
-                        <Popover theme={customPopoverTheme} content={<PopoverContent/>} placement="bottom" arrow={false} trigger="hover" className="">
-                            <div className="cursor-pointer">
-                                <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
-                                    <FaUser size={18}/>
-                                </div>
+                    <Popover theme={customPopoverTheme} content={<PopoverContent/>} placement="bottom" arrow={false} trigger="hover" className="">
+                        <div className="cursor-pointer">
+                            <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
+                                <FaUser size={18}/>
                             </div>
-                        </Popover>
+                        </div>
+                    </Popover>
                 </div>
             </div>
+            {openModal && 
+            <CreateClassroomModal closeModal={() => setOpenModal(false)} />
+            }
         </div>
     )
 }

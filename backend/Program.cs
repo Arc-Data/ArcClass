@@ -104,7 +104,7 @@ builder.Services.AddScoped<IClassroomService, ClassroomService>();
 builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
-/* NOTE: 
+/* NOTE : Background Service
 // Consider uncommenting the line down below when hosted. Haven't tried it yet if it works
 // ================================================================
 // builder.Services.AddHostedService<RefreshTokenCleanupService>();

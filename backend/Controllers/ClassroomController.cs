@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using backend.Interfaces;
 using backend.Mappers;
+using backend.Dtos.Classroom;
 
 namespace backend.Controllers
 {
@@ -36,8 +37,10 @@ namespace backend.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> CreateClassroom()
+        public async Task<IActionResult> CreateClassroom([FromBody] CreateClassroomDto classroomDto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var email = User.GetEmail();
             var teacher = await _userManager.Users.OfType<Teacher>().FirstOrDefaultAsync(t => t.Email == email);
 
@@ -49,9 +52,9 @@ namespace backend.Controllers
             var uniqueId = await _classroomService.GenerateUniqueRandomId();
             var classroom = new Classroom {
                 Id = uniqueId,
-                Name = "Test Classroom",
+                Name = classroomDto.Name!,
                 TeacherId = teacher.Id,
-                SemesterStart = DateTime.UtcNow
+                SemesterStart = classroomDto.SemesterStart ?? DateTime.UtcNow
             };
 
             await _classroomRepo.CreateAsync(classroom);
