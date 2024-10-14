@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom"
 import AuthContext from "../../context/AuthContext"
+import { Spinner } from "flowbite-react"
 
 const SignIn = () => {
     const { loginUser } = useContext(AuthContext)
@@ -8,9 +9,11 @@ const SignIn = () => {
         email: '',
         password: ''
     })
+    const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState()
 
     const handleSubmit = async (e) => {
+        setLoading(true)
         e.preventDefault()
         
         try {
@@ -18,6 +21,10 @@ const SignIn = () => {
         }
         catch (error) {
             setErrors(error.response.data)
+        }
+        finally 
+        {
+            setLoading(false)
         }
     }
 
@@ -56,7 +63,14 @@ const SignIn = () => {
                     onChange={handleInputChange}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Password" required />
             </div>
-            <button type="submit" className="w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none">Login</button>
+            {loading ? 
+            <div className="text-center">
+                <Spinner/>
+            </div>
+            :
+            <button type="submit" disabled={loading} className="w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none">Login</button>
+            }
+            {/* <button type="submit" disabled={loading} className="w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none">Login</button> */}
             <p>Don't have an account? <span><Link to="/signup" className="text-primary-default">Register</Link></span></p>
         </form>
     )

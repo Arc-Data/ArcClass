@@ -12,9 +12,6 @@ using backend.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-/* TODO:
-    Create a background service that deletes tokens past expiry
-*/
 namespace backend.Services
 {
     public class AccountService : IAccountService

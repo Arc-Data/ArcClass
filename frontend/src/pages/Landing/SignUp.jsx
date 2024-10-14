@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import { MdNavigateNext } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
+import { Spinner } from "flowbite-react";
 
 
-/* NOTE: 
+/* RECHECK : Login Form Errors
 ** Reassure that all form errors are accounted for 
 ** Rethink other possible ways of telling the users they are wrong
 * Consider font sizing 
@@ -23,6 +24,7 @@ const SignUp = () => {
         account: '',
     })
     const [ errors, setErrors ] = useState({})
+    const [ loading, setLoading ] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -36,6 +38,7 @@ const SignUp = () => {
     }
 
     const handleSubmit = async (e) => {
+        setLoading(true)
         e.preventDefault()
         try {
             await registerUser(formData)
@@ -66,9 +69,10 @@ const SignUp = () => {
                 setErrors(newErrors);
             }
         }
+        finally {
+            setLoading(false)
+        }
     }
-
-    console.log(formData)
 
     return (
         <div>
@@ -166,7 +170,13 @@ const SignUp = () => {
                             {errors?.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
                         </div>
 
-                        <button type="submit" className="w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">Register</button>
+                        {loading ? 
+                        <div className="text-center">
+                            <Spinner/>
+                        </div>
+                        :
+                        <button type="submit" disabled={loading} className="w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none">Register</button>
+                        }
                         <p>Already have an account? <span><Link to="/signin" className="text-primary-default">Login</Link></span></p>
                     </form>
                 )}

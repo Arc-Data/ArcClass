@@ -73,7 +73,15 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const logoutUser = async() => {
+    const logoutUser = async () => {
+        const response = await axios.post('api/account/logout', null, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
+
+        console.log(response)
+        
         setAuthTokens(null)
         setUser(null)
         localStorage.removeItem('authTokens')

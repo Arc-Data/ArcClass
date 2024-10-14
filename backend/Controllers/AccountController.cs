@@ -93,7 +93,7 @@ namespace backend.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
