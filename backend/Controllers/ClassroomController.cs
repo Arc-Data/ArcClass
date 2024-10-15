@@ -52,7 +52,8 @@ namespace backend.Controllers
             var uniqueId = await _classroomService.GenerateUniqueRandomId();
             var classroom = new Classroom {
                 Id = uniqueId,
-                Name = classroomDto.Name!,
+                Subject = classroomDto.Subject!,
+                Section = classroomDto.Section!,
                 TeacherId = teacher.Id,
                 SemesterStart = classroomDto.SemesterStart ?? DateTime.UtcNow
             };

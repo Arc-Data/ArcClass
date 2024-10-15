@@ -28,7 +28,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
+        public async Task<IActionResult> Register([FromBody] CreateUserDto userDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -63,7 +63,7 @@ namespace backend.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> StudentLogin(LoginDto loginDto)
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

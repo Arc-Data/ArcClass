@@ -11,7 +11,8 @@ namespace backend.Models
         [Key]
         [StringLength(6, MinimumLength = 6)]
         public string Id { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
+        public string Subject { get; set; } = string.Empty;
+        public string Section { get; set; } = string.Empty;
         public DateTime SemesterStart { get; set; }
         public DateTime? SemesterEnd { get; set; }
         public virtual Teacher? Teacher { get; set; }

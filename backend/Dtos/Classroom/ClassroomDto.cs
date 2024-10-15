@@ -11,8 +11,9 @@ namespace backend.Dtos.Classroom
     public class ClassroomDto
     {
         public string Id { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public DateTime SemesterStart { get; set; } 
+        public string Subject { get; set; } = string.Empty;
+        public string Section { get; set; } = string.Empty;
+        public DateTime? SemesterStart { get; set; } 
         public DateTime? SemesterEnd { get; set; }
         public TeacherDto? Teacher { get; set; }
     }

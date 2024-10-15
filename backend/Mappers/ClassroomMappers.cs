@@ -15,7 +15,8 @@ namespace backend.Mappers
             return new ClassroomDto
             {
                 Id = classroom.Id,
-                Name = classroom.Name,
+                Section = classroom.Section,
+                Subject = classroom.Subject,
                 SemesterStart = classroom.SemesterStart,
                 SemesterEnd = classroom.SemesterEnd,
                 Teacher = new TeacherDto 
