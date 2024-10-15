@@ -12,6 +12,10 @@ import Home from "./pages/Home"
 import DefaultLayout from "./layouts/DefaultLayout"
 import Calendar from "./pages/Calendar"
 
+/* TODO: Create Profile Customization Section 
+Optionally a mobile menu option similar to anilist 
+*/
+
 function App() {
 	return (
 		<BrowserRouter>

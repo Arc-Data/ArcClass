@@ -70,6 +70,7 @@
       --accent-800: #08465e;
       --accent-900: #04232f;
       --accent-950: #021118;
+      --radius: 0.5rem;
     }
     .dark {
       --text: #e3edf2;

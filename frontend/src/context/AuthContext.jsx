@@ -44,14 +44,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     const refreshToken = async () => {
-        console.log("Attempting Refresh")
         try {
             const response = await axios.post('api/account/refresh', {
                 refresh: authTokens.refresh
             })
 
-            console.log("Token refreshed")
-            console.log(response)
             setAuthTokens(response.data)
             setUser(jwtDecode(response.data.access))
 
@@ -73,8 +70,8 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const logoutUser = async () => {
-        const response = await axios.post('api/account/logout', null, {
+    const logoutUser = () => {
+        const response = axios.post('api/account/logout', null, {
             headers: {
                 Authorization: `Bearer ${authTokens.access}`
             }
@@ -108,20 +105,16 @@ export const AuthProvider = ({ children }) => {
 
                 if (timeUntilExpiry < 180) {
                     try {
-                        console.log("Will refresh token")
                         await refreshToken();
-                        console.log("Successfully refreshed token")
 
                         const twelveMinutes = 1000 * 6 * 12
                         timeoutId = setTimeout(checkTokenExpiryAndRefresh, twelveMinutes)
                     }
                     catch (error) {
-                        console.log("Token expired. Please login again")
                         logoutUser()
                     }
                 } else {
                     const nextRefreshIn = Math.max(timeUntilExpiry - 180, 0) * 1000
-                    console.log("Next refresh in", nextRefreshIn)
                     timeoutId = setTimeout(checkTokenExpiryAndRefresh, nextRefreshIn)
                 }
             } else {
