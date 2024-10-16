@@ -35,5 +35,12 @@ namespace backend.Repositories
         {
             return await _context.Classrooms.Include(c => c.Teacher).FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<List<Classroom>> GetTeacherClassroomsAsync(string teacherId)
+        {
+            return await _context.Classrooms
+                .Include(c => c.Teacher)
+                .Where(c => c.TeacherId == teacherId)
+                .ToListAsync();        }
     }
 }
