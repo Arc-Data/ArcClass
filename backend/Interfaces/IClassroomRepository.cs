@@ -10,5 +10,6 @@ namespace backend.Interfaces
     {
         Task<bool> ClassroomExists(string classroomId);
         Task<Classroom?> CreateAsync(Classroom classroom);
+        Task<Classroom?> GetByIdAsync(string id);
     }
 }

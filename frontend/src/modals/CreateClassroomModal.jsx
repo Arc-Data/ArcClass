@@ -8,6 +8,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { cn  } from "@/lib/utils"
+import { useNavigate } from "react-router-dom"
 
 /* FIXME: Date Input
 Fix Controlled Inputs having to do with null values to Date values
@@ -19,6 +20,8 @@ const CreateClassroomModal = ({}) => {
     const { authTokens, user } = useContext(AuthContext)
     const { createClassroom } = useClassroomManager(authTokens)
     const [ loading, setLoading ] = useState(false)
+
+    const navigate = useNavigate()
 
     const [ formData, setFormData] = useState({
         subject: '',
@@ -59,7 +62,9 @@ const CreateClassroomModal = ({}) => {
 
 
         try {
-            await createClassroom(formData);
+            const classroomId = await createClassroom(formData)
+            setOpenModal(false)
+            navigate(`/classroom/${classroomId}`)
         }
         catch (error) {
             console.log(error)

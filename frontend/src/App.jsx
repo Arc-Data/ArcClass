@@ -11,9 +11,14 @@ import UserRoutes from "./routes/UserRoutes"
 import Home from "./pages/Home"
 import DefaultLayout from "./layouts/DefaultLayout"
 import Calendar from "./pages/Calendar"
+import Classroom from "./pages/Classroom/Classroom"
 
 /* TODO: Create Profile Customization Section 
 Optionally a mobile menu option similar to anilist 
+*/
+
+/* TODO: Classroom Not Found 
+Classroom Specific Not Found
 */
 
 function App() {
@@ -32,7 +37,8 @@ function App() {
 					<Route element={<UserRoutes/>}>
 						<Route element={<DefaultLayout />}>
 							<Route path="/home" element={<Home/>} />	
-							<Route path="/calendar" element={<Calendar/>} />				
+							<Route path="/calendar" element={<Calendar/>} />	
+							<Route path="/classroom/:id" element={<Classroom/>} />			
 						</Route>
 					</Route>
 					

@@ -16,8 +16,6 @@ const UserNav = () => {
     const { logoutUser, role, user } = useContext(AuthContext)
     const [openModal, setOpenModal] = useState(false)
 
-    console.log(user)
-
     const PopoverContent = () => {
         return (
             <div className="flex flex-col  bg-background-default w-[240px] border *:p-2.5">

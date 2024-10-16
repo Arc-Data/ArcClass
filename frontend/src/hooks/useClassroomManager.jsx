@@ -7,7 +7,6 @@ const useClassroomManager = (authTokens) => {
     const [ classrooms, setClassrooms ] = useState([])
 
     const createClassroom = async (data) => {
-        console.log(authTokens)
         try {
             const response = await axios.post('api/classroom', data, {
                 headers: {
@@ -15,7 +14,7 @@ const useClassroomManager = (authTokens) => {
                 }
             })
 
-            console.log(response)
+            return response.data
         }
         catch (error) {
             console.log(error)
@@ -23,7 +22,30 @@ const useClassroomManager = (authTokens) => {
     }
 
     const getClassroomList = async () => {
+        try {
 
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getClassroom = async (id) => {
+        try {
+            const response = await axios.get(`api/classroom/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+            setClassroom(response.data)
+        }
+        catch (error) {
+            console.log(error)
+        }
+        finally {
+            setLoading(false)
+        }
     }
 
     return {
@@ -31,6 +53,7 @@ const useClassroomManager = (authTokens) => {
         classroom,
         classrooms,
         createClassroom,
+        getClassroom,
         getClassroomList,
     }
 }

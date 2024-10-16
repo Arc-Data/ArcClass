@@ -60,6 +60,18 @@ namespace backend.Controllers
 
             await _classroomRepo.CreateAsync(classroom);
 
+            return Ok(classroom.Id);
+        }
+
+        [HttpGet("{id}")]
+        // [Authorize]
+        public async Task<IActionResult> GetById([FromRoute] string id)
+        {
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null)
+            {
+                return NotFound();
+            }
             return Ok(classroom.ToClassroomDto());
         }
 

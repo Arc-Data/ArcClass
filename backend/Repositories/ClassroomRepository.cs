@@ -30,5 +30,10 @@ namespace backend.Repositories
             await _context.SaveChangesAsync();
             return classroom;
         }
+
+        public async Task<Classroom?> GetByIdAsync(string id)
+        {
+            return await _context.Classrooms.Include(c => c.Teacher).FirstOrDefaultAsync(c => c.Id == id);
+        }
     }
 }
