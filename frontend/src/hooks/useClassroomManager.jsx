@@ -23,10 +23,19 @@ const useClassroomManager = (authTokens) => {
 
     const getClassroomList = async () => {
         try {
+            const response = await axios.get("api/classroom", {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
 
+            setClassrooms(response.data)
         }
         catch (error) {
             console.log(error)
+        }
+        finally {
+            setLoading(false)
         }
     }
 

@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
     return (
-        <div className="">
+        <div className="hidden md:block">
             <NavLink
                 to="/home"
                 className={({ isActive }) =>
