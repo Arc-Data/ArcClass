@@ -12,5 +12,6 @@ namespace backend.Interfaces
         Task<Classroom?> CreateAsync(Classroom classroom);
         Task<Classroom?> GetByIdAsync(string id);
         Task<List<Classroom>> GetTeacherClassroomsAsync(string teacherId);
+        Task<Classroom?> DeleteAsync(string id);
     }
 }

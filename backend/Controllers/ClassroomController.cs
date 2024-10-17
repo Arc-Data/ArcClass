@@ -119,6 +119,17 @@ namespace backend.Controllers
             return Ok(classroom.ToClassroomDto());
         }
 
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> Delete([FromRoute] string id)
+        {
+            var classroom = await _classroomRepo.DeleteAsync(id);
+            if (classroom == null) 
+                return NotFound();
+                
+            return NoContent();
+        }
+
         [HttpPost("join")]
         public async Task<IActionResult> JoinClassroom()
         {

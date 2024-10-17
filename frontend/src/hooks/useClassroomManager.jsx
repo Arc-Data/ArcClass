@@ -43,6 +43,20 @@ const useClassroomManager = (authTokens) => {
         }
     }
 
+    const deleteClassroom = async (id) => {
+        try {
+            const response = await axios.delete(`api/classroom/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+            console.log(response)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleFilterClassroomList = (e) => {
         setSearchQuery(e.target.value)
         const query = e.target.value.toLowerCase();
@@ -80,6 +94,7 @@ const useClassroomManager = (authTokens) => {
         searchQuery,
         createClassroom,
         getClassroom,
+        deleteClassroom,
         getClassroomList,
         handleFilterClassroomList
     }

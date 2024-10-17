@@ -1,19 +1,27 @@
 import AuthContext from "@/context/AuthContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Spinner } from "flowbite-react"
 import { useContext, useEffect } from "react"
+import { FaTrash } from "react-icons/fa"
 import { FaGear } from "react-icons/fa6"
-import { useParams } from "react-router-dom"
-
+import { useNavigate, useParams } from "react-router-dom"
 /* TODO : Share classroom link. Join Classroom
 Specify settings for how others can join classroom
 */
 
 const Classroom = () => {``
     const { id } = useParams()
-    const { authTokens } = useContext(AuthContext)
-    const { classroom, loading, getClassroom } = useClassroomManager(authTokens)
+    const { authTokens, user } = useContext(AuthContext)
+    const { classroom, loading, getClassroom, deleteClassroom } = useClassroomManager(authTokens)
     
+    const navigate = useNavigate()
+
+    const handleDelete = async () => {
+        await deleteClassroom(id)
+        navigate('/home')
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             await getClassroom(id)
@@ -45,16 +53,31 @@ const Classroom = () => {``
     return (
         <div>
             <div className="flex p-2 border-b ">
-                <div className="p-4 ml-auto rounded-full cursor-pointer hover:bg-gray-200">
-                    <FaGear size={16}/>
-                </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button className="p-4 ml-auto rounded-full cursor-pointer hover:bg-gray-200">
+                            <FaGear size={16}/>
+                        </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="z-30 bg-background-default *:p-2 rounded-lg">
+                        {user.role.includes('Teacher') && classroom.teacher.id == user.nameid &&
+                        <DropdownMenuItem 
+                            onClick={handleDelete}
+                            className="z-30 flex items-center gap-2 text-red-500">
+                            <FaTrash/>
+                            <span>Delete</span>
+                        </DropdownMenuItem>
+                        }
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                
             </div>
             <div className="px-8 py-4">
             <div className="relative overflow-hidden rounded-lg h-60">
                 <img
                     src="/banner1.jpg"
                     alt=""
-                    className="absolute inset-0 z-10 object-cover"
+                    className="absolute inset-0 z-10 object-cover select-none"
                 />
                 <div className="absolute inset-0 z-20 flex items-end bg-black text-primary-default bg-opacity-30 ">
                     <div className="p-8">

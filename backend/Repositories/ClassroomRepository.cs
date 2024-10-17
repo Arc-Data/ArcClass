@@ -31,6 +31,15 @@ namespace backend.Repositories
             return classroom;
         }
 
+        public async Task<Classroom?> DeleteAsync(string id)
+        {
+            var classroomModel = await _context.Classrooms.FirstOrDefaultAsync(c => c.Id == id);
+            if (classroomModel == null) return null;
+            _context.Classrooms.Remove(classroomModel);
+            await _context.SaveChangesAsync();
+            return classroomModel;
+        }
+
         public async Task<Classroom?> GetByIdAsync(string id)
         {
             return await _context.Classrooms.Include(c => c.Teacher).FirstOrDefaultAsync(c => c.Id == id);
