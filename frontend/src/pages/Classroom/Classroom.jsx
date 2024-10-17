@@ -1,5 +1,6 @@
 import AuthContext from "@/context/AuthContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
+import ShareClassroomModal from "@/modals/ShareClassroomModal"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Spinner } from "flowbite-react"
 import { useContext, useEffect } from "react"
@@ -52,10 +53,16 @@ const Classroom = () => {``
 
     return (
         <div>
-            <div className="flex p-2 border-b ">
+            <div className="flex items-center gap-4 p-2 border-b">
+                <div className="flex items-center flex-1 gap-12">
+                    <button>Overview</button>
+                    <button>Class Files</button>
+                    <button>People</button>
+                </div>
+                <ShareClassroomModal id={classroom.id}/>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="p-4 ml-auto rounded-full cursor-pointer hover:bg-gray-200">
+                        <button className="p-4 ml-auto rounded-full hover:bg-gray-200">
                             <FaGear size={16}/>
                         </button>
                     </DropdownMenuTrigger>
@@ -70,22 +77,21 @@ const Classroom = () => {``
                         }
                     </DropdownMenuContent>
                 </DropdownMenu>
-                
             </div>
             <div className="px-8 py-4">
-            <div className="relative overflow-hidden rounded-lg h-60">
-                <img
-                    src="/banner1.jpg"
-                    alt=""
-                    className="absolute inset-0 z-10 object-cover select-none"
-                />
-                <div className="absolute inset-0 z-20 flex items-end bg-black text-primary-default bg-opacity-30 ">
-                    <div className="p-8">
-                        <h2 className="text-2xl font-bold">{classroom.subject}</h2>
-                        <p className="mt-2">{classroom.section}</p>
+                <div className="relative overflow-hidden rounded-lg h-60">
+                    <img
+                        src="/banner1.jpg"
+                        alt=""
+                        className="absolute inset-0 z-10 object-cover select-none"
+                    />
+                    <div className="absolute inset-0 z-20 flex items-end bg-black text-primary-default bg-opacity-30 ">
+                        <div className="p-8">
+                            <h2 className="text-2xl font-bold">{classroom.subject}</h2>
+                            <p className="mt-2">{classroom.section}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     )

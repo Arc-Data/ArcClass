@@ -187,34 +187,6 @@ const CreateClassroomModal = ({}) => {
                         </div>
                     )}
                     </div>
-                {/* <div className="w-full">
-                    <label htmlFor="" className="block mb-2 text-sm text-gray-900 font-body"> Semester Start</label>
-                    <Datepicker 
-                        value={formData.semesterStart} 
-                        onChange={(date) => setFormData(prev => ({
-                            ...prev, 
-                            semesterStart: date,
-                        }))}
-                        title="Semester Start" 
-                        className="font-heading" 
-                        minDate={new Date()}
-                    />
-                </div> */}
-                {/* {formData.semesterStart && 
-                <div className="w-full">
-                    <label htmlFor="" className="block mb-2 text-sm text-gray-900 font-body"> Semester End</label>
-                    <Datepicker 
-                        value={ formData.semesterEnd } 
-                        onChange={(date) => setFormData(prev => ({
-                            ...prev, 
-                            semesterEnd: date,
-                        }))}
-                        title="Semester End" 
-                        className="font-heading" 
-                        minDate={formData.semesterStart}
-                    />
-                </div>
-                } */}
             </ModalBody>
             <ModalFooter>
                 {loading ?
