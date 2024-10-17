@@ -6,6 +6,9 @@ const useClassroomManager = (authTokens) => {
     const [ classroom , setClassroom ] = useState()
     const [ classrooms, setClassrooms ] = useState([])
 
+    const [ filteredList, setFilteredList ] = useState([])
+    const [ searchQuery, setSearchQuery ] = useState("")
+
     const createClassroom = async (data) => {
         try {
             const response = await axios.post('api/classroom', data, {
@@ -30,6 +33,7 @@ const useClassroomManager = (authTokens) => {
             })
 
             setClassrooms(response.data)
+            setFilteredList(response.data)
         }
         catch (error) {
             console.log(error)
@@ -37,6 +41,17 @@ const useClassroomManager = (authTokens) => {
         finally {
             setLoading(false)
         }
+    }
+
+    const handleFilterClassroomList = (e) => {
+        setSearchQuery(e.target.value)
+        const query = e.target.value.toLowerCase();
+        
+        const filterClassroomsByQuery = classrooms.filter(classroom => {
+            return classroom.subject.toLowerCase().includes(query)
+        })
+        setFilteredList(filterClassroomsByQuery)
+
     }
 
     const getClassroom = async (id) => {
@@ -61,9 +76,12 @@ const useClassroomManager = (authTokens) => {
         loading,
         classroom,
         classrooms,
+        filteredList,
+        searchQuery,
         createClassroom,
         getClassroom,
         getClassroomList,
+        handleFilterClassroomList
     }
 }
 

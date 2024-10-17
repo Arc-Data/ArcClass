@@ -1,13 +1,14 @@
 import AuthContext from "@/context/AuthContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
+import { FaSearch } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 const Home = () => {
     const { authTokens } = useContext(AuthContext)
-    const { classrooms, loading, getClassroomList } = useClassroomManager(authTokens)
-    
-    // [
+    const { filteredList: classrooms, loading, getClassroomList, handleFilterClassroomList, searchQuery } = useClassroomManager(authTokens)
+
+
     //     {
     //         "id": "CT8ZA3",
     //         "subject": "Semester",
@@ -34,7 +35,7 @@ const Home = () => {
 
     const classCards = classrooms && classrooms.map(classroom => {
         return (
-            <Link to={`/classroom/${classroom.id}`} className="flex flex-col shadow">
+            <Link key={classroom.id} to={`/classroom/${classroom.id}`} className="flex flex-col shadow">
                 <img src="/banner1.jpg" alt="" className="object-cover h-40 rounded-t-lg" />
                 <div className="p-4">
                     <p className="font-heading">{classroom.subject}</p>
@@ -54,6 +55,17 @@ const Home = () => {
     
     return (
         <div className="w-full">
+            <search className="flex items-center max-w-4xl gap-2 mx-auto">
+                <input 
+                    type="search" 
+                    value={searchQuery}
+                    onChange={handleFilterClassroomList}
+                    placeholder="Search Class Name"
+                    className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50"/>
+                <button className="p-3 text-sm font-medium rounded-lg bg-primary-default">
+                    <FaSearch className="w-4 h-4"/>
+                </button>
+            </search>
             <h1>Recent</h1>
             <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
                 {classCards}

@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom"
 const Classroom = () => {``
     const { id } = useParams()
     const { authTokens } = useContext(AuthContext)
-    const { classroom, loading, getClassroom } = useClassroomManager(authTokens)
+    const { filteredList:classroom, loading, getClassroom } = useClassroomManager(authTokens)
     
     console.log(classroom)
 
@@ -33,8 +33,10 @@ const Classroom = () => {``
     //     "section": "BSIT 4-1N",
     //     "semesterStart": "2024-10-16T02:10:48.8453487",
     //     "semesterEnd": null,
-    //     "teacher": null,
-    //     "teacherId": "6b395212-5bca-4fcb-9ec1-badfda52b7b7"
+    //     "teacher": {
+    //         "id": "6b395212-5bca-4fcb-9ec1-badfda52b7b7",
+    //         "fullName": "Teacher1 Teacher"
+    //     }
     // }
 
     return (
