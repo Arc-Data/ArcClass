@@ -4,6 +4,20 @@ import { useContext, useEffect, useState } from "react"
 import { FaSearch } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
+/* COMMENT : To use a context
+Would it be actually better to wrap all of this in a context.
+Considering
+1. It is highly unlikely for a person to have more than 50 classrooms
+2. Saves time to fetch the database, then why not just do it in login
+*/
+
+/* TODO : Loading Skeleton
+Would it be actually better to wrap all of this in a context.
+Considering
+1. It is highly unlikely for a person to have more than 50 classrooms
+2. Saves time to fetch the database, then why not just do it in login
+*/
+
 const Home = () => {
     const { authTokens } = useContext(AuthContext)
     const { filteredList: classrooms, loading, getClassroomList, handleFilterClassroomList, searchQuery } = useClassroomManager(authTokens)
