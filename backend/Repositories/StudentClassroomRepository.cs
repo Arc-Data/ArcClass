@@ -39,7 +39,7 @@ namespace backend.Repositories
         {
             return await _context.StudentClassrooms
                 .Include(sc => sc.Classroom)
-                .ThenInclude(c => c.Teacher)
+                .ThenInclude(c => c!.Teacher)
                 .Where(sc => sc.StudentId == studentId)
                 .ToListAsync();
         }

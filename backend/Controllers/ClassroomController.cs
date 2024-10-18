@@ -148,6 +148,7 @@ namespace backend.Controllers
             var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
             if (student == null) return Unauthorized("Student not found");
 
+            Console.WriteLine(id);
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
 
@@ -157,7 +158,7 @@ namespace backend.Controllers
             };
 
             await _studentClassroomRepo.CreateAsync(studentClassroom);
-            return Ok(studentClassroom);
+            return Ok(classroom.Id);
         }
     }
 }

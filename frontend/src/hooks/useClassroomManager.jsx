@@ -24,6 +24,22 @@ const useClassroomManager = (authTokens) => {
         }
     }
 
+    const joinClassroom = async (id) => {
+        try {
+            console.log(id)
+            const response = await axios.post(`api/classroom/${id}/join`, null, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+            return response.data
+        }
+        catch (error) {
+            throw error
+        }
+    }
+
     const getClassroomList = async () => {
         try {
             const response = await axios.get("api/classroom", {
@@ -31,8 +47,6 @@ const useClassroomManager = (authTokens) => {
                     Authorization: `Bearer ${authTokens.access}`
                 }
             })
-
-            console.log(response)
 
             setClassrooms(response.data)
             setFilteredList(response.data)
@@ -94,6 +108,8 @@ const useClassroomManager = (authTokens) => {
         classrooms,
         filteredList,
         searchQuery,
+
+        joinClassroom,
         createClassroom,
         getClassroom,
         deleteClassroom,

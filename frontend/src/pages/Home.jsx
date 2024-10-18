@@ -1,5 +1,6 @@
 import AuthContext from "@/context/AuthContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
+import JoinClassroomModal from "@/modals/JoinClassroomModal"
 import { useContext, useEffect, useState } from "react"
 import { FaSearch } from "react-icons/fa"
 import { Link } from "react-router-dom"
@@ -73,12 +74,9 @@ const Home = () => {
                     onChange={handleFilterClassroomList}
                     placeholder="Search Class Name"
                     className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50"/>
-                <button className="p-3 text-sm font-medium rounded-lg bg-primary-default">
-                    Join Classroom <FaSearch className="w-4 h-4"/>
-                </button>
+                <JoinClassroomModal/>
             </search>
-            <h1>Recent</h1>
-            <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
+            <div className="mt-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
                 {classCards}
             </div>
         </div>
