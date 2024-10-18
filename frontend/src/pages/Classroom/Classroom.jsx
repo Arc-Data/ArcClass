@@ -7,11 +7,13 @@ import { useContext, useEffect } from "react"
 import { FaTrash } from "react-icons/fa"
 import { FaGear } from "react-icons/fa6"
 import { useNavigate, useParams } from "react-router-dom"
-/* TODO : Share classroom link. Join Classroom
-Specify settings for how others can join classroom
+
+/* TODO : Conceptualize Privacy Related Settings and User Control Systems
+Unauthorized Joining, User Moderation.
 */
 
-const Classroom = () => {``
+
+const Classroom = () => {
     const { id } = useParams()
     const { authTokens, user } = useContext(AuthContext)
     const { classroom, loading, getClassroom, deleteClassroom } = useClassroomManager(authTokens)
@@ -85,7 +87,7 @@ const Classroom = () => {``
                         alt=""
                         className="absolute inset-0 z-10 object-cover select-none"
                     />
-                    <div className="absolute inset-0 z-20 flex items-end bg-black text-primary-default bg-opacity-30 ">
+                    <div className="absolute inset-0 z-30 flex items-end bg-black text-primary-default bg-opacity-30 ">
                         <div className="p-8">
                             <h2 className="text-2xl font-bold">{classroom.subject}</h2>
                             <p className="mt-2">{classroom.section}</p>

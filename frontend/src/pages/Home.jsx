@@ -11,11 +11,8 @@ Considering
 2. Saves time to fetch the database, then why not just do it in login
 */
 
-/* TODO : Loading Skeleton
-Would it be actually better to wrap all of this in a context.
-Considering
-1. It is highly unlikely for a person to have more than 50 classrooms
-2. Saves time to fetch the database, then why not just do it in login
+/* TODO : Loading Skeleton for classroom skeleton
+Low priority but after designing the basic ideas should be good
 */
 
 const Home = () => {
@@ -77,7 +74,7 @@ const Home = () => {
                     placeholder="Search Class Name"
                     className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50"/>
                 <button className="p-3 text-sm font-medium rounded-lg bg-primary-default">
-                    <FaSearch className="w-4 h-4"/>
+                    Join Classroom <FaSearch className="w-4 h-4"/>
                 </button>
             </search>
             <h1>Recent</h1>

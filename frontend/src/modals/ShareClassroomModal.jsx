@@ -12,8 +12,6 @@ import {
 import { Clipboard, HR } from "flowbite-react"
 
 const ShareClassroomModal = ({ id }) => {
-    const [ openModal, setOpenModal ] = useState()
-    console.log(id);
     return (
         <Dialog>
             <DialogTrigger>

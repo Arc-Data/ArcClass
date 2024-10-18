@@ -52,7 +52,7 @@ const UserNav = () => {
                     &&
                     <CreateClassroomModal/>
                     }
-                    <Popover theme={customPopoverTheme} content={<PopoverContent/>} placement="bottom" arrow={false} trigger="hover" className="">
+                    <Popover theme={customPopoverTheme} content={<PopoverContent/>} placement="bottom" arrow={false} trigger="hover" className="bg-background-default">
                         <div className="cursor-pointer">
                             <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
                                 <FaUser size={18}/>

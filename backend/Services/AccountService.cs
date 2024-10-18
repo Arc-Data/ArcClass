@@ -30,9 +30,12 @@ namespace backend.Services
         }
         public async Task<(bool Succeeded, string? Token, string? refreshToken, IEnumerable<IdentityError>? Errors)> CreateUserAsync(CreateUserDto userDto)
         {
+            Console.WriteLine("Somehwere in here");
+            
             AppUser user;
             if (userDto.Account == AccountType.Student)
             {
+                Console.WriteLine("Is a student account");
                 user = new Student
                 {
                     UserName = userDto.Email,
@@ -44,6 +47,7 @@ namespace backend.Services
             }
             else 
             {
+                Console.WriteLine("Is a teacher account");
                 user = new Teacher
                 {
                     UserName = userDto.Email,
@@ -53,9 +57,13 @@ namespace backend.Services
                     LastName = userDto.LastName,
                 };
             }
-
+            Console.WriteLine(userDto.Password);
             var result = await _userManager.CreateAsync(user, userDto.Password!);
-            if (!result.Succeeded) return (false, null, null, result.Errors);
+            if (!result.Succeeded) {
+                Console.WriteLine("User creation failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                return (false, null, null, result.Errors);
+            }
+            Console.WriteLine("User created");
 
             var roleName = userDto.Account == AccountType.Student ? "Student" : "Teacher";
             var roleResult = await _userManager.AddToRoleAsync(user, roleName);

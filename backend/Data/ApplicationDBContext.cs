@@ -25,21 +25,25 @@ namespace backend.Data
         {
             base.OnModelCreating(builder);
 
-            List<IdentityRole> roles =
-            [
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
                 new() {
+                    Id = "12debc9a-4863-41f3-9603-67418de3a39c",
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
                 new() {
+                    Id = "088a386a-f72f-407c-94d8-72ea97a7a5d3",
                     Name = "Student",
                     NormalizedName = "STUDENT"
                 },
                 new() {
+                    Id = "6c73604f-9771-44b0-ac2e-4f7701cbbf54",
                     Name = "Teacher",
                     NormalizedName = "TEACHER"
                 }
-            ];
+            };
+
             builder.Entity<IdentityRole>().HasData(roles);
 
             builder.Entity<RefreshToken>()

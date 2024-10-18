@@ -27,12 +27,14 @@ namespace backend.Controllers
         private readonly IClassroomService _classroomService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IClassroomRepository _classroomRepo;
+        private readonly IStudentClassroomRepository _studentClassroomRepo;
 
-        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo)
+        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo, IStudentClassroomRepository studentClassroomRepo)
         {
             _classroomService = classroomService;
             _userManager = userManager;
             _classroomRepo = classroomRepo;
+            _studentClassroomRepo = studentClassroomRepo;
         }
 
         /* NOTE : Regarding Roles Based Approach (ramble)
@@ -71,11 +73,21 @@ namespace backend.Controllers
                 var classroomsDto = classrooms.Select(c => c.ToClassroomDto()).ToList();
                 return Ok(classroomsDto);
             } 
+            else if (roles.Contains("Student"))
+            {
+                var studentClassrooms = await _studentClassroomRepo.GetStudentClassroomsAsync(user.Id);
+                var studentClassroomsDto = studentClassrooms
+                    .Where(sc => sc.Classroom != null) // Ensure we only process non-null classrooms
+                    .Select(sc => sc.Classroom!.ToClassroomDto())
+                    .Distinct()
+                    .ToList();
+
+                return Ok(studentClassroomsDto);
+
+            }
             else 
             {
-                return Ok(new {
-                    Message = "Student"
-                });
+                return Unauthorized("Something is wrong with the role assignment");
             }
         }
 
@@ -88,10 +100,7 @@ namespace backend.Controllers
             var email = User.GetEmail();
             var teacher = await _userManager.Users.OfType<Teacher>().FirstOrDefaultAsync(t => t.Email == email);
 
-            if (teacher == null)
-            {
-                return NotFound("Teacher not found.");
-            }
+            if (teacher == null) return NotFound("Teacher not found.");
 
             var uniqueId = await _classroomService.GenerateUniqueRandomId();
             var classroom = new Classroom {
@@ -130,10 +139,25 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        [HttpPost("join")]
-        public async Task<IActionResult> JoinClassroom()
+        [HttpPost("{id}/join")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> JoinClassroom([FromRoute] string id)
         {
-            return Ok();
+            var email = User.GetEmail();
+
+            var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
+            if (student == null) return Unauthorized("Student not found");
+
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound();
+
+            var studentClassroom = new StudentClassroom {
+                Student = student,
+                Classroom = classroom,
+            };
+
+            await _studentClassroomRepo.CreateAsync(studentClassroom);
+            return Ok(studentClassroom);
         }
     }
 }

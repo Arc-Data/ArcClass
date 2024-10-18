@@ -12,7 +12,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241014085317_InitialCreate")]
+    [Migration("20241018055729_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -54,19 +54,19 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b57ce96d-600d-4d7b-acda-fff46cafff87",
+                            Id = "12debc9a-4863-41f3-9603-67418de3a39c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "bd4f787e-41be-432c-9291-875427ca1baa",
+                            Id = "088a386a-f72f-407c-94d8-72ea97a7a5d3",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
-                            Id = "27bf7a3b-4af7-4b1c-926e-599c9632a852",
+                            Id = "6c73604f-9771-44b0-ac2e-4f7701cbbf54",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         });
@@ -263,7 +263,7 @@ namespace backend.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Section")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -272,6 +272,10 @@ namespace backend.Migrations
 
                     b.Property<DateTime>("SemesterStart")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TeacherId")
                         .HasColumnType("nvarchar(450)");
@@ -313,6 +317,21 @@ namespace backend.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("backend.Models.StudentClassroom", b =>
+                {
+                    b.Property<string>("ClassroomId")
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ClassroomId", "StudentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentClassrooms");
                 });
 
             modelBuilder.Entity("backend.Models.Student", b =>
@@ -401,6 +420,25 @@ namespace backend.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("backend.Models.StudentClassroom", b =>
+                {
+                    b.HasOne("backend.Models.Classroom", "Classroom")
+                        .WithMany("StudentClassrooms")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Student", "Student")
+                        .WithMany("StudentClassrooms")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("backend.Models.Student", b =>
                 {
                     b.HasOne("backend.Models.AppUser", null)
@@ -422,6 +460,16 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.AppUser", b =>
                 {
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("backend.Models.Classroom", b =>
+                {
+                    b.Navigation("StudentClassrooms");
+                });
+
+            modelBuilder.Entity("backend.Models.Student", b =>
+                {
+                    b.Navigation("StudentClassrooms");
                 });
 
             modelBuilder.Entity("backend.Models.Teacher", b =>

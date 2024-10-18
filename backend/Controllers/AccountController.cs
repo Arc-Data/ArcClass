@@ -12,6 +12,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
+/* TODO : Add Admin Related Controls
+Add 
+*/
+
 namespace backend.Controllers
 {
     [Route("api/account")]

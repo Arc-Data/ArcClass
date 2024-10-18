@@ -32,6 +32,8 @@ const useClassroomManager = (authTokens) => {
                 }
             })
 
+            console.log(response)
+
             setClassrooms(response.data)
             setFilteredList(response.data)
         }

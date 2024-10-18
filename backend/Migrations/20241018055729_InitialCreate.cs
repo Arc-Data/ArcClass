@@ -223,7 +223,8 @@ namespace backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Section = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SemesterStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SemesterEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -239,14 +240,38 @@ namespace backend.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentClassrooms",
+                columns: table => new
+                {
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClassroomId = table.Column<string>(type: "nvarchar(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentClassrooms", x => new { x.ClassroomId, x.StudentId });
+                    table.ForeignKey(
+                        name: "FK_StudentClassrooms_Classrooms_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalTable: "Classrooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentClassrooms_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "27bf7a3b-4af7-4b1c-926e-599c9632a852", null, "Teacher", "TEACHER" },
-                    { "b57ce96d-600d-4d7b-acda-fff46cafff87", null, "Admin", "ADMIN" },
-                    { "bd4f787e-41be-432c-9291-875427ca1baa", null, "Student", "STUDENT" }
+                    { "088a386a-f72f-407c-94d8-72ea97a7a5d3", null, "Student", "STUDENT" },
+                    { "12debc9a-4863-41f3-9603-67418de3a39c", null, "Admin", "ADMIN" },
+                    { "6c73604f-9771-44b0-ac2e-4f7701cbbf54", null, "Teacher", "TEACHER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -297,6 +322,11 @@ namespace backend.Migrations
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentClassrooms_StudentId",
+                table: "StudentClassrooms",
+                column: "StudentId");
         }
 
         /// <inheritdoc />
@@ -318,16 +348,19 @@ namespace backend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Classrooms");
-
-            migrationBuilder.DropTable(
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "StudentClassrooms");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Classrooms");
+
+            migrationBuilder.DropTable(
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "Teachers");
