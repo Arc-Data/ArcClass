@@ -9,6 +9,6 @@ namespace backend.Models
     [Table("Students")]
     public class Student : AppUser
     {
-        
+        public IList<StudentClassroom> StudentClassrooms { get; set; } = [];
     }
 }

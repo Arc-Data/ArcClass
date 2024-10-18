@@ -17,5 +17,6 @@ namespace backend.Models
         public DateTime? SemesterEnd { get; set; }
         public virtual Teacher? Teacher { get; set; }
         public string? TeacherId { get; set; } = string.Empty;
+        public IList<StudentClassroom> StudentClassrooms { get; set; } = [];
     }
 }

@@ -19,8 +19,8 @@ namespace backend.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }  
-
         public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<StudentClassroom> StudentClassrooms { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -53,6 +53,19 @@ namespace backend.Data
                 .WithMany(t => t.Classrooms)
                 .HasForeignKey(c => c.TeacherId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<StudentClassroom>()
+                .HasKey(sc => new { sc.ClassroomId, sc.StudentId });
+
+            builder.Entity<StudentClassroom>()
+                .HasOne(sc => sc.Student)
+                .WithMany(s => s.StudentClassrooms)
+                .HasForeignKey(sc => sc.StudentId);
+
+            builder.Entity<StudentClassroom>()
+                .HasOne(sc => sc.Classroom)
+                .WithMany(c => c.StudentClassrooms)
+                .HasForeignKey(sc => sc.ClassroomId);
         }
     }
 }
