@@ -10,11 +10,6 @@ import { Button } from "@/components/ui/button"
 import { cn  } from "@/lib/utils"
 import { useNavigate } from "react-router-dom"
 
-/* FIXME: Date Input
-Fix Controlled Inputs having to do with null values to Date values
-Fix Clear Button not removing the associated display
-*/
-
 /* TODO : Move to using ShadCN
 
 */

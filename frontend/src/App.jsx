@@ -14,12 +14,10 @@ import Calendar from "./pages/Calendar"
 import Classroom from "./pages/Classroom/Classroom"
 import JoinClassroomModal from "./modals/JoinClassroomModal"
 
-/* TODO: Create Profile Customization Section 
-Optionally a mobile menu option similar to anilist 
-*/
-
-/* TODO: Classroom Not Found 
-Classroom Specific Not Found
+/* TODO: 
+// [ ] - Create Profile Customization Section
+// Optionally a mobile menu option similar to anilist 
+// [ ] - Classroom Not Found 
 */
 
 function App() {

@@ -18,6 +18,7 @@ using backend.Interfaces;
 using backend.Mappers;
 using backend.Dtos.Classroom;
 
+
 namespace backend.Controllers
 {
     [ApiController]
@@ -143,19 +144,25 @@ namespace backend.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Exists([FromRoute] string id)
         {
+            
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null)
                 return NotFound();
+            
+            var email = User.GetEmail();
+            var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
+            if (student == null) return Unauthorized("Student not found");
 
-            return Ok(classroom.ToClassroomDto());
+            var isExisting = await _studentClassroomRepo.StudentExistsInClassroom(student, classroom);
+
+            return Ok(new {
+                Classroom = classroom.ToClassroomDto(),
+                IsExisting = isExisting
+            });
         }      
 
         /* NOTE : Reconsider process whether to recheck classroom exists
         Redundant because web process involves calling Exists first before JoinClassroom
-        */
-
-        /* TODO : Check for whether student is already a part of a classroom
-
         */
 
         [HttpPost("{id}/join")]
@@ -190,7 +197,6 @@ namespace backend.Controllers
         {
             var email = User.GetEmail();
             var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
-            
             if (student == null) return Unauthorized("Student not found");
 
             var classroom = await _classroomRepo.GetByIdAsync(id);

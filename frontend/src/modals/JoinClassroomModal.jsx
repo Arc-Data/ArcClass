@@ -7,20 +7,18 @@ import { FaUser } from "react-icons/fa"
 import { FaRightFromBracket } from "react-icons/fa6"
 import { useLocation, useNavigate } from "react-router-dom"
 
-/* TODO : Classroom Settings : Set Passwords, Lock Group Members
-
+/* TODO : 
+// [ ] - Classroom Settings : Set Passwords, Lock Group Members
+// [ ] - Classroom does not exist 
 */
 
-/* TODO : Classroom does not exist and loaders
-
-*/
 
 const JoinClassroomModal = () => {
     const [ isOpen, setIsOpen ] = useState(false)
     const [ code, setCode ] = useState("")
     const [ step, setStep ] = useState(0)
     const { authTokens } = useContext(AuthContext)
-    const { classroom, getClassroom, joinClassroom, checkClassroom } = useClassroomManager(authTokens)
+    const { classroom, joinClassroom, checkClassroom } = useClassroomManager(authTokens)
     const [ loading, setLoading ] = useState(false)
     const [ errors, setErrors ] = useState()
 
@@ -44,8 +42,11 @@ const JoinClassroomModal = () => {
     }, [location]);
 
     const handleStep1 = async (shortCutCode) => {
+        setLoading(true)
+        
         try {
-            await checkClassroom(shortCutCode ?? code);
+            const isExisting = await checkClassroom(shortCutCode ?? code);
+            if (isExisting) navigate(`/classroom/${shortCutCode ?? code}`)
             setStep(1)
         }
         catch (error) {
@@ -84,10 +85,10 @@ const JoinClassroomModal = () => {
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <button onClick={() => setIsOpen(prev => !prev)} className="flex items-center gap-2 p-4 text-sm rounded-full bg-primary-default hover:bg-gray-200">
+            <div onClick={() => setIsOpen(prev => !prev)} className="flex items-center gap-2 p-4 text-sm rounded-full bg-primary-default hover:bg-gray-200">
                 <span className="whitespace-nowrap">Join Classroom</span>
                 <FaRightFromBracket size={16}/>
-            </button>
+            </div>
             <DialogContent className="sm:max-w-[425px]">
                 <form onSubmit={handleSubmit}>
                 {step == 0 && 
@@ -98,16 +99,22 @@ const JoinClassroomModal = () => {
                         Enter classroom code below 
                     </DialogDescription>
                 </DialogHeader>
-                <div className="relative">
+                <div className="relative my-4">
+                    {loading ? 
+                    <div className="text-center">
+                        <Spinner />
+                    </div>
+                    : 
                     <input
-                        id="id"
-                        type="text"
-                        className=" text-center text-xl font-bold block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-500 uppercase"
-                        minLength={6}
-                        maxLength={6}
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
+                    id="id"
+                    type="text"
+                    className=" text-center text-xl font-bold block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-500 uppercase"
+                    minLength={6}
+                    maxLength={6}
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
                     />
+                    }
                 </div>
                 </>
                 }
