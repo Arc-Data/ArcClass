@@ -5,23 +5,31 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Spinner } from "flowbite-react"
 import { useContext, useEffect } from "react"
 import { FaTrash } from "react-icons/fa"
-import { FaGear } from "react-icons/fa6"
+import { FaGear, FaRightFromBracket } from "react-icons/fa6"
 import { useNavigate, useParams } from "react-router-dom"
 
 /* TODO : Conceptualize Privacy Related Settings and User Control Systems
 Unauthorized Joining, User Moderation.
 */
 
+/* TODO : Create alert dialog for leaving classroom
+
+*/
 
 const Classroom = () => {
     const { id } = useParams()
-    const { authTokens, user } = useContext(AuthContext)
-    const { classroom, loading, getClassroom, deleteClassroom } = useClassroomManager(authTokens)
+    const { authTokens, user, role } = useContext(AuthContext)
+    const { classroom, loading, getClassroom, deleteClassroom, leaveClassroom } = useClassroomManager(authTokens)
     
     const navigate = useNavigate()
 
     const handleDelete = async () => {
         await deleteClassroom(id)
+        navigate('/home')
+    }
+
+    const handleLeaveClassroom = async () => {
+        await leaveClassroom(id)
         navigate('/home')
     }
 
@@ -68,13 +76,19 @@ const Classroom = () => {
                             <FaGear size={16}/>
                         </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="z-30 bg-background-default *:p-2 rounded-lg">
-                        {user.role.includes('Teacher') && classroom.teacher.id == user.nameid &&
+                    <DropdownMenuContent align="end" className="z-40 bg-background-default *:p-2 rounded-lg *:cursor-pointer">
+                        {role.includes('Teacher') && classroom.teacher.id == user.nameid &&
                         <DropdownMenuItem 
                             onClick={handleDelete}
                             className="z-30 flex items-center gap-2 text-red-500">
                             <FaTrash/>
                             <span>Delete</span>
+                        </DropdownMenuItem>
+                        }
+                        {role.includes('Student') &&
+                        <DropdownMenuItem onClick={handleLeaveClassroom } className="z-30 flex items-center gap-2 text-red-500">
+                            <FaRightFromBracket/>
+                            <span>Leave Classroom</span>
                         </DropdownMenuItem>
                         }
                     </DropdownMenuContent>

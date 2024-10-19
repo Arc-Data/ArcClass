@@ -43,5 +43,11 @@ namespace backend.Repositories
                 .Where(sc => sc.StudentId == studentId)
                 .ToListAsync();
         }
+
+        public async Task<bool> StudentExistsInClassroom(Student student, Classroom classroom)
+        {
+            return await _context.StudentClassrooms
+                .AnyAsync(sc => sc.ClassroomId == classroom.Id && sc.StudentId == student.Id);
+        }
     }
 }

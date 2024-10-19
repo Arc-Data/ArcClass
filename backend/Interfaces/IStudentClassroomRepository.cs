@@ -11,5 +11,6 @@ namespace backend.Interfaces
         Task<StudentClassroom?> CreateAsync(StudentClassroom studentClassroom);
         Task<StudentClassroom?> DeleteStudentClassroom(Student student, Classroom classroom);
         Task<IList<StudentClassroom>> GetStudentClassroomsAsync(string studentId);
+        Task<bool> StudentExistsInClassroom(Student student, Classroom classroom);
     }
 }

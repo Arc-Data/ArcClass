@@ -7,6 +7,14 @@ import { FaUser } from "react-icons/fa"
 import { FaRightFromBracket } from "react-icons/fa6"
 import { useLocation, useNavigate } from "react-router-dom"
 
+/* TODO : Classroom Settings : Set Passwords, Lock Group Members
+
+*/
+
+/* TODO : Classroom does not exist and loaders
+
+*/
+
 const JoinClassroomModal = () => {
     const [ isOpen, setIsOpen ] = useState(false)
     const [ code, setCode ] = useState("")

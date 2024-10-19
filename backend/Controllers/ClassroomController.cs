@@ -154,6 +154,10 @@ namespace backend.Controllers
         Redundant because web process involves calling Exists first before JoinClassroom
         */
 
+        /* TODO : Check for whether student is already a part of a classroom
+
+        */
+
         [HttpPost("{id}/join")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> JoinClassroom([FromRoute] string id)
@@ -166,6 +170,11 @@ namespace backend.Controllers
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
 
+            if (await _studentClassroomRepo.StudentExistsInClassroom(student, classroom))
+            {
+                return Ok(classroom.Id);
+            }
+
             var studentClassroom = new StudentClassroom {
                 Student = student,
                 Classroom = classroom,
@@ -173,6 +182,24 @@ namespace backend.Controllers
 
             await _studentClassroomRepo.CreateAsync(studentClassroom);
             return Ok(classroom.Id);
+        }
+
+        [HttpPost("{id}/leave")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> LeaveClassroom(string id)
+        {
+            var email = User.GetEmail();
+            var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
+            
+            if (student == null) return Unauthorized("Student not found");
+
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound();
+
+            var studentClassroom = await _studentClassroomRepo.DeleteStudentClassroom(student, classroom);
+            if (studentClassroom == null) return BadRequest();
+
+            return NoContent();
         }
     }
 }

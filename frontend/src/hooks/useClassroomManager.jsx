@@ -98,6 +98,21 @@ const useClassroomManager = (authTokens) => {
         }
     }
 
+    const leaveClassroom = async (id) => {
+        try {
+            const response = await axios.post(`api/classroom/${id}/leave`, null, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+            console.log(response)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     const getClassroom = async (id) => {
         try {
             const response = await axios.get(`api/classroom/${id}`, {
@@ -123,6 +138,7 @@ const useClassroomManager = (authTokens) => {
         filteredList,
         searchQuery,
 
+        leaveClassroom,
         checkClassroom,
         joinClassroom,
         createClassroom,
