@@ -17,7 +17,7 @@ Low priority but after designing the basic ideas should be good
 */
 
 const Home = () => {
-    const { authTokens } = useContext(AuthContext)
+    const { authTokens, role } = useContext(AuthContext)
     const { filteredList: classrooms, loading, getClassroomList, handleFilterClassroomList, searchQuery } = useClassroomManager(authTokens)
 
 
@@ -74,7 +74,7 @@ const Home = () => {
                     onChange={handleFilterClassroomList}
                     placeholder="Search Class Name"
                     className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50"/>
-                <JoinClassroomModal/>
+                {role.includes("Student") && <JoinClassroomModal/>}
             </search>
             <div className="mt-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
                 {classCards}

@@ -76,8 +76,6 @@ export const AuthProvider = ({ children }) => {
                 Authorization: `Bearer ${authTokens.access}`
             }
         })
-
-        console.log(response)
         
         setAuthTokens(null)
         setUser(null)

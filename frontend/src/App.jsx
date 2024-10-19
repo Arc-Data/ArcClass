@@ -12,6 +12,7 @@ import Home from "./pages/Home"
 import DefaultLayout from "./layouts/DefaultLayout"
 import Calendar from "./pages/Calendar"
 import Classroom from "./pages/Classroom/Classroom"
+import JoinClassroomModal from "./modals/JoinClassroomModal"
 
 /* TODO: Create Profile Customization Section 
 Optionally a mobile menu option similar to anilist 
@@ -38,7 +39,10 @@ function App() {
 						<Route element={<DefaultLayout />}>
 							<Route path="/home" element={<Home/>} />	
 							<Route path="/calendar" element={<Calendar/>} />	
-							<Route path="/classroom/:id" element={<Classroom/>} />			
+							<Route path="/classroom/:id" element={<Classroom/>} />		
+							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}
+								<Route index element={<JoinClassroomModal />} /> {/* Open the modal on this route */}
+                            </Route>
 						</Route>
 					</Route>
 					

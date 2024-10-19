@@ -139,6 +139,21 @@ namespace backend.Controllers
             return NoContent();
         }
 
+        [HttpPost("{id}")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> Exists([FromRoute] string id)
+        {
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null)
+                return NotFound();
+
+            return Ok(classroom.ToClassroomDto());
+        }      
+
+        /* NOTE : Reconsider process whether to recheck classroom exists
+        Redundant because web process involves calling Exists first before JoinClassroom
+        */
+
         [HttpPost("{id}/join")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> JoinClassroom([FromRoute] string id)
@@ -148,7 +163,6 @@ namespace backend.Controllers
             var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
             if (student == null) return Unauthorized("Student not found");
 
-            Console.WriteLine(id);
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
 
