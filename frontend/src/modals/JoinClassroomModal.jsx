@@ -7,9 +7,10 @@ import { FaUser } from "react-icons/fa"
 import { FaRightFromBracket } from "react-icons/fa6"
 import { useLocation, useNavigate } from "react-router-dom"
 
-/* TODO : 
+/* 
 // [ ] - Classroom Settings : Set Passwords, Lock Group Members
-// [ ] - Classroom does not exist 
+// [ ] - Classroom does not exist
+// [ ] - Include student counts
 */
 
 

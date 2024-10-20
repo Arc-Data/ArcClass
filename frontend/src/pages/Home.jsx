@@ -2,7 +2,6 @@ import AuthContext from "@/context/AuthContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import JoinClassroomModal from "@/modals/JoinClassroomModal"
 import { useContext, useEffect, useState } from "react"
-import { FaSearch } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 /* COMMENT : To use a context
@@ -19,7 +18,6 @@ Low priority but after designing the basic ideas should be good
 const Home = () => {
     const { authTokens, role } = useContext(AuthContext)
     const { filteredList: classrooms, loading, getClassroomList, handleFilterClassroomList, searchQuery } = useClassroomManager(authTokens)
-
 
     //     {
     //         "id": "CT8ZA3",

@@ -1,11 +1,13 @@
 import { useContext, useState } from "react"
 import AuthContext from "../context/AuthContext"
 import { Link } from "react-router-dom"
-import { FaPlus, FaUser } from "react-icons/fa";
+import { FaHamburger, FaPlus, FaUser } from "react-icons/fa";
+import { IoMenu } from "react-icons/io5";
 import { HR, Modal, Popover } from "flowbite-react";
 import customPopoverTheme from "./FlowbiteCustom/CustomPopoverTheme";
 import { FaArrowRightFromBracket, FaGear } from "react-icons/fa6";
 import CreateClassroomModal from "../modals/CreateClassroomModal";
+import { Sidebar, useSidebar } from "./ui/sidebar";
 
 /* TODO: Create a Toggle Sidebar 
 Optionally a mobile menu option similar to anilist 
@@ -15,6 +17,7 @@ Optionally a mobile menu option similar to anilist
 const UserNav = () => {
     const { logoutUser, role, user } = useContext(AuthContext)
     const [openModal, setOpenModal] = useState(false)
+    const { toggleSidebar } = useSidebar()
 
     const PopoverContent = () => {
         return (
@@ -43,8 +46,11 @@ const UserNav = () => {
     }
     
     return (
-        <div className="fixed top-0 w-full border-b bg-background-default">
-            <div className="flex items-center py-2.5 w-full max-w-7xl mx-auto px-2">
+        <Sidebar className="fixed top-0 w-full border-b bg-background-default">
+            <div className="flex items-center gap-4 py-2.5 w-full mx-auto px-2">
+                <button className="p-2 hover:bg-gray-200" onClick={toggleSidebar}>
+                    <IoMenu size={20}/>
+                </button>
                 <Link to="/" className="text-2xl font-heading">ArcClass</Link>
 
                 <div className="flex items-center gap-8 ml-auto">
@@ -61,10 +67,8 @@ const UserNav = () => {
                     </Popover>
                 </div>
             </div>
-            {openModal && 
-            <CreateClassroomModal show={openModal} onClose={() => setOpenModal(false)}/>
-            }
-        </div>
+          
+        </Sidebar>
     )
 }
 
