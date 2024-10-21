@@ -8,7 +8,7 @@ import { FaTrash } from "react-icons/fa"
 import { FaGear, FaRightFromBracket } from "react-icons/fa6"
 import { useNavigate, useParams } from "react-router-dom"
 
-/* TODO 
+/*
 // [ ] - Conceptualize Privacy Related Settings and User Control Systems
 // Unauthorized Joining, User Moderation.
 // [ ] - Create alert dialog for leaving classroom

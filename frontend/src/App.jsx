@@ -13,8 +13,9 @@ import DefaultLayout from "./layouts/DefaultLayout"
 import Calendar from "./pages/Calendar"
 import Classroom from "./pages/Classroom/Classroom"
 import JoinClassroomModal from "./modals/JoinClassroomModal"
+import { ClassroomProvider } from "./context/ClassroomContext"
 
-/* TODO: 
+/* 
 // [ ] - Create Profile Customization Section
 // Optionally a mobile menu option similar to anilist 
 // [ ] - Classroom Not Found 
@@ -34,7 +35,10 @@ function App() {
 						</Route>
 					</Route>
 					<Route element={<UserRoutes/>}>
-						<Route element={<DefaultLayout />}>
+						<Route element={
+							<ClassroomProvider>
+								<DefaultLayout />
+							</ClassroomProvider>}>
 							<Route path="/home" element={<Home/>} />	
 							<Route path="/calendar" element={<Calendar/>} />	
 							<Route path="/classroom/:id" element={<Classroom/>} />		

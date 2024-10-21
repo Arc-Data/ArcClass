@@ -2,6 +2,11 @@ import { Outlet } from "react-router-dom"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import AppSidebar from "@/components/AppSidebar"
 
+/* TODO : Save sidebar settings on local state
+Sidebar does not remember its own default state when
+User clicks on home page for some reason
+*/
+
 const DefaultLayout = ({ children }) => {
 	return (
 		<SidebarProvider>
