@@ -10,8 +10,11 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Clipboard, HR } from "flowbite-react"
+import { useParams } from "react-router-dom"
 
-const ShareClassroomModal = ({ id }) => {
+const ShareClassroomModal = () => {
+    const { id } = useParams()
+
     return (
         <Dialog>
             <DialogTrigger>
