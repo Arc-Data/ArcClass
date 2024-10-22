@@ -1,10 +1,11 @@
+import Classroom404 from "@/components/errors/Classroom404"
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import ShareClassroomModal from "@/modals/ShareClassroomModal"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { Spinner } from "flowbite-react"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FaTrash } from "react-icons/fa"
 import { FaGear, FaRightFromBracket } from "react-icons/fa6"
 import { useNavigate, useParams } from "react-router-dom"
@@ -20,6 +21,7 @@ const Classroom = () => {
     const { authTokens, user, role } = useContext(AuthContext)
     const { classroom, loading, getClassroom, deleteClassroom, leaveClassroom } = useClassroomManager(authTokens)
     const { handleRemoveClassroom } = useContext(ClassroomContext)
+    const [ error, setError ] = useState()
 
     const navigate = useNavigate()
 
@@ -37,11 +39,21 @@ const Classroom = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await getClassroom(id)
+            try {
+                await getClassroom(id)
+            }
+            catch (error) {
+                console.log(error)
+                setError(error)
+            }
         }
 
         fetchData()
     }, [id])
+
+    if (error) {
+        return <Classroom404/>
+    }
 
     if (loading) {
         return (
@@ -88,7 +100,7 @@ const Classroom = () => {
                         </DropdownMenuItem>
                         }
                         {role.includes('Student') &&
-                        <DropdownMenuItem onClick={handleLeaveClassroom } className="z-30 flex items-center gap-2 text-red-500">
+                        <DropdownMenuItem onClick={ handleLeaveClassroom } className="z-30 flex items-center gap-2 text-red-500">
                             <FaRightFromBracket/>
                             <span>Leave Classroom</span>
                         </DropdownMenuItem>

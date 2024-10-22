@@ -15,7 +15,6 @@ Considering
 /* 
 // [ ] - Loading Skeleton for classroom skeleton
 // Low priority but after designing the basic ideas should be good
-// [ ] - Move to using ClassroomContext 
 */
 
 const Home = () => {
