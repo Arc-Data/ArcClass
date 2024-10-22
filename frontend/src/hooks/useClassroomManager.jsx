@@ -7,7 +7,6 @@ const useClassroomManager = (authTokens) => {
     const [ classrooms, setClassrooms ] = useState([])
 
     const [ filteredList, setFilteredList ] = useState([])
-    const [ searchQuery, setSearchQuery ] = useState("")
 
     const createClassroom = async (data) => {
         try {
@@ -16,11 +15,11 @@ const useClassroomManager = (authTokens) => {
                     Authorization: `Bearer ${authTokens.access}`
                 }
             })
-
+                
             return response.data
         }
         catch (error) {
-            console.log(error)
+            throw error
         }
     }
 
@@ -49,6 +48,7 @@ const useClassroomManager = (authTokens) => {
 
             setClassrooms(response.data)
             setFilteredList(response.data)
+            return response.data
         }
         catch (error) {
             console.log(error)
@@ -72,16 +72,6 @@ const useClassroomManager = (authTokens) => {
         }
     }
 
-    const handleFilterClassroomList = (e) => {
-        setSearchQuery(e.target.value)
-        const query = e.target.value.toLowerCase();
-        
-        const filterClassroomsByQuery = classrooms.filter(classroom => {
-            return classroom.subject.toLowerCase().includes(query)
-        })
-        setFilteredList(filterClassroomsByQuery)
-
-    }
 
     const checkClassroom = async (id) => {
         try {
@@ -138,7 +128,6 @@ const useClassroomManager = (authTokens) => {
         classroom,
         classrooms,
         filteredList,
-        searchQuery,
 
         leaveClassroom,
         checkClassroom,
@@ -147,7 +136,6 @@ const useClassroomManager = (authTokens) => {
         getClassroom,
         deleteClassroom,
         getClassroomList,
-        handleFilterClassroomList
     }
 }
 

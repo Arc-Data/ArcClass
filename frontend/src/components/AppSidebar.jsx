@@ -1,26 +1,13 @@
 import { Link, NavLink } from "react-router-dom"
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader } from "./ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader } from "./ui/sidebar"
 import { FaHome } from "react-icons/fa"
 import { FaCalendar } from "react-icons/fa6"
 import { useContext, useEffect, useState } from "react"
 import ClassroomContext from "@/context/ClassroomContext"
 
-const SIDEBAR_STATE_KEY = "sidebarOpen"
 
 const AppSidebar = () => {
     const { classrooms }  = useContext(ClassroomContext)
-    const [sidebarOpen, setSidebarOpen] = useState(() => {
-        if (typeof window !== "undefined") {
-          const savedState = localStorage.getItem(SIDEBAR_STATE_KEY)
-          return savedState ? JSON.parse(savedState) : true
-        }
-        return true
-      })
-
-      useEffect(() => {
-        localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(sidebarOpen))
-      }, [sidebarOpen])
-    
 
     const classroomLinks = classrooms && classrooms.map(classroom => {
         return (
@@ -37,7 +24,7 @@ const AppSidebar = () => {
     })
 
     return (
-        <Sidebar defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
+        <Sidebar >
             <SidebarHeader className="flex flex-col gap-0 py-12">
                 <NavLink to="/home"
                     className={({ isActive }) =>
@@ -66,6 +53,7 @@ const AppSidebar = () => {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <SidebarFooter className="h-20"/>
         </Sidebar>
     )
 }

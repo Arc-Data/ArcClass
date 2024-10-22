@@ -1,4 +1,5 @@
 import AuthContext from "@/context/AuthContext"
+import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import JoinClassroomModal from "@/modals/JoinClassroomModal"
 import { useContext, useEffect, useState } from "react"
@@ -11,13 +12,15 @@ Considering
 2. Saves time to fetch the database, then why not just do it in login
 */
 
-/* TODO : Loading Skeleton for classroom skeleton
-Low priority but after designing the basic ideas should be good
+/* 
+// [ ] - Loading Skeleton for classroom skeleton
+// Low priority but after designing the basic ideas should be good
+// [ ] - Move to using ClassroomContext 
 */
 
 const Home = () => {
-    const { authTokens, role } = useContext(AuthContext)
-    const { filteredList: classrooms, loading, getClassroomList, handleFilterClassroomList, searchQuery } = useClassroomManager(authTokens)
+    const { role } = useContext(AuthContext)
+    const { filteredList: classrooms, loading, getClassroomList, handleFilterClassroomList, searchQuery } = useContext(ClassroomContext)
 
     //     {
     //         "id": "CT8ZA3",
@@ -55,14 +58,6 @@ const Home = () => {
         )
     })
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await getClassroomList()
-        }
-        
-        fetchData()
-    }, [])
-    
     return (
         <div className="w-full">
             <search className="flex items-center max-w-4xl gap-2 mx-auto">

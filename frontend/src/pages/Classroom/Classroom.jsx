@@ -1,4 +1,5 @@
 import AuthContext from "@/context/AuthContext"
+import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import ShareClassroomModal from "@/modals/ShareClassroomModal"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
@@ -18,16 +19,19 @@ const Classroom = () => {
     const { id } = useParams()
     const { authTokens, user, role } = useContext(AuthContext)
     const { classroom, loading, getClassroom, deleteClassroom, leaveClassroom } = useClassroomManager(authTokens)
-    
+    const { handleRemoveClassroom } = useContext(ClassroomContext)
+
     const navigate = useNavigate()
 
     const handleDelete = async () => {
         await deleteClassroom(id)
+        handleRemoveClassroom(id)
         navigate('/home')
     }
 
     const handleLeaveClassroom = async () => {
         await leaveClassroom(id)
+        handleRemoveClassroom(id)
         navigate('/home')
     }
 

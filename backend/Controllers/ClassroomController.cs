@@ -114,7 +114,7 @@ namespace backend.Controllers
 
             await _classroomRepo.CreateAsync(classroom);
 
-            return Ok(classroom.Id);
+            return Ok(classroom.ToClassroomDto());
         }
 
         [HttpGet("{id}")]

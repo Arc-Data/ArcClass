@@ -9,6 +9,7 @@ import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { cn  } from "@/lib/utils"
 import { useNavigate } from "react-router-dom"
+import ClassroomContext from "@/context/ClassroomContext"
 
 /* TODO : Move to using ShadCN
 
@@ -16,8 +17,7 @@ import { useNavigate } from "react-router-dom"
 
 const CreateClassroomModal = ({}) => {
     const [ openModal, setOpenModal ] = useState(false)
-    const { authTokens, user } = useContext(AuthContext)
-    const { createClassroom } = useClassroomManager(authTokens)
+    const { handleAddClassroom } = useContext(ClassroomContext)
     const [ loading, setLoading ] = useState(false)
 
     const navigate = useNavigate()
@@ -28,7 +28,6 @@ const CreateClassroomModal = ({}) => {
         semesterStart: null,
         semesterEnd: null,
     })
-    const [ errors, setErrors ] = useState()
     const today = new Date()
 
     const handleInputChange = (e) => {
@@ -57,20 +56,14 @@ const CreateClassroomModal = ({}) => {
                 ...prev, semesterEnd: null
             }))
         } 
-        console.log(formData)
 
-
-        try {
-            const classroomId = await createClassroom(formData)
+        const id = await handleAddClassroom(formData)
+        if (id != null) {
             setOpenModal(false)
-            navigate(`/classroom/${classroomId}`)
+            navigate(`classroom/${id}`)
         }
-        catch (error) {
-            console.log(error)
-        }
-        finally {
-            setLoading(false)
-        }
+            
+        setLoading(false)
     }
 
     return (

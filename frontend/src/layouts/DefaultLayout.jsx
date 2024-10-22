@@ -7,7 +7,7 @@ Sidebar does not remember its own default state when
 User clicks on home page for some reason
 */
 
-const DefaultLayout = ({ children }) => {
+const DefaultLayout = () => {
 	return (
 		<SidebarProvider>
 			<AppSidebar />
