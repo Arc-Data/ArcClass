@@ -1,21 +1,14 @@
+import ClassSkeleton from "@/components/Skeleton/ClassSkeleton"
+import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import JoinClassroomModal from "@/modals/JoinClassroomModal"
 import { useContext, useEffect, useState } from "react"
+import { FaImage } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
-/* COMMENT : To use a context
-Would it be actually better to wrap all of this in a context.
-Considering
-1. It is highly unlikely for a person to have more than 50 classrooms
-2. Saves time to fetch the database, then why not just do it in login
-*/
-
-/* 
-// [ ] - Loading Skeleton for classroom skeleton
-// Low priority but after designing the basic ideas should be good
-*/
+// TODO : No classrooms
 
 const Home = () => {
     const { role } = useContext(AuthContext)
@@ -45,7 +38,7 @@ const Home = () => {
     //     },
     // ]
 
-    const classCards = classrooms && classrooms.map(classroom => {
+    const classCards = () => classrooms && classrooms.map(classroom => {
         return (
             <Link key={classroom.id} to={`/classroom/${classroom.id}`} className="flex flex-col shadow">
                 <img src="/banner1.jpg" alt="" className="object-cover h-40 rounded-t-lg" />
@@ -68,9 +61,13 @@ const Home = () => {
                     className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50"/>
                 {role.includes("Student") && <JoinClassroomModal/>}
             </search>
-            <div className="mt-4 grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
-                {classCards}
-            </div>
+                {loading ? 
+                    <ClassSkeleton count={5}/>
+                :
+                <div className="mt-8 grid gap-4  grid-cols-[repeat(auto-fill,300px)]">
+                    {classCards()}
+                </div>
+                }
         </div>
     )
 }

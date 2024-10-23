@@ -15,8 +15,6 @@ const People = () => {
     const [ errors, setErrors ] = useState()
     const { id } = useParams()
 
-    
-
     useEffect(() => {
         const fetchData = async () => {
             try {

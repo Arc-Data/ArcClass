@@ -8,7 +8,7 @@ import { Spinner } from "flowbite-react"
 import { useContext, useEffect, useState } from "react"
 import { FaTrash } from "react-icons/fa"
 import { FaGear, FaRightFromBracket } from "react-icons/fa6"
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom"
+import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
 
 const ClassroomLayout = () => {
     const { id } = useParams() 
@@ -45,13 +45,6 @@ const ClassroomLayout = () => {
         fetchData()
     }, [id])
 
-    if (loading) {
-        return (
-            <div className="grid w-full h-full place-items-center">
-                <Spinner />
-            </div>
-        )
-    }
 
     if (error) {
         return <Classroom404 />
@@ -60,12 +53,32 @@ const ClassroomLayout = () => {
     return (
         <div className="">
             <div className="flex border-b">
-                <div className="flex items-center flex-1 gap-12">
-                    <button>Overview</button>
+                <div className="flex items-center flex-1 gap-4">
+                    <NavLink
+                        to={`/classroom/${id}`}
+                        end
+                        className={({ isActive }) =>
+                            `border-b-4 border-transparent py-2 px-4 ${
+                                isActive ? ' border-b-4 border-b-accent-default' : 'hover:border-b-gray-200'
+                            }`
+                        }
+                    >
+                        Overview
+                    </NavLink>
                     <button>Class Files</button>
-                    <Link to={`/classroom/${id}/people`}>People</Link>
+                    <NavLink
+                        to={`/classroom/${id}/people`}
+                        className={({ isActive }) =>
+                            `border-b-4 border-transparent py-2 px-4 ${
+                                isActive ? 'border-b-4 border-b-accent-default' : ' hover:border-b-gray-200'
+                            }`
+                        }
+                    >
+                        People
+                    </NavLink>
                 </div>
-                <ShareClassroomModal  />
+                <ShareClassroomModal />
+                {!loading && 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <button className="p-4 ml-auto rounded-full hover:bg-gray-200">
@@ -89,6 +102,7 @@ const ClassroomLayout = () => {
                         }
                     </DropdownMenuContent>
                 </DropdownMenu>
+                }
             </div>
             <Outlet/>
         </div>

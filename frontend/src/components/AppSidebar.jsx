@@ -4,10 +4,13 @@ import { FaHome } from "react-icons/fa"
 import { FaCalendar } from "react-icons/fa6"
 import { useContext, useEffect, useState } from "react"
 import ClassroomContext from "@/context/ClassroomContext"
+import { Skeleton } from "./ui/skeleton"
 
 
 const AppSidebar = () => {
-    const { classrooms }  = useContext(ClassroomContext)
+    const { classrooms, loading }  = useContext(ClassroomContext)
+
+    console.log(loading)
 
     const classroomLinks = classrooms && classrooms.map(classroom => {
         return (
@@ -48,9 +51,27 @@ const AppSidebar = () => {
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>Classroom</SidebarGroupLabel>
+                    {loading ?
+                    <div className="px-2 space-y-6">
+                        <div className="space-y-2">
+                            <Skeleton className="w-full h-3 bg-gray-400"/>
+                            <Skeleton className="w-2/3 h-3 bg-gray-400"/>
+                        </div>
+                        <div className="space-y-2">
+                            <Skeleton className="w-full h-3 bg-gray-400"/>
+                            <Skeleton className="w-2/3 h-3 bg-gray-400"/>
+                        </div>
+                        <div className="space-y-2">
+                            <Skeleton className="w-full h-3 bg-gray-400"/>
+                            <Skeleton className="w-2/3 h-3 bg-gray-400"/>
+                        </div>
+
+                    </div>
+                    :
                     <SidebarGroupContent>
                     {classroomLinks}
                     </SidebarGroupContent>
+                    }
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter className="h-20"/>

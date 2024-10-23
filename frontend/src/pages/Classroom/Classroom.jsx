@@ -1,4 +1,5 @@
 import Classroom404 from "@/components/errors/Classroom404"
+import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
@@ -40,13 +41,6 @@ const Classroom = () => {
         return <Classroom404/>
     }
 
-    if (loading) {
-        return (
-            <div className="grid w-full h-full place-items-center">
-                <Spinner />
-            </div>
-        )
-    }
 
     // {
     //     "id": "OMFOU3",
@@ -68,12 +62,22 @@ const Classroom = () => {
                         alt=""
                         className="absolute inset-0 z-10 object-cover select-none"
                     />
+                   
+                    {loading ? 
+                    <div className="absolute inset-0 z-30 flex flex-col justify-end">
+                        <div className="p-8 space-y-2">
+                            <Skeleton className="w-1/3 h-6 bg-gray-400" /> 
+                            <Skeleton className="w-1/4 h-3 bg-gray-400" /> 
+                        </div>
+                    </div>
+                    :
                     <div className="absolute inset-0 z-30 flex items-end bg-black text-primary-default bg-opacity-30 ">
                         <div className="p-8">
                             <h2 className="text-2xl font-bold">{classroom.subject}</h2>
                             <p className="mt-2">{classroom.section}</p>
                         </div>
                     </div>
+                    }
                 </div>
             </div>
     )
