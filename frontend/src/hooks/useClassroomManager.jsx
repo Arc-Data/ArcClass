@@ -33,7 +33,6 @@ const useClassroomManager = (authTokens) => {
                 }
             })
 
-            console.log(response)
             return response.data
         }
         catch (error) {
