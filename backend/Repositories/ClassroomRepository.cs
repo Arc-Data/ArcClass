@@ -21,7 +21,9 @@ namespace backend.Repositories
 
         public async Task<bool> ClassroomExists(string classroomId)
         {
-            return await _context.Classrooms.AnyAsync(c => c.Id == classroomId);
+            return await _context.Classrooms
+                .Include(sc => sc.StudentClassrooms)
+                .AnyAsync(c => c.Id == classroomId);
         }
 
         public async Task<Classroom?> CreateAsync(Classroom classroom)
@@ -42,7 +44,10 @@ namespace backend.Repositories
 
         public async Task<Classroom?> GetByIdAsync(string id)
         {
-            return await _context.Classrooms.Include(c => c.Teacher).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Classrooms
+                .Include(c => c.Teacher)
+                .Include(c => c.StudentClassrooms)
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<List<Classroom>> GetTeacherClassroomsAsync(string teacherId)

@@ -82,7 +82,7 @@ const useClassroomManager = (authTokens) => {
             })
 
             setClassroom(response.data.classroom)
-            
+            console.log(response.data)
             return response.data.isExisting
         }
         catch (error) {

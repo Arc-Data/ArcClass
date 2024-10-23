@@ -26,5 +26,23 @@ namespace backend.Mappers
                     }
             };
         }
+
+        public static ClassroomExistsDto ToClassroomExistsDto(this Classroom classroom)
+        {
+            return new ClassroomExistsDto 
+            {
+                Id = classroom.Id,
+                Section = classroom.Section,
+                Subject = classroom.Subject,
+                SemesterStart = classroom.SemesterStart,
+                SemesterEnd = classroom.SemesterEnd,
+                Teacher = new TeacherDto 
+                    {
+                        Id = classroom.TeacherId!,
+                        FullName = $"{classroom.Teacher!.FirstName} {classroom.Teacher!.LastName}"
+                    },
+                StudentCount = classroom.StudentClassrooms.Count
+            };
+        }
     }
 }

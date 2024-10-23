@@ -147,7 +147,7 @@ namespace backend.Controllers
             
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null)
-                return NotFound();
+                return NotFound($"Classroom with id '{id}' does not exist");
             
             var email = User.GetEmail();
             var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
@@ -156,8 +156,8 @@ namespace backend.Controllers
             var isExisting = await _studentClassroomRepo.StudentExistsInClassroom(student, classroom);
 
             return Ok(new {
-                Classroom = classroom.ToClassroomDto(),
-                IsExisting = isExisting
+                Classroom = classroom.ToClassroomExistsDto(),
+                IsExisting = isExisting,
             });
         }      
 
@@ -188,7 +188,7 @@ namespace backend.Controllers
             };
 
             await _studentClassroomRepo.CreateAsync(studentClassroom);
-            return Ok(classroom.Id);
+            return Ok(studentClassroom.Classroom.ToClassroomDto());
         }
 
         [HttpPost("{id}/leave")]

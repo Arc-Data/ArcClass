@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import AuthContext from "@/context/AuthContext"
+import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import { Spinner } from "flowbite-react"
 import { useContext, useEffect, useState } from "react"
@@ -10,7 +11,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 /* 
 // [ ] - Classroom Settings : Set Passwords, Lock Group Members
 // [ ] - Classroom does not exist
-// [ ] - Include student counts
 */
 
 
@@ -19,7 +19,8 @@ const JoinClassroomModal = () => {
     const [ code, setCode ] = useState("")
     const [ step, setStep ] = useState(0)
     const { authTokens } = useContext(AuthContext)
-    const { classroom, joinClassroom, checkClassroom } = useClassroomManager(authTokens)
+    const { handleJoinClassroom } = useContext(ClassroomContext)
+    const { classroom, checkClassroom } = useClassroomManager(authTokens)
     const [ loading, setLoading ] = useState(false)
     const [ errors, setErrors ] = useState()
 
@@ -51,7 +52,8 @@ const JoinClassroomModal = () => {
             setStep(1)
         }
         catch (error) {
-            console.log(error)
+            console.log(error.response)
+            setErrors(error.response.data)
         }
         finally {
             setLoading(false)
@@ -64,8 +66,14 @@ const JoinClassroomModal = () => {
         setCode("")
     };
 
+
+    /* NOTE : This handle submit function looks disorganized and inconsistent
+
+    */
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setErrors()
 
         if (step == 0) {
             handleStep1()
@@ -73,7 +81,7 @@ const JoinClassroomModal = () => {
         else if (step == 1)
         {
             try {
-                const id = await joinClassroom(code);
+                const id = await handleJoinClassroom(code)
                 navigate(`/classroom/${id}`)
             }
             catch (error) {
@@ -116,6 +124,7 @@ const JoinClassroomModal = () => {
                     onChange={(e) => setCode(e.target.value)}
                     />
                     }
+                    {errors && <p className="mt-4 text-sm text-center text-red-700">{errors}</p>}
                 </div>
                 </>
                 }
@@ -124,8 +133,9 @@ const JoinClassroomModal = () => {
                 <>
                 <DialogHeader>
                     <DialogTitle>Join Classroom</DialogTitle>
-                    <DialogDescription>
-                        {classroom.subject}
+                    <DialogDescription className="flex justify-between">
+                        <span>{classroom.subject}</span>
+                        <span>{classroom.studentCount} students</span>
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center gap-4 mt-4">
@@ -141,9 +151,11 @@ const JoinClassroomModal = () => {
                 }
                 
                 <DialogFooter className="mt-8">
+                {!loading && 
                 <button type="submit" className="gap-2 px-8 py-4 text-sm text-center rounded-2xl bg-primary-default hover:bg-gray-200" disabled={loading}>
-                    {loading ? <Spinner /> : <span className="whitespace-nowrap">Next</span>}
+                    Next
                 </button>
+                }
                 </DialogFooter>
                 </form>
 

@@ -17,6 +17,7 @@ export const ClassroomProvider = ({ children }) => {
         loading, 
         getClassroomList, 
         createClassroom, 
+        joinClassroom,
     } = useClassroomManager(authTokens)
     const [ errors, setErrors ] = useState()
 
@@ -31,6 +32,19 @@ export const ClassroomProvider = ({ children }) => {
         catch (error) {
             console.log(error)
             setErrors(error.response.data)
+        }
+    }
+
+    const handleJoinClassroom = async (code) => {
+        try {
+            const classroom = await joinClassroom(code)
+            const updatedClassroomList = [...classrooms, classroom]
+            setClassrooms(updatedClassroomList)
+            setFilteredList(updatedClassroomList)
+            return classroom.id
+        }
+        catch (error) {
+            console.log(error)
         }
     }
 
@@ -76,7 +90,8 @@ export const ClassroomProvider = ({ children }) => {
 
         handleFilterClassroomList,
         handleAddClassroom,
-        handleRemoveClassroom
+        handleRemoveClassroom,
+        handleJoinClassroom,
     }
 
     return (

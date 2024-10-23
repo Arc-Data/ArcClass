@@ -7,7 +7,7 @@ import ShareClassroomModal from "@/modals/ShareClassroomModal"
 import { Spinner } from "flowbite-react"
 import { useContext, useEffect, useState } from "react"
 import { FaTrash } from "react-icons/fa"
-import { FaGear } from "react-icons/fa6"
+import { FaGear, FaRightFromBracket } from "react-icons/fa6"
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom"
 
 const ClassroomLayout = () => {
@@ -18,7 +18,6 @@ const ClassroomLayout = () => {
     const [ error, setError ] = useState()
 
     const navigate = useNavigate()
-    console.log(role)
 
     const handleDelete = async () => {
         await deleteClassroom(id)
