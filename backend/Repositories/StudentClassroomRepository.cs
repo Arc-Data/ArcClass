@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
+using backend.Dtos.Account;
+using backend.Dtos.Classroom;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,12 +38,30 @@ namespace backend.Repositories
 
         }
 
+        public async Task<IList<Student>> GetClassroomParticipants(string id)
+        {
+            return await _context.StudentClassrooms
+                .Where(sc => sc.ClassroomId == id)
+                .Include(sc => sc.Student)
+                .Select(sc => sc.Student!)
+                .ToListAsync();
+        }
+
         public async Task<IList<StudentClassroom>> GetStudentClassroomsAsync(string studentId)
         {
             return await _context.StudentClassrooms
                 .Include(sc => sc.Classroom)
                 .ThenInclude(c => c!.Teacher)
                 .Where(sc => sc.StudentId == studentId)
+                .ToListAsync();
+        }
+
+        public async Task<IList<Student>> GetStudentsByClassroomIdAsync(string id)
+        {
+            return await _context.StudentClassrooms
+                .Where(sc => sc.ClassroomId == id)
+                .Include(sc => sc.Student)
+                .Select(sc => sc.Student!)
                 .ToListAsync();
         }
 

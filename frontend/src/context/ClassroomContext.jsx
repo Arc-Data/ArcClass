@@ -10,6 +10,7 @@ export default ClassroomContext
 export const ClassroomProvider = ({ children }) => {
     const { authTokens } = useContext(AuthContext)
     const [ classrooms, setClassrooms ] = useState([])
+    const [ students, setStudents ] = useState([])
     const [ filteredList, setFilteredList ] = useState([])
 
     const [ searchQuery, setSearchQuery ] = useState("")

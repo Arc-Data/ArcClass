@@ -20,7 +20,6 @@ import People from "./pages/Classroom/People"
 /* 
 // [ ] - Create Profile Customization Section
 // Optionally a mobile menu option similar to anilist 
-// [ ] - Classroom Not Found 
 */
 
 function App() {

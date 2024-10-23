@@ -17,7 +17,7 @@ const ShareClassroomModal = () => {
 
     return (
         <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
             <button className="p-4 rounded-full hover:bg-gray-200">
                 <FaUserPlus size={16}/>
             </button>

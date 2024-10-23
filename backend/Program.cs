@@ -12,6 +12,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+// TODO : Use a Logger
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>

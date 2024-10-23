@@ -23,6 +23,28 @@ const useClassroomManager = (authTokens) => {
         }
     }
 
+    const getClassroomParticipants = async (id) => {
+        setLoading(true)
+       
+        try {
+            const response = await axios.get(`api/classroom/${id}/participants`, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+            console.log(response)
+            return response.data
+        }
+        catch (error) {
+            throw error
+        }
+        finally 
+        {
+            setLoading(false)
+        }
+    }
+
     const joinClassroom = async (id) => {
         try {
             const response = await axios.post(`api/classroom/${id}/join`, null, {
@@ -136,6 +158,7 @@ const useClassroomManager = (authTokens) => {
         getClassroom,
         deleteClassroom,
         getClassroomList,
+        getClassroomParticipants
     }
 }
 

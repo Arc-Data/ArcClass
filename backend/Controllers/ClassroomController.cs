@@ -17,6 +17,7 @@ using Microsoft.Identity.Client;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Dtos.Classroom;
+using backend.Dtos.Account;
 
 
 namespace backend.Controllers
@@ -164,6 +165,30 @@ namespace backend.Controllers
         /* NOTE : Reconsider process whether to recheck classroom exists
         Redundant because web process involves calling Exists first before JoinClassroom
         */
+        [HttpGet("{id}/participants")]
+        [Authorize]
+        public async Task<IActionResult> GetStudentList([FromRoute] string id) 
+        {
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            
+            if (classroom == null) 
+            {
+                return NotFound("Classroom Id does not exist");
+            }
+
+            var students = await _studentClassroomRepo.GetClassroomParticipants(id);
+            var teacherDto = new TeacherDto  {
+                Id = classroom.TeacherId!,
+                FullName = $"{classroom.Teacher!.FirstName} {classroom.Teacher!.LastName}"
+            };
+
+            var participantsDto = new ClassroomParticipantsDto {
+                Teacher = teacherDto,
+                Students = students.Select(student => student.ToStudentDto()).ToList()
+            };
+
+            return Ok(participantsDto);
+        }
 
         [HttpPost("{id}/join")]
         [Authorize(Roles = "Student")]
@@ -182,7 +207,7 @@ namespace backend.Controllers
                 return Ok(classroom.Id);
             }
 
-            var studentClassroom = new StudentClassroom {
+        var studentClassroom = new StudentClassroom {
                 Student = student,
                 Classroom = classroom,
             };
