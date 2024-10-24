@@ -12,7 +12,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-// TODO : Use a Logger
+/*
+//  [ ] : Use a Logger
+//  [ ] : Learn how to sanitize inputs in ASP.NET applications
+*/
 
 var builder = WebApplication.CreateBuilder(args);
 

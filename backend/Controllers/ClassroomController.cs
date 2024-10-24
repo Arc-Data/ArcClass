@@ -18,6 +18,7 @@ using backend.Interfaces;
 using backend.Mappers;
 using backend.Dtos.Classroom;
 using backend.Dtos.Account;
+using backend.Dtos.Post;
 
 
 namespace backend.Controllers
@@ -231,6 +232,29 @@ namespace backend.Controllers
             if (studentClassroom == null) return BadRequest();
 
             return NoContent();
+        }
+
+        [HttpPost("{id}/post")]
+        [Authorize]
+        public async Task<IActionResult> CreatePost([FromRoute] string id, [FromBody] CreatePostDto postDto)
+        {
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound("Classroom not found");
+            
+            var email = User.GetEmail();
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) return Unauthorized("Invalid request");
+
+            var post = new Post
+            {
+                Content = postDto.Content,
+                DateModified = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
+                AppUser = user,
+                Classroom = classroom,
+            };
+
+            return Ok(post.ToPostDto());
         }
     }
 }
