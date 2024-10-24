@@ -12,5 +12,10 @@ namespace backend.Extensions
         {
             return user.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Email)?.Value!;
         }
+
+        public static string GetId(this ClaimsPrincipal user)
+        {
+            return user.Claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value!;
+        }
     }
 }

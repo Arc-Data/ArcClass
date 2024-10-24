@@ -10,5 +10,6 @@ namespace backend.Service
     {
         Task<string> GenerateUniqueRandomId();
         string GenerateRandomId(int length = 6);
+        Task<bool> IsUserAuthorizedToPost(Classroom classroom, string userId);
     }
 }

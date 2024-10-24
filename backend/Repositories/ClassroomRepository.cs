@@ -50,6 +50,14 @@ namespace backend.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<IList<Post>> GetPostsAsync(string classroomId)
+        {
+            return await _context.Posts
+                .Include(p => p.AppUser)
+                .Where(p => p.ClassroomId == classroomId)
+                .ToListAsync();
+        }
+
         public async Task<List<Classroom>> GetTeacherClassroomsAsync(string teacherId)
         {
             return await _context.Classrooms

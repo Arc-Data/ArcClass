@@ -18,7 +18,7 @@ import ClassroomLayout from "./layouts/ClassroomLayout"
 import People from "./pages/Classroom/People"
 
 /* 
-// [ ] - Create Profile Customization Section
+// TODO : Create Profile Customization Section
 // Optionally a mobile menu option similar to anilist 
 */
 

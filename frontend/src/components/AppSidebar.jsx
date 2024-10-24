@@ -65,7 +65,6 @@ const AppSidebar = () => {
                             <Skeleton className="w-full h-3 bg-gray-400"/>
                             <Skeleton className="w-2/3 h-3 bg-gray-400"/>
                         </div>
-
                     </div>
                     :
                     <SidebarGroupContent>

@@ -20,6 +20,9 @@ using backend.Dtos.Classroom;
 using backend.Dtos.Account;
 using backend.Dtos.Post;
 
+/* TODO : Validity checks for obtaining posts data
+// StudentExists or Is Teacher 
+*/
 
 namespace backend.Controllers
 {
@@ -31,13 +34,15 @@ namespace backend.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IClassroomRepository _classroomRepo;
         private readonly IStudentClassroomRepository _studentClassroomRepo;
+        private readonly IPostRepository _postRepo;
 
-        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo, IStudentClassroomRepository studentClassroomRepo)
+        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo, IStudentClassroomRepository studentClassroomRepo, IPostRepository postRepo)
         {
             _classroomService = classroomService;
             _userManager = userManager;
             _classroomRepo = classroomRepo;
             _studentClassroomRepo = studentClassroomRepo;
+            _postRepo = postRepo;
         }
 
         /* NOTE : Regarding Roles Based Approach (ramble)
@@ -136,11 +141,12 @@ namespace backend.Controllers
         public async Task<IActionResult> Delete([FromRoute] string id)
         {
             var classroom = await _classroomRepo.DeleteAsync(id);
-            if (classroom == null) 
-                return NotFound();
+            if (classroom == null) return NotFound();
                 
             return NoContent();
         }
+        
+        // NOTE : Consider the similarities between Exists and GetById
 
         [HttpPost("{id}")]
         [Authorize(Roles = "Student")]
@@ -208,7 +214,7 @@ namespace backend.Controllers
                 return Ok(classroom.Id);
             }
 
-        var studentClassroom = new StudentClassroom {
+            var studentClassroom = new StudentClassroom {
                 Student = student,
                 Classroom = classroom,
             };
@@ -234,7 +240,40 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/post")]
+        /* NOTE : Do i need additional checks for eligibility to obtain posts
+        // Im talking about whether even if the frontend interface does not allow for
+        // users not involved with the classroom in question should be able to access it
+        // even if frontend does not hypothetically allow it
+        // 
+        // Will be the same for delete method soon
+        */
+
+        [HttpGet("{id}/posts")]
+        [Authorize]
+        public async Task<IActionResult> GetPosts([FromRoute] string id)
+        {
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound("Classroom does not exist");
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (classroom.TeacherId != userId) 
+            {
+                Console.WriteLine("User is not the teacher");
+                var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Id == userId);
+                if (student == null) return Forbid();
+
+                var studentIsAParticipant = await _studentClassroomRepo.StudentExistsInClassroom(student, classroom);
+                if (!studentIsAParticipant) return Forbid();
+            }
+
+            var posts = await _classroomRepo.GetPostsAsync(classroom.Id);
+            var postsDto = posts.Select(p => p.ToPostDto()).ToList();
+
+            return Ok(postsDto);
+        }
+
+        [HttpPost("{id}/posts")]
         [Authorize]
         public async Task<IActionResult> CreatePost([FromRoute] string id, [FromBody] CreatePostDto postDto)
         {
@@ -253,6 +292,8 @@ namespace backend.Controllers
                 AppUser = user,
                 Classroom = classroom,
             };
+
+            await _postRepo.CreateAsync(post);
 
             return Ok(post.ToPostDto());
         }
