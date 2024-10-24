@@ -12,5 +12,6 @@ namespace backend.Models
         public string MiddleName { get; set; } = String.Empty;
         public string LastName { get; set; } = String.Empty; 
         public List<RefreshToken> RefreshTokens { get; set; } = [];
+        public List<Post> Posts { get; set; } = [];
     }
 }

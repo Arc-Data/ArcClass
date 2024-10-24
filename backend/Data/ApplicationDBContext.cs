@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+
+// NOTE : Review Delete Interactions
+
 namespace backend.Data
 {
     public class ApplicationDBContext : IdentityDbContext<AppUser>
@@ -21,6 +24,7 @@ namespace backend.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }  
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<StudentClassroom> StudentClassrooms { get; set; }
+        public DbSet<Post> Posts { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -50,6 +54,18 @@ namespace backend.Data
                 .HasOne(r => r.AppUser)
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<Post>()
+                .HasOne(p => p.AppUser)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Post>()
+                .HasOne(p => p.Classroom)
+                .WithMany(c => c.Posts)
+                .HasForeignKey(c => c.ClassroomId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Classroom>()
