@@ -64,6 +64,8 @@ namespace backend.Controllers
         Revisit this idea in the future.
         */
 
+        // FIXME : Consider ways to flatten this code 
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAll()
@@ -129,10 +131,8 @@ namespace backend.Controllers
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
             var classroom = await _classroomRepo.GetByIdAsync(id);
-            if (classroom == null)
-            {
-                return NotFound();
-            }
+            if (classroom == null) return NotFound();
+            
             return Ok(classroom.ToClassroomDto());
         }
 
@@ -154,8 +154,7 @@ namespace backend.Controllers
         {
             
             var classroom = await _classroomRepo.GetByIdAsync(id);
-            if (classroom == null)
-                return NotFound($"Classroom with id '{id}' does not exist");
+            if (classroom == null) return NotFound($"Classroom with id '{id}' does not exist");
             
             var email = User.GetEmail();
             var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Email == email);
@@ -177,12 +176,8 @@ namespace backend.Controllers
         public async Task<IActionResult> GetStudentList([FromRoute] string id) 
         {
             var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound("Classroom Id does not exist");
             
-            if (classroom == null) 
-            {
-                return NotFound("Classroom Id does not exist");
-            }
-
             var students = await _studentClassroomRepo.GetClassroomParticipants(id);
             var teacherDto = new TeacherDto  {
                 Id = classroom.TeacherId!,
@@ -209,10 +204,8 @@ namespace backend.Controllers
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
 
-            if (await _studentClassroomRepo.StudentExistsInClassroom(student, classroom))
-            {
-                return Ok(classroom.Id);
-            }
+            var isStudentInClassroom = await _studentClassroomRepo.StudentExistsInClassroom(student, classroom);
+            if (isStudentInClassroom) return Ok(classroom.Id);
 
             var studentClassroom = new StudentClassroom {
                 Student = student,
@@ -240,14 +233,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        /* NOTE : Do i need additional checks for eligibility to obtain posts
-        // Im talking about whether even if the frontend interface does not allow for
-        // users not involved with the classroom in question should be able to access it
-        // even if frontend does not hypothetically allow it
-        // 
-        // Will be the same for delete method soon
-        */
-
         [HttpGet("{id}/posts")]
         [Authorize]
         public async Task<IActionResult> GetPosts([FromRoute] string id)
@@ -255,18 +240,10 @@ namespace backend.Controllers
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound("Classroom does not exist");
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (classroom.TeacherId != userId) 
-            {
-                Console.WriteLine("User is not the teacher");
-                var student = await _userManager.Users.OfType<Student>().FirstOrDefaultAsync(s => s.Id == userId);
-                if (student == null) return Forbid();
-
-                var studentIsAParticipant = await _studentClassroomRepo.StudentExistsInClassroom(student, classroom);
-                if (!studentIsAParticipant) return Forbid();
-            }
-
+            var userId = User.GetId();
+            var isUserAuthorized = await _classroomService.IsUserAuthorizedToPost(classroom, userId);
+            if (!isUserAuthorized) return Forbid();
+            
             var posts = await _classroomRepo.GetPostsAsync(classroom.Id);
             var postsDto = posts.Select(p => p.ToPostDto()).ToList();
 
@@ -277,12 +254,16 @@ namespace backend.Controllers
         [Authorize]
         public async Task<IActionResult> CreatePost([FromRoute] string id, [FromBody] CreatePostDto postDto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound("Classroom not found");
             
-            var email = User.GetEmail();
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null) return Unauthorized("Invalid request");
+            var userId = User.GetId();
+            var isUserAuthorized = await _classroomService.IsUserAuthorizedToPost(classroom, userId);
+            if (!isUserAuthorized) return Forbid();
+            
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             var post = new Post
             {
