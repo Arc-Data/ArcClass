@@ -4,6 +4,7 @@ import { useState } from "react"
 const usePostManager = (authTokens) => {
     const [ posts, setPosts ] = useState([])
     const [ loading, setLoading ] = useState(true)
+    const [ optimisticLoading, setOptimisticLoading ] = useState(false)
 
     const getPosts = async (id) => {
         setLoading(true)
@@ -15,7 +16,6 @@ const usePostManager = (authTokens) => {
                 }
             })
 
-            console.log(response)
             setPosts(response.data)
         }   
         catch (error) {
@@ -26,11 +26,52 @@ const usePostManager = (authTokens) => {
         }
     }
 
+    const createPost = async (id, content) => {
+        setOptimisticLoading(true)
+        console.log(id)
+
+        try {
+            const response = await axios.post(`api/classroom/${id}/post`, { content }, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+            const post = response.data 
+            const updatedPosts = [post, ...posts]
+            setOptimisticLoading(false)
+            setPosts(updatedPosts)
+        }
+        catch (error) {
+            setOptimisticLoading(false)
+            throw error
+        }
+    }
+
+    const deletePost = async (id) => {
+        try {
+            await axios.delete(`api/post/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+            const updatedPosts = posts.filter(post => post.id != id)
+            setPosts(updatedPosts)
+        }
+        catch (error) {
+            throw error
+        }
+    }
+
     return {
         posts, 
         loading,
+        optimisticLoading,
 
         getPosts,
+        createPost,
+        deletePost
     }
 }
 

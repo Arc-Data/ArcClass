@@ -1,4 +1,6 @@
 import Classroom404 from "@/components/errors/Classroom404"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
@@ -17,6 +19,8 @@ const ClassroomLayout = () => {
     const { classroom, loading, getClassroom, deleteClassroom, leaveClassroom } = useClassroomManager(authTokens)
     const [ error, setError ] = useState()
 
+    const [ openLeaveModal, setOpenLeaveModal ] = useState(false)
+    
     const navigate = useNavigate()
 
     const handleDelete = async () => {
@@ -52,6 +56,20 @@ const ClassroomLayout = () => {
 
     return (
         <div className="">
+            <Dialog open={openLeaveModal} onOpenChange={setOpenLeaveModal}>
+                <DialogContent>
+                    <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete your account
+                        and remove your data from our servers.
+                    </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                    </DialogFooter>
+                        <Button onClick={handleDelete}>Hello</Button>
+                </DialogContent>
+            </Dialog>
             <div className="flex border-b">
                 <div className="flex items-center flex-1 gap-4">
                     <NavLink
@@ -85,10 +103,10 @@ const ClassroomLayout = () => {
                             <FaGear size={16}/>
                         </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="z-40 bg-background-default *:p-2 rounded-lg *:cursor-pointer">
+                    <DropdownMenuContent align="end" className="bg-background-default *:p-2 rounded-lg *:cursor-pointer">
                         {role.includes('Teacher') && classroom.teacher?.id == user.nameid &&
                         <DropdownMenuItem 
-                            onClick={handleDelete}
+                            onClick={ () => setOpenLeaveModal(true)}
                             className="z-30 flex items-center gap-2 text-red-500">
                             <FaTrash/>
                             <span>Delete</span>
