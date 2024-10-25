@@ -79,6 +79,22 @@ const useClassroomManager = (authTokens) => {
         }
     }
 
+    const getClassroomPosts = async (id) => {
+        try {
+            const response = await axios.get(`api/classroom/${id}/posts`, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+            console.log(response)
+        }
+        catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
     const deleteClassroom = async (id) => {
         try {
             const response = await axios.delete(`api/classroom/${id}`, {
@@ -157,6 +173,7 @@ const useClassroomManager = (authTokens) => {
         getClassroom,
         deleteClassroom,
         getClassroomList,
+        getClassroomPosts, 
         getClassroomParticipants
     }
 }
