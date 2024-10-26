@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
@@ -26,6 +27,13 @@ namespace backend.Repositories
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
             return post;
+        }
+
+        public async Task<Post?> GetByIdAsync(int id)
+        {
+            return await _context.Posts
+                .Include(p => p.Classroom)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }

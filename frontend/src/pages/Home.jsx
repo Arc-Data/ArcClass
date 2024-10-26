@@ -62,7 +62,7 @@ const Home = () => {
                 {role.includes("Student") && <JoinClassroomModal/>}
             </search>
                 {loading ? 
-                    <ClassSkeleton count={5}/>
+                <ClassSkeleton count={5}/>
                 :
                 <div className="mt-8 grid gap-4  grid-cols-[repeat(auto-fill,300px)]">
                     {classCards()}

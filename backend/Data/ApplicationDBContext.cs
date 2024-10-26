@@ -8,8 +8,12 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
-// NOTE : Review Delete Interactions
-
+/* NOTE : Review Delete 
+// Currently there is a three way delete interaction between Post, AppUser, and Comments where 
+// it has been decided that Post should delete Comments but deletion of User should 
+// mean that the frontend should be able to handle comments from Deleted Users
+// TODO : Handle Comments from deleted Users
+*/
 namespace backend.Data
 {
     public class ApplicationDBContext(DbContextOptions<ApplicationDBContext> dbContextOptions) : IdentityDbContext<AppUser>(dbContextOptions)

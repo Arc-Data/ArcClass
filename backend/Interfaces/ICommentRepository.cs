@@ -6,10 +6,9 @@ using backend.Models;
 
 namespace backend.Interfaces
 {
-    public interface IPostRepository
+    public interface ICommentRepository
     {
-        Task<Post?> CreateAsync(Post post);
-        Task<Post?> DeleteAsync(int id);
-        Task<Post?> GetByIdAsync(int id);
+        Task<Comment?> CreateAsync(Comment comment);
+        Task<Comment?> DeleteAsync(int id);
     }
 }
