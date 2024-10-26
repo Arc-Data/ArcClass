@@ -250,11 +250,15 @@ namespace backend.Controllers
             return Ok(postsDto);
         }
 
-        [HttpPost("{id}/posts")]
+        [HttpPost("{id}/post")]
         [Authorize]
         public async Task<IActionResult> CreatePost([FromRoute] string id, [FromBody] CreatePostDto postDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+            Console.WriteLine();
+            Console.WriteLine($"Id in question {id}");
+            Console.WriteLine();
+            Console.WriteLine();
 
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound("Classroom not found");

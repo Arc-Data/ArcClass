@@ -10,8 +10,6 @@ import { Skeleton } from "./ui/skeleton"
 const AppSidebar = () => {
     const { classrooms, loading }  = useContext(ClassroomContext)
 
-    console.log(loading)
-
     const classroomLinks = classrooms && classrooms.map(classroom => {
         return (
             <NavLink 

@@ -28,7 +28,6 @@ const usePostManager = (authTokens) => {
 
     const createPost = async (id, content) => {
         setOptimisticLoading(true)
-        console.log(id)
 
         try {
             const response = await axios.post(`api/classroom/${id}/post`, { content }, {
