@@ -12,19 +12,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Data
 {
-    public class ApplicationDBContext : IdentityDbContext<AppUser>
+    public class ApplicationDBContext(DbContextOptions<ApplicationDBContext> dbContextOptions) : IdentityDbContext<AppUser>(dbContextOptions)
     {
-        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> dbContextOptions) : base(dbContextOptions)
-        {
-            
-        }
-
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }  
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<StudentClassroom> StudentClassrooms { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -67,6 +63,18 @@ namespace backend.Data
                 .WithMany(c => c.Posts)
                 .HasForeignKey(c => c.ClassroomId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Post>()
+                .HasMany(p => p.Comments)
+                .WithOne(c => c.Post)
+                .HasForeignKey(c => c.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.AppUser)
+                .WithMany(a => a.Comments)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Classroom>()
                 .HasOne(c => c.Teacher)

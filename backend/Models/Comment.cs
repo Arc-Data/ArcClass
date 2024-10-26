@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace backend.Models
 {
-    public class Post
+    public class Comment
     {
         public int Id { get; set; }
         public AppUser? AppUser { get; set; }
@@ -13,8 +13,7 @@ namespace backend.Models
         public DateTime CreatedAt { get; set; }
         public DateTime DateModified { get; set; }
         public string Content { get; set; } = string.Empty;
-        public Classroom? Classroom { get; set; }
-        public string ClassroomId { get; set; } = string.Empty;
-        public IList<Comment> Comments { get; set; } = [];
+        public Post? Post { get; set; }
+        public int PostId { get; set; }
     }
 }
