@@ -2,6 +2,7 @@ import useClassroomManager from "@/hooks/useClassroomManager"
 import { createContext, useContext, useEffect, useState } from "react"
 import AuthContext from "./AuthContext"
 import { useNavigate } from "react-router-dom"
+import useCommentManager from "@/hooks/useCommentManager"
 
 const ClassroomContext = createContext()
 
@@ -19,6 +20,11 @@ export const ClassroomProvider = ({ children }) => {
         createClassroom, 
         joinClassroom,
     } = useClassroomManager(authTokens)
+
+    const { 
+        createComment,
+    } = useCommentManager(authTokens)
+
     const [ errors, setErrors ] = useState()
 
     const handleAddClassroom = async (data) => {
@@ -32,6 +38,18 @@ export const ClassroomProvider = ({ children }) => {
         catch (error) {
             console.log(error)
             setErrors(error.response.data)
+        }
+    }
+
+    const handleCreateComment = async (e, id) => {
+        console.log(e)
+        e.preventDefault()
+        try {
+            const content = e.target.elements.content.value
+            await createComment(id, content)
+        }
+        catch (error) { 
+            console.log(error)
         }
     }
 
@@ -92,6 +110,7 @@ export const ClassroomProvider = ({ children }) => {
         handleAddClassroom,
         handleRemoveClassroom,
         handleJoinClassroom,
+        handleCreateComment
     }
 
     return (

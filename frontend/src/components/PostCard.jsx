@@ -2,8 +2,14 @@ import { FaEllipsisV, FaTrash, FaUser } from "react-icons/fa"
 import dayjs from "@/utils/dayjs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import PostInput from "./PostInput"
+import { useContext } from "react"
+import ClassroomContext from "@/context/ClassroomContext"
+
+// FIXME : Page refresh on add comment
 
 const PostCard = ({ classroom, post, openModal, userId }) => {
+    const { handleCreateComment } = useContext(ClassroomContext)
+    
     return (
         <div key={post.id} className="w-full gap-4 border rounded-lg shadow">
             <div className="flex gap-4 px-8 py-4 border-b">
@@ -36,7 +42,7 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
                     <p>{post.content}</p>
                 </div>
             </div>
-            <PostInput handleSubmit={(e) => {e.preventDefault()}} placeholder={"Add a comment"}/>
+            <PostInput onSubmitPost={(e) => handleCreateComment(e, post.id)} placeholder={"Add a comment"}/>
         </div>
     )
 }
