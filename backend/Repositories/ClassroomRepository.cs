@@ -54,6 +54,8 @@ namespace backend.Repositories
         {
             return await _context.Posts
                 .Include(p => p.AppUser)
+                .Include(p => p.Comments)
+                    .ThenInclude(c => c.AppUser)
                 .Where(p => p.ClassroomId == classroomId)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();

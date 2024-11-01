@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.Account;
+using backend.Dtos.Comment;
 using backend.Dtos.Post;
 using backend.Models;
 
@@ -23,8 +24,11 @@ namespace backend.Mappers
                         Id = post.AppUser!.Id,
                         FullName =  $"{post.AppUser.FirstName} {post.AppUser.LastName}"
                     },
-                ClassroomId = post.ClassroomId
+                ClassroomId = post.ClassroomId,
+                NumberOfComments = post.Comments.Count,
+                Comments = post.Comments!.Select(comment => comment.ToCommentDto()).ToList()
             };
+            
         }
     }
 }

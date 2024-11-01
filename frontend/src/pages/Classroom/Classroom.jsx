@@ -50,6 +50,8 @@ const Classroom = () => {
         } 
     }
 
+    console.log(posts)
+
     useEffect(() => {
         const fetchData = async () => {
             try {

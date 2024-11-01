@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.Account;
+using backend.Dtos.Comment;
 using backend.Models;
 
 namespace backend.Dtos.Post
@@ -15,5 +16,7 @@ namespace backend.Dtos.Post
         public DateTime CreatedAt { get; set; }
         public DateTime DateModified { get; set; }
         public string Content { get; set; } = string.Empty;
+        public int NumberOfComments { get; set; }
+        public IList<CommentDto> Comments { get; set; } = [];
     }
 }
