@@ -3,25 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
+using backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/comments")]
     public class CommentController : ControllerBase
     {
-        public CommentController()
+        private readonly ICommentRepository _commentRepo;
+
+        public CommentController(ICommentRepository commentRepo)
         {
-            
+            _commentRepo = commentRepo;
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteComment()
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            return Ok();
+            var comment = await _commentRepo.DeleteAsync(id);
+            if (comment == null) return NotFound("Comment not found");
+
+            return NoContent();
         }
     }
 }

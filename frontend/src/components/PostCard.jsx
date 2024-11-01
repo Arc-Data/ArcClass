@@ -5,14 +5,43 @@ import PostInput from "./PostInput"
 import { useContext, useState } from "react"
 import ClassroomContext from "@/context/ClassroomContext"
 import PostComment from "./PostComment"
+import useCommentManager from "@/hooks/useCommentManager"
+import AuthContext from "@/context/AuthContext"
 
 /* TODO : Obtain only the latest comment at first into loading all comments
 
 */
 
 const PostCard = ({ classroom, post, openModal, userId }) => {
-    const { handleCreateComment } = useContext(ClassroomContext)
-    const [comments, setComments ] = useState(post.comments)
+    const { authTokens } = useContext(AuthContext)
+    const [ comments, setComments ] = useState(post.comments)
+    const [ count, setCount ] = useState(post.numberOfComments)
+
+    const { createComment, deleteComment } = useCommentManager(authTokens)
+
+    const handleCreateComment = async (e, id) => {
+        e.preventDefault()
+        try {
+            const content = e.target.elements.content.value
+            const comment = await createComment(id, content)
+            setComments(prev => [...prev, comment])
+            setCount(prev => prev + 1)
+        }
+        catch (error) { 
+            console.log(error)
+        }
+    }
+    const handleDeleteComment = async (id) => {
+        try {
+            await deleteComment(id)
+            const updatedComments = comments.filter(comment => comment.id != id)
+            setComments(updatedComments)
+            setCount(prev => prev - 1)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div key={post.id} className="w-full gap-4 border rounded-lg shadow">
@@ -46,10 +75,14 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
                     <p>{post.content}</p>
                 </div>
             </div>
-            {post.numberOfComments > 1 && 
-            <p className="px-12 py-4 text-right text-bold">{post.numberOfComments} Comments</p>
+            {count > 1 && 
+            <p className="px-12 py-4 text-right text-bold">{count} Comments</p>
             }
-            {comments.map(comment => <PostComment key={comment.id} comment={comment}/>)}
+            {comments.map(comment => (<PostComment 
+                                        key={comment.id} 
+                                        comment={comment} 
+                                        onDeleteComment={handleDeleteComment}
+                                    />))}
             <PostInput onSubmitPost={(e) => handleCreateComment(e, post.id)} placeholder={"Add a comment"}/>
         </div>
     )
