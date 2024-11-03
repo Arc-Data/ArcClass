@@ -42,6 +42,25 @@ namespace backend.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CreatePostDto postDto) 
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var post = await _postRepo.GetByIdAsync(id);
+            if (post == null) return NotFound();
+
+            if (post.UserId != User.GetId()) return Forbid();
+
+            post.Content = postDto.Content;
+            post.DateModified = DateTime.UtcNow;
+
+            await _postRepo.UpdateAsync(post);
+            return NoContent();
+        }
+
+
         [HttpPost("{id}/comments")]
         [Authorize]
         public async Task<IActionResult> CreateComment([FromRoute] int id, [FromBody] CreatePostDto commentDto)

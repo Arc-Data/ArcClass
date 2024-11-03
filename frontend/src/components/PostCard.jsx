@@ -7,6 +7,9 @@ import ClassroomContext from "@/context/ClassroomContext"
 import PostComment from "./PostComment"
 import useCommentManager from "@/hooks/useCommentManager"
 import AuthContext from "@/context/AuthContext"
+import { FaPencil } from "react-icons/fa6"
+import { Textarea } from "./ui/textarea"
+import usePostManager from "@/hooks/usePostManager"
 
 /* TODO : Obtain only the latest comment at first into loading all comments
 
@@ -16,8 +19,27 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
     const { authTokens } = useContext(AuthContext)
     const [ comments, setComments ] = useState(post.comments)
     const [ count, setCount ] = useState(post.numberOfComments)
+    const [ content, setContent ] = useState(post.content)
+    const [ isEditing, setEditing ] = useState(false)
 
+    const { editPost } = usePostManager(authTokens)
     const { createComment, deleteComment } = useCommentManager(authTokens)
+
+    const handleCancel = () => {
+        setEditing(false)
+        setContent(post.content)
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setEditing(false)
+        try {
+            await editPost(post.id, content)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleCreateComment = async (e, id) => {
         e.preventDefault()
@@ -62,6 +84,13 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="z-40 bg-background-default border-2 shadow *:p-2 rounded-lg *:cursor-pointer">
+                                {post.user.id == userId && 
+                                <DropdownMenuItem onClick={() => setEditing(true)}
+                                className="z-30 flex items-center gap-2">
+                                    <FaPencil/>
+                                    <span>Edit</span>
+                                </DropdownMenuItem>
+                                }
                                 {(classroom.teacher?.id == userId || post.user.id == userId) &&
                                 <DropdownMenuItem onClick={() => openModal(post.id)}
                                     className="z-30 flex items-center gap-2 text-red-500">
@@ -69,10 +98,21 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
                                     <span>Delete</span>
                                 </DropdownMenuItem>
                                 }
+                                
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <p>{post.content}</p>
+                    {!isEditing ? 
+                    <p>{content}</p>
+                    :
+                    <form onSubmit={handleSubmit} className="space-y-2">
+                        <Textarea className="text-base" required value={content} onChange={(e) => setContent(e.target.value)}></Textarea>
+                        <div className="justify-end flex gap-2 *:px-4 *:py-2 *:border *:rounded-lg">
+                            <button onClick={handleCancel}>Cancel</button>
+                            <button className="bg-primary-default">Edit</button>
+                        </div>
+                    </form>
+                    }
                 </div>
             </div>
             {count > 1 && 

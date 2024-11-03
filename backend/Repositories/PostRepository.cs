@@ -35,5 +35,12 @@ namespace backend.Repositories
                 .Include(p => p.Classroom)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public async Task<Post?> UpdateAsync(Post post)
+        {
+             _context.Posts.Update(post);
+             await _context.SaveChangesAsync();
+             return post;
+        }
     }
 }

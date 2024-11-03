@@ -59,15 +59,14 @@ const ClassroomLayout = () => {
             <Dialog open={openLeaveModal} onOpenChange={setOpenLeaveModal}>
                 <DialogContent>
                     <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogTitle>Deleting Classroom</DialogTitle>
                     <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
+                        This action cannot be undone. This will permanently delete the classroom
                     </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
                     </DialogFooter>
-                        <Button onClick={handleDelete}>Hello</Button>
+                        <Button onClick={handleDelete} className="text-white bg-red-500">Delete</Button>
                 </DialogContent>
             </Dialog>
             <div className="flex border-b">

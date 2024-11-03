@@ -63,6 +63,20 @@ const usePostManager = (authTokens) => {
         }
     }
 
+    const editPost = async (id, content) => {
+        try {
+            await axios.put(`api/post/${id}`, { content }, {
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}`
+                }
+            })
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
     return {
         posts, 
         loading,
@@ -70,7 +84,8 @@ const usePostManager = (authTokens) => {
 
         getPosts,
         createPost,
-        deletePost
+        deletePost,
+        editPost
     }
 }
 
