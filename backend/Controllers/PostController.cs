@@ -60,6 +60,18 @@ namespace backend.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}/comments")]
+        [Authorize]
+        public async Task<IActionResult> GetAllComments([FromRoute] int id)
+        {
+            var exists = await _postRepo.PostExists(id);
+            if (!exists) return NotFound();
+
+            var comments = await _commentRepo.GetAllCommentsAsync(id);
+            var commentsDto = comments.Select(c => c.ToCommentDto()).ToList();
+            return Ok(commentsDto);
+        }
+
 
         [HttpPost("{id}/comments")]
         [Authorize]

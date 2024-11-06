@@ -36,6 +36,12 @@ namespace backend.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        public async Task<bool> PostExists(int id)
+        {
+            return await _context.Posts
+                .AnyAsync(p => p.Id == id);
+        }
+
         public async Task<Post?> UpdateAsync(Post post)
         {
              _context.Posts.Update(post);

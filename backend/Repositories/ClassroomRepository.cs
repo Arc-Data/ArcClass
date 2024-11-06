@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using backend.Data;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,10 +55,21 @@ namespace backend.Repositories
         {
             return await _context.Posts
                 .Include(p => p.AppUser)
-                .Include(p => p.Comments)
-                    .ThenInclude(c => c.AppUser)
                 .Where(p => p.ClassroomId == classroomId)
                 .OrderByDescending(p => p.CreatedAt)
+                .Select(p => new Post
+                {
+                    Id = p.Id,
+                    CreatedAt = p.CreatedAt,
+                    AppUser = p.AppUser,
+                    ClassroomId = p.ClassroomId,
+                    Content = p.Content,
+                    Comments = p.Comments
+                        .OrderByDescending(c => c.CreatedAt)
+                        .Take(2)
+                        .ToList(),
+                    NumberOfComments = p.Comments.Count()
+                })
                 .ToListAsync();
         }
 

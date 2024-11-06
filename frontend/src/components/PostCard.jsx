@@ -7,9 +7,11 @@ import ClassroomContext from "@/context/ClassroomContext"
 import PostComment from "./PostComment"
 import useCommentManager from "@/hooks/useCommentManager"
 import AuthContext from "@/context/AuthContext"
-import { FaPencil } from "react-icons/fa6"
+import { FaPencil, FaUserGroup } from "react-icons/fa6"
 import { Textarea } from "./ui/textarea"
 import usePostManager from "@/hooks/usePostManager"
+import { Spinner } from "flowbite-react"
+import PostSkeleton from "./Skeleton/PostSkeleton"
 
 /* TODO : Obtain only the latest comment at first into loading all comments
 
@@ -17,17 +19,44 @@ import usePostManager from "@/hooks/usePostManager"
 
 const PostCard = ({ classroom, post, openModal, userId }) => {
     const { authTokens } = useContext(AuthContext)
+    console.log(post)
+
     const [ comments, setComments ] = useState(post.comments)
+    const [ showAllComments, setShowAllComments ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
+
     const [ count, setCount ] = useState(post.numberOfComments)
     const [ content, setContent ] = useState(post.content)
+    
     const [ isEditing, setEditing ] = useState(false)
 
     const { editPost } = usePostManager(authTokens)
-    const { createComment, deleteComment } = useCommentManager(authTokens)
+    const { createComment, deleteComment, loadComments } = useCommentManager(authTokens)
 
     const handleCancel = () => {
         setEditing(false)
         setContent(post.content)
+    }
+
+    const handleLoadComments = async () => {
+        setLoading(true)
+        if (showAllComments) {
+            setComments(post.comments)
+        } else {
+            const allComments = await loadComments(post.id)
+            console.log(allComments)
+            setComments(prevComments => [...prevComments, ...allComments])
+        }
+
+        setShowAllComments(prev => !prev)
+        setLoading(false)
+        // see google classroom people
+        // there is a button that loads all comments when clicked 
+        // and otherwise only shows the 2 most recent comments if applicable
+        // the question is, how do i make it so in display? do i have to
+        // slice the comments state back to the 2 most recent ones and then 
+        // refetch? this might be the best time to make use of skip
+        // const skip = post.comments 
     }
 
     const handleSubmit = async (e) => {
@@ -116,8 +145,15 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
                 </div>
             </div>
             {count > 1 && 
-            <p className="px-12 py-4 text-right text-bold">{count} Comments</p>
+            <button 
+                className="flex items-center gap-4 p-2 mx-10 my-3 text-left border border-transparent rounded-xl text-bold hover:text-text-900 hover:bg-secondary-200"
+                onClick={handleLoadComments}
+                >
+                <FaUserGroup />
+                <span>{count} Comments</span>
+            </button>
             }
+            {loading && <PostSkeleton count={1}/>}
             {comments.map(comment => (<PostComment 
                                         key={comment.id} 
                                         comment={comment} 

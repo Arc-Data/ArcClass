@@ -6,6 +6,7 @@ using backend.Data;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
@@ -31,6 +32,16 @@ namespace backend.Repositories
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
             return comment;
+        }
+
+        public async Task<IList<Comment>> GetAllCommentsAsync(int id)
+        {
+            return await _context.Comments
+                .Include(c => c.AppUser)
+                .Where(c => c.PostId == id)
+                .OrderByDescending(c => c.CreatedAt)
+                .Skip(2)
+                .ToListAsync();
         }
     }
 }

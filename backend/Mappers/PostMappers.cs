@@ -13,6 +13,7 @@ namespace backend.Mappers
     {
         public static PostDto ToPostDto(this Post post)
         {
+
             return new PostDto 
             {
                 Id = post.Id,
@@ -25,8 +26,8 @@ namespace backend.Mappers
                         FullName =  $"{post.AppUser.FirstName} {post.AppUser.LastName}"
                     },
                 ClassroomId = post.ClassroomId,
-                NumberOfComments = post.Comments.Count,
-                Comments = post.Comments!.Select(comment => comment.ToCommentDto()).ToList()
+                NumberOfComments = post.NumberOfComments,
+                Comments = post.Comments.Select(comment => comment.ToCommentDto()).ToList()
             };
             
         }

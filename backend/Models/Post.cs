@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,5 +17,7 @@ namespace backend.Models
         public Classroom? Classroom { get; set; }
         public string ClassroomId { get; set; } = string.Empty;
         public IList<Comment> Comments { get; set; } = [];
+        [NotMapped]
+        public int NumberOfComments { get; set; }
     }
 }

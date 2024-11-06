@@ -10,5 +10,6 @@ namespace backend.Interfaces
     {
         Task<Comment?> CreateAsync(Comment comment);
         Task<Comment?> DeleteAsync(int id);
+        Task<IList<Comment>> GetAllCommentsAsync(int id);
     }
 }
