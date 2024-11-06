@@ -1,11 +1,36 @@
 import { FaEllipsisV, FaTrash, FaUser } from "react-icons/fa"
 import dayjs from "@/utils/dayjs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import AuthContext from "@/context/AuthContext"
+import useCommentManager from "@/hooks/useCommentManager"
+import { FaPencil } from "react-icons/fa6"
+import { Textarea } from "./ui/textarea"
 
 const PostComment = ({ comment, onDeleteComment }) => {
     const { user, role } = useContext(AuthContext)
+    const { authTokens } = useContext(AuthContext)
+
+    const [ content, setContent ] = useState(comment.content)
+    const { editComment } = useCommentManager(authTokens)
+
+    const [ isEditing, setIsEditing ] = useState(false)
+
+    const handleCancel = () => {
+        setIsEditing(false)
+        setContent(comment.content)
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setIsEditing(false)
+        try {
+            await editComment(comment.id, content)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className="flex gap-4 px-8 py-2 group">
@@ -27,6 +52,13 @@ const PostComment = ({ comment, onDeleteComment }) => {
                         }
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
+                            {user.nameid == comment.user.id && 
+                            <DropdownMenuItem onClick={() => setIsEditing(true)}
+                            className="z-30 flex items-center gap-2">
+                                <FaPencil/>
+                                <span>Edit</span>
+                            </DropdownMenuItem>
+                            }
                             <DropdownMenuItem className="z-30 flex items-center gap-2 text-red-500" onClick={() => onDeleteComment(comment.id)}>
                                 <FaTrash />
                                 <span>Delete</span>
@@ -34,9 +66,19 @@ const PostComment = ({ comment, onDeleteComment }) => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-                <div>
-                {comment.content}
-                </div>
+                {!isEditing ? 
+                <p>
+                {content}
+                </p>
+                :
+                <form onSubmit={handleSubmit} className="space-y-2">
+                    <Textarea className="text-base" required value={content} onChange={(e) => setContent(e.target.value)}></Textarea>
+                    <div className="justify-end flex gap-2 *:px-4 *:py-2 *:border *:rounded-lg">
+                        <button onClick={handleCancel}>Cancel</button>
+                        <button className="bg-primary-default">Edit</button>
+                    </div>
+                </form>
+                }
             </div>
         </div>
     )

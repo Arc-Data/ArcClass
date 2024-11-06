@@ -23,7 +23,6 @@ const useCommentManager = (authTokens) => {
 
     const loadComments = async (id) => {
         try {
-            console.log(id)
             const response = await axios.get(`api/post/${id}/comments`, {
                 headers: {
                     Authorization: `Bearer ${authTokens.access}`
@@ -37,9 +36,16 @@ const useCommentManager = (authTokens) => {
         }
     }
 
-    const editComment = async (id) => {
+    const editComment = async (id, content) => {
         try {
+            const response = await axios.put(`api/comments/${id}`, { content },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`
+                    }
+                })
 
+            console.log(response)
         }
         catch (error) {
             console.log(error)
@@ -63,6 +69,7 @@ const useCommentManager = (authTokens) => {
         createComment,
         loadComments,   
         deleteComment,
+        editComment,
     }
 }
 

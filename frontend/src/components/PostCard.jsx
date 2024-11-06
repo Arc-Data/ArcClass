@@ -19,7 +19,6 @@ import PostSkeleton from "./Skeleton/PostSkeleton"
 
 const PostCard = ({ classroom, post, openModal, userId }) => {
     const { authTokens } = useContext(AuthContext)
-    console.log(post)
 
     const [ comments, setComments ] = useState(post.comments)
     const [ showAllComments, setShowAllComments ] = useState(false)
@@ -40,23 +39,16 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
 
     const handleLoadComments = async () => {
         setLoading(true)
+
         if (showAllComments) {
             setComments(post.comments)
         } else {
             const allComments = await loadComments(post.id)
-            console.log(allComments)
             setComments(prevComments => [...prevComments, ...allComments])
         }
 
         setShowAllComments(prev => !prev)
         setLoading(false)
-        // see google classroom people
-        // there is a button that loads all comments when clicked 
-        // and otherwise only shows the 2 most recent comments if applicable
-        // the question is, how do i make it so in display? do i have to
-        // slice the comments state back to the 2 most recent ones and then 
-        // refetch? this might be the best time to make use of skip
-        // const skip = post.comments 
     }
 
     const handleSubmit = async (e) => {

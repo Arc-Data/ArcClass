@@ -43,5 +43,17 @@ namespace backend.Repositories
                 .Skip(2)
                 .ToListAsync();
         }
+
+        public async Task<Comment?> GetByIdAsync(int id)
+        {
+            return await _context.Comments.FindAsync(id);
+        }
+
+        public async Task<Comment?> UpdateAsync(Comment comment)
+        {
+            _context.Comments.Update(comment);
+            await _context.SaveChangesAsync();
+            return comment;
+        }
     }
 }
