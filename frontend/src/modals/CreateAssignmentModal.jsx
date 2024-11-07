@@ -8,7 +8,7 @@ import { format } from "date-fns"
 import { useState } from "react"
 import { FaCalendar } from "react-icons/fa"
 
-const CreateActivityModal = () => {
+const CreateAssignmentModal = () => {
     const [ data, setData ] = useState({
         title: '',
         description: '',
@@ -31,7 +31,7 @@ const CreateActivityModal = () => {
     return (
         <Dialog className="">
             <DialogTrigger className="" asChild>
-                <button className="px-5 py-2 rounded-full bg-primary-default">Create Activity</button>
+                <button className="px-5 py-2 rounded-full bg-primary-default">Create Assignment</button>
             </DialogTrigger>
             <DialogContent className="max-w-lg">
                 <form onSubmit={handleSubmit}>
@@ -39,7 +39,7 @@ const CreateActivityModal = () => {
                 <div className="flex flex-col max-h-[80vh]">
                     <DialogHeader>
                         <DialogTitle>
-                        Create Class Activity
+                        Create Class Assignment
                         </DialogTitle>
                         <DialogDescription>
                             
@@ -113,4 +113,4 @@ const CreateActivityModal = () => {
     )
 }
 
-export default CreateActivityModal
+export default CreateAssignmentModal

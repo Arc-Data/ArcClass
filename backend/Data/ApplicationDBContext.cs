@@ -55,6 +55,12 @@ namespace backend.Data
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Assignment>()
+                .HasOne(a => a.Classroom)
+                .WithMany(c => c.Assignments)
+                .HasForeignKey(a => a.ClassroomId)
+                .OnDelete(DeleteBehavior.Cascade);
             
             builder.Entity<Post>()
                 .HasOne(p => p.AppUser)

@@ -15,9 +15,10 @@ namespace backend.Models
         public string Section { get; set; } = string.Empty;
         public DateTime SemesterStart { get; set; }
         public DateTime? SemesterEnd { get; set; }
-        public virtual Teacher? Teacher { get; set; }
+        public Teacher? Teacher { get; set; }
         public string? TeacherId { get; set; } = string.Empty;
         public IList<StudentClassroom> StudentClassrooms { get; set; } = [];
         public IList<Post> Posts { get; set; } = [];
+        public IList<Assignment> Assignments { get; set; } = [];
     }
 }

@@ -76,7 +76,6 @@ namespace backend.Repositories
         public async Task<List<Classroom>> GetTeacherClassroomsAsync(string teacherId)
         {
             return await _context.Classrooms
-                .Include(c => c.Teacher)
                 .Where(c => c.TeacherId == teacherId)
                 .ToListAsync();        
             }
