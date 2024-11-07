@@ -16,6 +16,7 @@ import JoinClassroomModal from "./modals/JoinClassroomModal"
 import { ClassroomProvider } from "./context/ClassroomContext"
 import ClassroomLayout from "./layouts/ClassroomLayout"
 import People from "./pages/Classroom/People"
+import Activities from "./pages/Activities"
 
 /* 
 // TODO : Create Profile Customization Section
@@ -44,6 +45,7 @@ function App() {
 							<Route path="/calendar" element={<Calendar/>} />
 							<Route element={<ClassroomLayout />} >
 								<Route path="/classroom/:id" element={<Classroom/>} />	
+								<Route path="/classroom/:id/activities" element={<Activities/>} />
 								<Route path="/classroom/:id/people" element={<People />} />
 							</Route>	
 							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}

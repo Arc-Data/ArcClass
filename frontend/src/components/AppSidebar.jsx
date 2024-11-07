@@ -25,7 +25,7 @@ const AppSidebar = () => {
     })
 
     return (
-        <Sidebar >
+        <Sidebar className="z-0">
             <SidebarHeader className="flex flex-col gap-0 py-12">
                 <NavLink to="/home"
                     className={({ isActive }) =>

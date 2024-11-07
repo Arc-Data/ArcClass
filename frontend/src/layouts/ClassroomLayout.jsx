@@ -6,9 +6,8 @@ import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import ShareClassroomModal from "@/modals/ShareClassroomModal"
-import { Spinner } from "flowbite-react"
 import { useContext, useEffect, useState } from "react"
-import { FaTrash } from "react-icons/fa"
+import { FaPlus, FaTrash } from "react-icons/fa"
 import { FaGear, FaRightFromBracket } from "react-icons/fa6"
 import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
 
@@ -82,7 +81,17 @@ const ClassroomLayout = () => {
                     >
                         Overview
                     </NavLink>
-                    <button>Class Files</button>
+                    <NavLink
+                        to={`/classroom/${id}/activities`}
+                        end
+                        className={({ isActive }) =>
+                            `border-b-4 border-transparent py-2 px-4 ${
+                                isActive ? ' border-b-4 border-b-accent-default' : 'hover:border-b-gray-200'
+                            }`
+                        }
+                    >
+                        Activities
+                    </NavLink>
                     <NavLink
                         to={`/classroom/${id}/people`}
                         className={({ isActive }) =>
@@ -94,6 +103,7 @@ const ClassroomLayout = () => {
                         People
                     </NavLink>
                 </div>
+                
                 <ShareClassroomModal />
                 {!loading && 
                 <DropdownMenu>

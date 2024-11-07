@@ -34,8 +34,8 @@ const PostComment = ({ comment, onDeleteComment }) => {
 
     return (
         <div className="flex gap-4 px-8 py-2 group">
-            <div className="grid flex-shrink-0 w-10 h-10 border rounded-full bg-background-default place-items-center">
-                <FaUser size={18} />
+            <div className="grid flex-shrink-0 w-8 h-8 border rounded-full bg-background-default place-items-center">
+                <FaUser size={16} />
             </div>
             <div className="flex-1 space-y-4">
                 <div className="flex justify-between">

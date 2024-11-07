@@ -128,7 +128,7 @@ const Classroom = () => {
                             classroom={classroom} 
                             post={post} 
                             openModal={handleOpenDeleteModal} 
-                            userId={user.nameid}/>
+                            />
                     ))}
                 </div>
                 }

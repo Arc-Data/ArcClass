@@ -121,7 +121,6 @@ const CreateClassroomModal = ({}) => {
                                 mode="single"
                                 selected={formData.semesterStart}
                                 onSelect={(date) => setFormData(prev => ({...prev, semesterStart: date}))}
-                                initialFocus
                                 disabled={(date) => date < today}
                             />
                             </PopoverContent>
@@ -160,7 +159,6 @@ const CreateClassroomModal = ({}) => {
                                 mode="single"
                                 selected={formData.semesterEnd}
                                 onSelect={(date) => setFormData(prev => ({...prev, semesterEnd: date}))}
-                                initialFocus
                                 disabled={(date) => date < today || date <= formData.semesterStart}
                                 />
                             </PopoverContent>

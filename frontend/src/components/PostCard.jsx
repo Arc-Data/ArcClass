@@ -17,8 +17,8 @@ import PostSkeleton from "./Skeleton/PostSkeleton"
 
 */
 
-const PostCard = ({ classroom, post, openModal, userId }) => {
-    const { authTokens } = useContext(AuthContext)
+const PostCard = ({ classroom, post, openModal }) => {
+    const { user, authTokens } = useContext(AuthContext)
 
     const [ comments, setComments ] = useState(post.comments)
     const [ showAllComments, setShowAllComments ] = useState(false)
@@ -105,14 +105,14 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="z-40 bg-background-default border-2 shadow *:p-2 rounded-lg *:cursor-pointer">
-                                {post.user.id == userId && 
+                                {post.user.id == user.nameid && 
                                 <DropdownMenuItem onClick={() => setEditing(true)}
                                 className="z-30 flex items-center gap-2">
                                     <FaPencil/>
                                     <span>Edit</span>
                                 </DropdownMenuItem>
                                 }
-                                {(classroom.teacher?.id == userId || post.user.id == userId) &&
+                                {(classroom.teacher?.id == user.nameid || post.user.id == user.nameid) &&
                                 <DropdownMenuItem onClick={() => openModal(post.id)}
                                     className="z-30 flex items-center gap-2 text-red-500">
                                     <FaTrash/>
@@ -138,11 +138,18 @@ const PostCard = ({ classroom, post, openModal, userId }) => {
             </div>
             {count > 1 && 
             <button 
-                className="flex items-center gap-4 p-2 mx-10 my-3 text-left border border-transparent rounded-xl text-bold hover:text-text-900 hover:bg-secondary-200"
+                className={
+                    `flex items-center gap-4 p-2 mx-10 my-3 text-sm font-bold font-heading text-left rounded-xl hover:text-text-900 hover:bg-background-50
+                    ${showAllComments  && ""}`
+                }
                 onClick={handleLoadComments}
                 >
                 <FaUserGroup />
+                {showAllComments ? 
+                <span>View Less</span>
+                :
                 <span>{count} Comments</span>
+                }
             </button>
             }
             {loading && <PostSkeleton count={1}/>}
