@@ -3,18 +3,22 @@ import { Calendar } from "@/components/ui/calendar"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
+import ClassroomContext from "@/context/ClassroomContext"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { FaCalendar } from "react-icons/fa"
+import { useParams } from "react-router-dom"
 
 const CreateAssignmentModal = () => {
+    const { id } = useParams()
     const [ data, setData ] = useState({
         title: '',
         description: '',
         submissionDate: null,
-        maxGrades: 0,
+        maxGrade: 0,
     })
+    const { handleCreateAssignment } = useContext(ClassroomContext)
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -26,6 +30,7 @@ const CreateAssignmentModal = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        handleCreateAssignment(id, data)
     }
 
     return (
@@ -94,10 +99,10 @@ const CreateAssignmentModal = () => {
                             <label htmlFor="section" className="block mb-2 text-sm text-gray-900 font-body">Max Grade</label>
                             <input 
                                 type="number" 
-                                id="maxGrades" 
-                                name="maxGrades"
+                                id="maxGrade" 
+                                name="maxGrade"
                                 className="w-full font-body bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" 
-                                value={data.maxGrades}
+                                value={data.maxGrade}
                                 min={1}
                                 onChange={handleInputChange}
                                 required />

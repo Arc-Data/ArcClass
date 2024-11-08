@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 import AuthContext from "./AuthContext"
 import { useNavigate } from "react-router-dom"
 import useCommentManager from "@/hooks/useCommentManager"
+import useAssignmentManager from "@/hooks/useAssignmentManager"
 
 const ClassroomContext = createContext()
 
@@ -12,6 +13,7 @@ export const ClassroomProvider = ({ children }) => {
     const { authTokens } = useContext(AuthContext)
     const [ classrooms, setClassrooms ] = useState([])
     const [ filteredList, setFilteredList ] = useState([])
+    const [ assignments, setAssignments ] = useState([])
 
     const [ searchQuery, setSearchQuery ] = useState("")
     const { 
@@ -24,6 +26,10 @@ export const ClassroomProvider = ({ children }) => {
     const { 
         createComment,
     } = useCommentManager(authTokens)
+
+    const {
+        createAssignment
+    } = useAssignmentManager(authTokens)
 
     const [ errors, setErrors ] = useState()
 
@@ -49,6 +55,16 @@ export const ClassroomProvider = ({ children }) => {
             await createComment(id, content)
         }
         catch (error) { 
+            console.log(error)
+        }
+    }
+
+    const handleCreateAssignment = async (id, data) => {
+        try {
+            const assignment = await createAssignment(id, data)
+            console.log(assignment)
+        }
+        catch (error) {
             console.log(error)
         }
     }
@@ -107,6 +123,7 @@ export const ClassroomProvider = ({ children }) => {
         loading, 
 
         handleFilterClassroomList,
+        handleCreateAssignment,
         handleAddClassroom,
         handleRemoveClassroom,
         handleJoinClassroom,

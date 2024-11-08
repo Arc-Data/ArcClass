@@ -253,8 +253,15 @@ namespace backend.Controllers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromBody] CreateAssignmentDto assignmentDto)
         {
+            Console.WriteLine();
+            Console.WriteLine("I am here");
+            Console.WriteLine();
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            Console.WriteLine();
+            Console.WriteLine("Model validated");
+            Console.WriteLine();
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
             
