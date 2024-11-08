@@ -14,7 +14,7 @@ namespace backend.Models
         public string ClassroomId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public DateTime SubmissionDate { get; set; }
+        public DateTime? SubmissionDate { get; set; }
         public int MaxGrade { get; set; }   
     }
 }

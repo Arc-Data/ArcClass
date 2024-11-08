@@ -111,6 +111,7 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IStudentClassroomRepository, StudentClassroomRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 
 /* NOTE : Background Service
 // Consider uncommenting the line down below when hosted. Haven't tried it yet if it works

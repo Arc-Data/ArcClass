@@ -23,7 +23,6 @@ namespace backend.Repositories
         public async Task<bool> ClassroomExists(string classroomId)
         {
             return await _context.Classrooms
-                .Include(sc => sc.StudentClassrooms)
                 .AnyAsync(c => c.Id == classroomId);
         }
 

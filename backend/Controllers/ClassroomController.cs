@@ -19,10 +19,7 @@ using backend.Mappers;
 using backend.Dtos.Classroom;
 using backend.Dtos.Account;
 using backend.Dtos.Post;
-
-/* TODO : Validity checks for obtaining posts data
-// StudentExists or Is Teacher 
-*/
+using backend.Dtos.Assignment;
 
 namespace backend.Controllers
 {
@@ -35,14 +32,16 @@ namespace backend.Controllers
         private readonly IClassroomRepository _classroomRepo;
         private readonly IStudentClassroomRepository _studentClassroomRepo;
         private readonly IPostRepository _postRepo;
+        private readonly IAssignmentRepository _assignmentRepo;
 
-        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo, IStudentClassroomRepository studentClassroomRepo, IPostRepository postRepo)
+        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo, IStudentClassroomRepository studentClassroomRepo, IPostRepository postRepo, IAssignmentRepository assignmentRepo)
         {
             _classroomService = classroomService;
             _userManager = userManager;
             _classroomRepo = classroomRepo;
             _studentClassroomRepo = studentClassroomRepo;
             _postRepo = postRepo;
+            _assignmentRepo = assignmentRepo;
         }
 
         /* NOTE : Regarding Roles Based Approach (ramble)
@@ -103,7 +102,7 @@ namespace backend.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> CreateClassroom([FromBody] CreateClassroomDto classroomDto)
+        public async Task<IActionResult> Create([FromBody] CreateClassroomDto classroomDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -248,6 +247,31 @@ namespace backend.Controllers
             var postsDto = posts.Select(p => p.ToPostDto()).ToList();
 
             return Ok(postsDto);
+        }
+
+        [HttpPost("{id}/assignment")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromBody] CreateAssignmentDto assignmentDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound();
+            
+            if (classroom.TeacherId != User.GetId()) return Unauthorized();
+            
+            var assignment = new Assignment 
+            {
+                Title = assignmentDto.Title,
+                Description = assignmentDto.Description,
+                SubmissionDate = assignmentDto.SubmissionDate,
+                ClassroomId = id,
+                MaxGrade = assignmentDto.MaxGrade,
+            };
+
+            await _assignmentRepo.CreateAsync(assignment);
+            
+            return Ok(assignment.ToAssignmentDto());
         }
 
         [HttpPost("{id}/post")]
