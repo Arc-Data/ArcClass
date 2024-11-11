@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import PostCard from "@/components/PostCard"
 import PostInput from "@/components/PostInput"
+import ClassroomContext from "@/context/ClassroomContext"
 
 /*
 // [ ] - Conceptualize Privacy Related Settings and User Control Systems
@@ -21,11 +22,9 @@ import PostInput from "@/components/PostInput"
 
 const Classroom = () => {
     const { id } = useParams()
-    const { authTokens, user } = useContext(AuthContext)
-    const { classroom, loading, getClassroom } = useClassroomManager(authTokens)
+    const { authTokens } = useContext(AuthContext)
+    const { classroom, loading } = useContext(ClassroomContext)
     const { posts, loading:postLoading, getPosts, createPost, deletePost, optimisticLoading } = usePostManager(authTokens)
-    const [ error, setError ] = useState()
-
     const [ openDeleteModal, setOpenDeleteModal ] = useState()
     const [ selectedPostId, setSelectedPostId ] = useState()
 
@@ -53,21 +52,15 @@ const Classroom = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await getClassroom(id)
                 await getPosts(id)
             }
             catch (error) {
                 console.log(error)
-                setError(error)
             }
         }
 
         fetchData()
     }, [id])
-
-    if (error) {
-        return <Classroom404/>
-    }
 
     return (
         <div className="px-8 py-4">

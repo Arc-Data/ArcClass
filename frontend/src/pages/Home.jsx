@@ -2,6 +2,7 @@ import ClassSkeleton from "@/components/Skeleton/ClassSkeleton"
 import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
+import HomeContext from "@/context/HomeContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import JoinClassroomModal from "@/modals/JoinClassroomModal"
 import { useContext, useEffect, useState } from "react"
@@ -12,7 +13,7 @@ import { Link } from "react-router-dom"
 
 const Home = () => {
     const { role } = useContext(AuthContext)
-    const { filteredList: classrooms, loading, getClassroomList, handleFilterClassroomList, searchQuery } = useContext(ClassroomContext)
+    const { filteredList: classrooms, loading, handleFilterClassroomList, searchQuery } = useContext(HomeContext)
 
     //     {
     //         "id": "CT8ZA3",

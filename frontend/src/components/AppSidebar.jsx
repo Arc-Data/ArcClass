@@ -5,10 +5,11 @@ import { FaCalendar } from "react-icons/fa6"
 import { useContext, useEffect, useState } from "react"
 import ClassroomContext from "@/context/ClassroomContext"
 import { Skeleton } from "./ui/skeleton"
+import HomeContext from "@/context/HomeContext"
 
 
 const AppSidebar = () => {
-    const { classrooms, loading }  = useContext(ClassroomContext)
+    const { classrooms, loading }  = useContext(HomeContext)
 
     const classroomLinks = classrooms && classrooms.map(classroom => {
         return (

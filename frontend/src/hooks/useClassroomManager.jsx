@@ -9,18 +9,12 @@ const useClassroomManager = (authTokens) => {
     const [ filteredList, setFilteredList ] = useState([])
 
     const createClassroom = async (data) => {
-        try {
-            const response = await axios.post('api/classroom', data, {
-                headers: {
-                    Authorization: `Bearer ${authTokens.access}`
-                }
-            })
-                
-            return response.data
-        }
-        catch (error) {
-            throw error
-        }
+        const response = await axios.post('api/classroom', data, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
+        return response.data
     }
 
     const getClassroomParticipants = async (id) => {
@@ -60,23 +54,16 @@ const useClassroomManager = (authTokens) => {
     }
 
     const getClassroomList = async () => {
-        try {
-            const response = await axios.get("api/classroom", {
-                headers: {
-                    Authorization: `Bearer ${authTokens.access}`
-                }
-            })
+        const response = await axios.get("api/classroom", {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
 
-            setClassrooms(response.data)
-            setFilteredList(response.data)
-            return response.data
-        }
-        catch (error) {
-            console.log(error)
-        }
-        finally {
-            setLoading(false)
-        }
+        setClassrooms(response.data)
+        setFilteredList(response.data)
+        setLoading(false)
+        return response.data
     }
 
     const getClassroomPosts = async (id) => {
@@ -143,21 +130,15 @@ const useClassroomManager = (authTokens) => {
     }
 
     const getClassroom = async (id) => {
-        try {
-            const response = await axios.get(`api/classroom/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${authTokens.access}`
-                }
-            })
+        setLoading(true)
+        const response = await axios.get(`api/classroom/${id}`, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
 
-            setClassroom(response.data)
-        }
-        catch (error) {
-            throw error
-        }
-        finally {
-            setLoading(false)
-        }
+        setLoading(false)
+        return response.data
     }
 
     return {

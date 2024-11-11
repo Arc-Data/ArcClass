@@ -253,15 +253,8 @@ namespace backend.Controllers
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromBody] CreateAssignmentDto assignmentDto)
         {
-            Console.WriteLine();
-            Console.WriteLine("I am here");
-            Console.WriteLine();
-
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            Console.WriteLine();
-            Console.WriteLine("Model validated");
-            Console.WriteLine();
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
             
@@ -279,6 +272,16 @@ namespace backend.Controllers
             await _assignmentRepo.CreateAsync(assignment);
             
             return Ok(assignment.ToAssignmentDto());
+        }
+
+        [HttpGet("{id}/assignments")]
+        [Authorize]
+        public async Task<IActionResult> GetAssignments([FromRoute] string id) {
+            var classroom = _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound();
+
+            
+            return Ok();
         }
 
         [HttpPost("{id}/post")]

@@ -18,6 +18,7 @@ const CreateAssignmentModal = () => {
         submissionDate: null,
         maxGrade: 0,
     })
+
     const { handleCreateAssignment } = useContext(ClassroomContext)
 
     const handleInputChange = (e) => {
@@ -103,7 +104,7 @@ const CreateAssignmentModal = () => {
                                 name="maxGrade"
                                 className="w-full font-body bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" 
                                 value={data.maxGrade}
-                                min={1}
+                            min={1}
                                 onChange={handleInputChange}
                                 required />
                         </div>

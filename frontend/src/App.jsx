@@ -17,6 +17,7 @@ import { ClassroomProvider } from "./context/ClassroomContext"
 import ClassroomLayout from "./layouts/ClassroomLayout"
 import People from "./pages/Classroom/People"
 import Activities from "./pages/Activities"
+import { HomeProvider } from "./context/HomeContext"
 
 /* 
 // TODO : Create Profile Customization Section
@@ -37,13 +38,19 @@ function App() {
 						</Route>
 					</Route>
 					<Route element={<UserRoutes/>}>
+						{/* to replace with HomeProvider */}
 						<Route element={
-							<ClassroomProvider>
+							<HomeProvider>
 								<DefaultLayout />
-							</ClassroomProvider>}>
+							</HomeProvider>}>
 							<Route path="/home" element={<Home/>} />	
 							<Route path="/calendar" element={<Calendar/>} />
-							<Route element={<ClassroomLayout />} >
+							{/* to use classroom provider */}
+							<Route element={
+								<ClassroomProvider>
+									<ClassroomLayout />
+								</ClassroomProvider>
+								} >
 								<Route path="/classroom/:id" element={<Classroom/>} />	
 								<Route path="/classroom/:id/activities" element={<Activities/>} />
 								<Route path="/classroom/:id/people" element={<People />} />

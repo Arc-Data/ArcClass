@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { cn  } from "@/lib/utils"
 import { useNavigate } from "react-router-dom"
 import ClassroomContext from "@/context/ClassroomContext"
+import HomeContext from "@/context/HomeContext"
 
 /* TODO : Move to using ShadCN
 
@@ -17,7 +18,7 @@ import ClassroomContext from "@/context/ClassroomContext"
 
 const CreateClassroomModal = ({}) => {
     const [ openModal, setOpenModal ] = useState(false)
-    const { handleAddClassroom } = useContext(ClassroomContext)
+    const { handleAddClassroom } = useContext(HomeContext)
     const [ loading, setLoading ] = useState(false)
 
     const navigate = useNavigate()

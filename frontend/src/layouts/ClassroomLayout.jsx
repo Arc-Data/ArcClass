@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
+import HomeContext from "@/context/HomeContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import ShareClassroomModal from "@/modals/ShareClassroomModal"
 import { useContext, useEffect, useState } from "react"
@@ -14,9 +15,9 @@ import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
 const ClassroomLayout = () => {
     const { id } = useParams() 
     const { authTokens, role, user } = useContext(AuthContext)
-    const { handleRemoveClassroom } = useContext(ClassroomContext)
-    const { classroom, loading, getClassroom, deleteClassroom, leaveClassroom } = useClassroomManager(authTokens)
-    const [ error, setError ] = useState()
+    const { handleRemoveClassroom } = useContext(HomeContext)
+    const { classroom, loading, classroomError } = useContext(ClassroomContext)
+    const { deleteClassroom, leaveClassroom } = useClassroomManager(authTokens)
 
     const [ openLeaveModal, setOpenLeaveModal ] = useState(false)
     
@@ -34,22 +35,7 @@ const ClassroomLayout = () => {
         navigate('/home')
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await getClassroom(id)
-            }
-            catch (error) {
-                console.log(error)
-                setError(error)
-            }
-        }
-
-        fetchData()
-    }, [id])
-
-
-    if (error) {
+    if (classroomError) {
         return <Classroom404 />
     }
 
