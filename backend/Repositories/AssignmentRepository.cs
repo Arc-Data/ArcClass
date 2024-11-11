@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
@@ -27,6 +28,23 @@ namespace backend.Repositories
         public async Task<Assignment?> Delete(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<IList<Assignment>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        /* NOTE: Regarding Repository Function Distinctions
+        // Would it be better to regard classroom assignments as a method 
+        // of the classroom repository or does it work best as a method within
+        // the assignment repository
+        */
+        public async Task<IList<Assignment>> GetClassroomAssignments(string id)
+        {
+            return await _context.Assignments
+                .Where(a => a.ClassroomId == id)
+                .ToListAsync();
         }
 
         public async Task<Assignment?> UpdateAsync(Assignment assignment)

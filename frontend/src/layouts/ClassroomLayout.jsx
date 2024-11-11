@@ -68,7 +68,7 @@ const ClassroomLayout = () => {
                         Overview
                     </NavLink>
                     <NavLink
-                        to={`/classroom/${id}/activities`}
+                        to={`/classroom/${id}/assignments`}
                         end
                         className={({ isActive }) =>
                             `border-b-4 border-transparent py-2 px-4 ${
@@ -76,7 +76,7 @@ const ClassroomLayout = () => {
                             }`
                         }
                     >
-                        Activities
+                        Assignments
                     </NavLink>
                     <NavLink
                         to={`/classroom/${id}/people`}

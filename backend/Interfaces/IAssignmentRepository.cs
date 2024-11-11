@@ -8,8 +8,10 @@ namespace backend.Interfaces
 {
     public interface IAssignmentRepository
     {
-        Task<Assignment?> CreateAsync(Assignment assignment);
+        Task<Assignment?> CreateAsync(Assignment assignment); 
         Task<Assignment?> Delete(int id);
         Task<Assignment?> UpdateAsync(Assignment assignment);
+        Task<IList<Assignment>> GetAll();
+        Task<IList<Assignment>> GetClassroomAssignments(string id); 
     }
 }

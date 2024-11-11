@@ -10,7 +10,7 @@ export default ClassroomContext
 
 export const ClassroomProvider = ({ children }) => {
     const [ classroom, setClassroom ] = useState()
-    const [ assignments, setAssignments ] = useState([])
+    const [ assignments, setAssignments ] = useState()
     const { authTokens } = useContext(AuthContext)
     const { id } = useParams()
 
@@ -18,7 +18,8 @@ export const ClassroomProvider = ({ children }) => {
     const [ errors, setErrors ] = useState()
 
     const {
-        createAssignment
+        createAssignment,
+        getAssignmentList,
     } = useAssignmentManager(authTokens)
 
     const handleCreateAssignment = async (id, data) => {
@@ -27,6 +28,16 @@ export const ClassroomProvider = ({ children }) => {
             console.log(assignment)
             const updatedAssignments = [...assignments, assignment]
             setAssignments(updatedAssignments)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleGetAssignmentList = async () => {
+        try {
+            const fetchAssignments = await getAssignmentList(id);
+            setAssignments(fetchAssignments)
         }
         catch (error) {
             console.log(error)
@@ -51,7 +62,9 @@ export const ClassroomProvider = ({ children }) => {
         classroomError: errors,
         classroom, 
         loading, 
+        assignments,
 
+        handleGetAssignmentList,
         handleCreateAssignment,
     }
 

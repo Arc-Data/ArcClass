@@ -16,7 +16,7 @@ import JoinClassroomModal from "./modals/JoinClassroomModal"
 import { ClassroomProvider } from "./context/ClassroomContext"
 import ClassroomLayout from "./layouts/ClassroomLayout"
 import People from "./pages/Classroom/People"
-import Activities from "./pages/Activities"
+import Assignments from "./pages/Classroom/Assignments"
 import { HomeProvider } from "./context/HomeContext"
 
 /* 
@@ -52,7 +52,7 @@ function App() {
 								</ClassroomProvider>
 								} >
 								<Route path="/classroom/:id" element={<Classroom/>} />	
-								<Route path="/classroom/:id/activities" element={<Activities/>} />
+								<Route path="/classroom/:id/assignments" element={<Assignments/>} />
 								<Route path="/classroom/:id/people" element={<People />} />
 							</Route>	
 							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}

@@ -64,7 +64,6 @@ namespace backend.Controllers
         */
 
         // FIXME : Consider ways to flatten this code 
-
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAll()
@@ -141,7 +140,7 @@ namespace backend.Controllers
         {
             var classroom = await _classroomRepo.DeleteAsync(id);
             if (classroom == null) return NotFound();
-                
+            
             return NoContent();
         }
         
@@ -277,11 +276,12 @@ namespace backend.Controllers
         [HttpGet("{id}/assignments")]
         [Authorize]
         public async Task<IActionResult> GetAssignments([FromRoute] string id) {
-            var classroom = _classroomRepo.GetByIdAsync(id);
+            var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
 
-            
-            return Ok();
+            var assignments = await _assignmentRepo.GetClassroomAssignments(id);
+            var assignmentsDto = assignments.Select(a => a.ToAssignmentDto()).ToList();
+            return Ok(assignmentsDto);
         }
 
         [HttpPost("{id}/post")]
