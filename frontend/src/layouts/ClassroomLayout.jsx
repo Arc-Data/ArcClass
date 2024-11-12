@@ -5,42 +5,26 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
 import HomeContext from "@/context/HomeContext"
-import useClassroomManager from "@/hooks/useClassroomManager"
 import ShareClassroomModal from "@/modals/ShareClassroomModal"
-import { useContext, useEffect, useState } from "react"
-import { FaPlus, FaTrash } from "react-icons/fa"
+import { useContext, useState } from "react"
+import { FaTrash } from "react-icons/fa"
 import { FaGear, FaRightFromBracket } from "react-icons/fa6"
-import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom"
+import { NavLink, Outlet, useParams } from "react-router-dom"
 
 const ClassroomLayout = () => {
     const { id } = useParams() 
-    const { authTokens, role, user } = useContext(AuthContext)
-    const { handleRemoveClassroom } = useContext(HomeContext)
+    const { role, user } = useContext(AuthContext)
     const { classroom, loading, classroomError } = useContext(ClassroomContext)
-    const { deleteClassroom, leaveClassroom } = useClassroomManager(authTokens)
-
+    const { handleDeleteClassroom, handleLeaveClassroom } = useContext(HomeContext)
+    
     const [ openLeaveModal, setOpenLeaveModal ] = useState(false)
     
-    const navigate = useNavigate()
-
-    const handleDelete = async () => {
-        await deleteClassroom(id)
-        handleRemoveClassroom(id)
-        navigate('/home')
-    }
-
-    const handleLeaveClassroom = async () => {
-        await leaveClassroom(id)
-        handleRemoveClassroom(id)
-        navigate('/home')
-    }
-
     if (classroomError) {
         return <Classroom404 />
     }
 
     return (
-        <div className="">
+        <div>
             <Dialog open={openLeaveModal} onOpenChange={setOpenLeaveModal}>
                 <DialogContent>
                     <DialogHeader>
@@ -51,7 +35,7 @@ const ClassroomLayout = () => {
                     </DialogHeader>
                     <DialogFooter>
                     </DialogFooter>
-                        <Button onClick={handleDelete} className="text-white bg-red-500">Delete</Button>
+                        <Button onClick={() => handleDeleteClassroom(id)} className="text-white bg-red-500">Delete</Button>
                 </DialogContent>
             </Dialog>
             <div className="flex border-b">
@@ -74,7 +58,7 @@ const ClassroomLayout = () => {
                             `border-b-4 border-transparent py-2 px-4 ${
                                 isActive ? ' border-b-4 border-b-accent-default' : 'hover:border-b-gray-200'
                             }`
-                        }
+                        }   
                     >
                         Assignments
                     </NavLink>
@@ -108,7 +92,7 @@ const ClassroomLayout = () => {
                         </DropdownMenuItem>
                         }
                         {role.includes('Student') &&
-                        <DropdownMenuItem onClick={ handleLeaveClassroom } className="z-30 flex items-center gap-2 text-red-500">
+                        <DropdownMenuItem onClick={ () => handleLeaveClassroom(id) } className="z-30 flex items-center gap-2 text-red-500">
                             <FaRightFromBracket/>
                             <span>Leave Classroom</span>
                         </DropdownMenuItem>

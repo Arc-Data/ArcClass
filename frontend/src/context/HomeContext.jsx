@@ -1,6 +1,7 @@
 import useClassroomManager from "@/hooks/useClassroomManager";
 import { createContext, useContext, useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const HomeContext = createContext()
 
@@ -14,8 +15,9 @@ export const HomeProvider = ({ children }) => {
     const [ searchQuery, setSearchQuery ] = useState("")
 
     const [ errors, setErrors ] = useState()
+    const navigate = useNavigate()
 
-    const { createClassroom, getClassroomList, joinClassroom, loading } = useClassroomManager(authTokens)
+    const { createClassroom, getClassroomList, joinClassroom, deleteClassroom, leaveClassroom, loading } = useClassroomManager(authTokens)
 
     const handleAddClassroom = async (data) => {
         const classroom = await createClassroom(data)
@@ -39,10 +41,30 @@ export const HomeProvider = ({ children }) => {
         }
     }
 
-    const handleRemoveClassroom = async () => {
-        const updatedClassrooms = classrooms.filter(classroom => classroom.id !== id)
-        setClassrooms(updatedClassrooms)
-        setFilteredList(updatedClassrooms)
+    const handleDeleteClassroom = async (id) => {
+        try {
+            deleteClassroom(id);
+            const updatedClassrooms = classrooms.filter(classroom => classroom.id !== id)
+            setClassrooms(updatedClassrooms)
+            setFilteredList(updatedClassrooms)
+            navigate('/home')
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleLeaveClassroom = async (id) => {
+        try {
+            leaveClassroom(id)
+            const updatedClassrooms = classrooms.filter(classroom => classroom.id !== id)
+            setClassrooms(updatedClassrooms)
+            setFilteredList(updatedClassrooms)
+            navigate('/home')
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 
     const handleFilterClassroomList = async (e) => {
@@ -79,8 +101,9 @@ export const HomeProvider = ({ children }) => {
 
         handleAddClassroom,
         handleJoinClassroom,
-        handleRemoveClassroom,
-        handleFilterClassroomList
+        handleDeleteClassroom,
+        handleFilterClassroomList,
+        handleLeaveClassroom,
     }
 
     return (
