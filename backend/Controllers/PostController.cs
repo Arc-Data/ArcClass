@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
+/* TODO: Reduce data fetches on delete methods
+// Refer to TryDeletePost for validating on fetch
+*/
 namespace backend.Controllers
 {
     [ApiController]
@@ -36,8 +39,9 @@ namespace backend.Controllers
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var post = await _postRepo.DeleteAsync(id);
-            if (post == null) return NotFound("Post not found");
+            var userId = User.GetId();
+            var succeeded = await _postRepo.TryDeletePost(id, userId);
+            if (!succeeded) return NotFound("Post not found or not authorized to delete");
             
             return NoContent();
         }

@@ -8,8 +8,7 @@ import { FaPencil } from "react-icons/fa6"
 import { Textarea } from "./ui/textarea"
 
 const PostComment = ({ comment, onDeleteComment }) => {
-    const { user, role } = useContext(AuthContext)
-    const { authTokens } = useContext(AuthContext)
+    const { authTokens, user, role } = useContext(AuthContext)
 
     const [ content, setContent ] = useState(comment.content)
     const { editComment } = useCommentManager(authTokens)
@@ -45,7 +44,7 @@ const PostComment = ({ comment, onDeleteComment }) => {
                     </div>
                     <DropdownMenu className="">
                         <DropdownMenuTrigger asChild>
-                        {(user.nameid == comment.user.id  || role.contains("Teacher")) && 
+                        {(user.nameid == comment.user.id  || role.includes("Teacher")) && 
                             <button className="invisible p-4 ml-auto rounded-full group-hover:visible hover:bg-gray-200">
                                 <FaEllipsisV size={16}/>
                             </button>

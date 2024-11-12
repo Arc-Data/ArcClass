@@ -13,5 +13,6 @@ namespace backend.Interfaces
         Task<Post?> GetByIdAsync(int id);
         Task<Post?> UpdateAsync(Post post);
         Task<bool> PostExists(int id);
+        Task<bool> TryDeletePost(int id, string userId);
     }
 }

@@ -9,9 +9,10 @@ namespace backend.Interfaces
     public interface IAssignmentRepository
     {
         Task<Assignment?> CreateAsync(Assignment assignment); 
-        Task<Assignment?> Delete(int id);
+        Task<bool> TryDeleteAsync(int id, string userId);
         Task<Assignment?> UpdateAsync(Assignment assignment);
         Task<IList<Assignment>> GetAll();
+        Task<Assignment?> GetByIdAsync(int id);
         Task<IList<Assignment>> GetClassroomAssignments(string id); 
     }
 }

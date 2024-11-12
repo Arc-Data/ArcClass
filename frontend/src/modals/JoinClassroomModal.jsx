@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import AuthContext from "@/context/AuthContext"
 import ClassroomContext from "@/context/ClassroomContext"
+import HomeContext from "@/context/HomeContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import { Spinner } from "flowbite-react"
 import { useContext, useEffect, useState } from "react"
@@ -15,7 +16,7 @@ const JoinClassroomModal = () => {
     const [ code, setCode ] = useState("")
     const [ step, setStep ] = useState(0)
     const { authTokens } = useContext(AuthContext)
-    const { handleJoinClassroom } = useContext(ClassroomContext)
+    const { handleJoinClassroom } = useContext(HomeContext)
     const { classroom, checkClassroom } = useClassroomManager(authTokens)
     const [ loading, setLoading ] = useState(false)
     const [ errors, setErrors ] = useState()

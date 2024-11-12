@@ -15,13 +15,26 @@ export const HomeProvider = ({ children }) => {
 
     const [ errors, setErrors ] = useState()
 
-    const { createClassroom, getClassroomList, loading } = useClassroomManager(authTokens)
+    const { createClassroom, getClassroomList, joinClassroom, loading } = useClassroomManager(authTokens)
 
     const handleAddClassroom = async (data) => {
         const classroom = await createClassroom(data)
         const updatedClassroomList = [...classrooms, classroom]
         setClassrooms(updatedClassroomList)
         setFilteredList()
+    }
+
+    const handleJoinClassroom = async (code) => {
+        try {
+            const classroom = await joinClassroom(code)
+            const updatedClassroomList = [...classrooms, classroom]
+            setClassrooms(updatedClassroomList)
+            setFilteredList(updatedClassroomList)
+            return classroom.id
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 
     const handleRemoveClassroom = async () => {
@@ -63,6 +76,7 @@ export const HomeProvider = ({ children }) => {
         errors,
 
         handleAddClassroom,
+        handleJoinClassroom,
         handleRemoveClassroom,
         handleFilterClassroomList
     }

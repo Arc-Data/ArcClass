@@ -20,6 +20,9 @@ namespace backend.Repositories
             return post;
         }
 
+        /* NOTE: Eligible for Deletion
+        // uhhh.. pun intended?
+        */
         public async Task<Post?> DeleteAsync(int id)
         {
             var post = await _context.Posts.FindAsync(id);
@@ -40,6 +43,23 @@ namespace backend.Repositories
         {
             return await _context.Posts
                 .AnyAsync(p => p.Id == id);
+        }
+
+        public async Task<bool> TryDeletePost(int id, string userId)
+        {
+            var post = await _context.Posts
+            .Include(p => p.Classroom)
+            .Where(p => p.Id == id && (
+                p.Classroom!.TeacherId == userId || p.UserId == userId)
+            )
+            .FirstOrDefaultAsync();
+
+            if (post == null) return false;
+
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<Post?> UpdateAsync(Post post)

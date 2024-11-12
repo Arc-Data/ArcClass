@@ -89,6 +89,7 @@ namespace backend.Controllers
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto requestDto)
         {
             if (string.IsNullOrWhiteSpace(requestDto.Refresh))  return BadRequest("Refresh token is required");
+            Console.WriteLine(requestDto.Refresh);
 
             var (succeeded, newToken, newRefreshToken) = await _accountService.RefreshTokenAsync(requestDto.Refresh);
 

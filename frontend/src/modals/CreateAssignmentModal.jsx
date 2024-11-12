@@ -10,7 +10,8 @@ import { useContext, useState } from "react"
 import { FaCalendar } from "react-icons/fa"
 import { useParams } from "react-router-dom"
 
-const CreateAssignmentModal = () => {
+const CreateAssignmentModal = ({ isTeacher }) => {
+    const [ isOpen, setIsOpen ] = useState(false)
     const { id } = useParams()
     const [ data, setData ] = useState({
         title: '',
@@ -32,11 +33,12 @@ const CreateAssignmentModal = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         handleCreateAssignment(id, data)
+        setIsOpen(false)
     }
 
     return (
-        <Dialog className="">
-            <DialogTrigger className="" asChild>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger className={`${isTeacher ? "block" : "hidden"}`} asChild>
                 <button className="px-5 py-2 rounded-full bg-primary-default">Create Assignment</button>
             </DialogTrigger>
             <DialogContent className="max-w-lg">

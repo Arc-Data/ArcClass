@@ -9,14 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
-    public class AssignmentRepository : IAssignmentRepository
+    
+    public class AssignmentRepository(ApplicationDBContext context) : IAssignmentRepository
     {
-        private readonly ApplicationDBContext _context;
-
-        public AssignmentRepository(ApplicationDBContext context) 
-        {
-            _context = context;            
-        }
+        private readonly ApplicationDBContext _context = context;
 
         public async Task<Assignment?> CreateAsync(Assignment assignment)
         {
@@ -25,14 +21,16 @@ namespace backend.Repositories
             return assignment;
         }
 
-        public async Task<Assignment?> Delete(int id)
+        public Task<IList<Assignment>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IList<Assignment>> GetAll()
+        public async Task<Assignment?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Assignments
+                .Include(a => a.Classroom)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         /* NOTE: Regarding Repository Function Distinctions
@@ -45,6 +43,19 @@ namespace backend.Repositories
             return await _context.Assignments
                 .Where(a => a.ClassroomId == id)
                 .ToListAsync();
+        }
+
+        public async Task<bool> TryDeleteAsync(int id, string userId)
+        {
+            var assignment = await _context.Assignments
+                .Include(a => a.Classroom)
+                .Where(a => a.Id == id && a.Classroom!.TeacherId == userId)
+                .FirstOrDefaultAsync();
+            if (assignment == null) return false;
+
+            _context.Assignments.Remove(assignment);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<Assignment?> UpdateAsync(Assignment assignment)
