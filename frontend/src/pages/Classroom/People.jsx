@@ -1,6 +1,7 @@
 import Student404 from "@/components/errors/Student404"
 import UserSkeleton from "@/components/Skeleton/UserSkeleton"
 import AuthContext from "@/context/AuthContext"
+import ClassroomContext from "@/context/ClassroomContext"
 import useClassroomManager from "@/hooks/useClassroomManager"
 import { useContext, useEffect, useState } from "react"
 import { FaUser } from "react-icons/fa"
@@ -9,32 +10,29 @@ import { useParams } from "react-router-dom"
 // TODO : Create User Avatar + Data Component
 
 const People = () => {
-    const { authTokens } = useContext(AuthContext)
-    const { getClassroomParticipants, loading } = useClassroomManager(authTokens)
-    const [ participants, setParticipants ] = useState() 
-    const [ errors, setErrors ] = useState()
+    const { loading, participants, handleGetClassroomParticipants, participantsLoading } = useContext(ClassroomContext)
     const { id } = useParams()
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const participants = await getClassroomParticipants(id)
-                setParticipants(participants)
-            }
-            catch (error) {
-                setErrors(error.response)
+            if (participants == undefined) {
+                await handleGetClassroomParticipants()
             }
         }
 
         fetchData()
-    }, [])
+    }, [id, participants])
+
+    if (loading) {
+        return (<div></div>)
+    }
 
 
     return (
         <div>
             <div className="w-full p-4 mx-auto">
                 <p className="py-2 my-4 text-lg border-b">Teacher</p>
-                {loading ? 
+                {participantsLoading ? 
                 <UserSkeleton/> 
                 :
                 <div className="flex items-center gap-4 mt-4">
@@ -47,7 +45,7 @@ const People = () => {
                 </div>
                 }
                 <p className="py-2 mt-8 mb-4 text-lg border-b">Students</p>
-                {loading ?
+                {participantsLoading ?
                 <div className="space-y-4">
                     <UserSkeleton/>  
                     <UserSkeleton/>  

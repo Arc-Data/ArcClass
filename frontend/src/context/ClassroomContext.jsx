@@ -12,10 +12,12 @@ export default ClassroomContext
 export const ClassroomProvider = ({ children }) => {
     const [ classroom, setClassroom ] = useState()
     const [ assignments, setAssignments ] = useState()
+    const [ participants, setParticipants ] = useState()
     const { authTokens } = useContext(AuthContext)
     const { id } = useParams()
 
-    const { loading, getClassroom } = useClassroomManager(authTokens)
+    const { loading, getClassroom, getClassroomParticipants } = useClassroomManager(authTokens)
+    const [ participantsLoading, setParticipantsLoading ] = useState(true)
     const [ errors, setErrors ] = useState()
     
     const {
@@ -70,6 +72,21 @@ export const ClassroomProvider = ({ children }) => {
         }
     }
 
+    const handleGetClassroomParticipants = async () => {
+        try {
+            console.log("I am here")
+            const fetchParticipants = await getClassroomParticipants(id)
+            setParticipants(fetchParticipants)
+            console.log(fetchParticipants)
+        }
+        catch (error) {
+            console.log(error)
+        }
+        finally {
+            setParticipantsLoading(false)
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -91,10 +108,13 @@ export const ClassroomProvider = ({ children }) => {
         loading, 
         assignments,
         assignmentsGroup,
+        participants,
+        participantsLoading,
 
         handleGetAssignmentList,
         handleCreateAssignment,
         handleDeleteAssignment,
+        handleGetClassroomParticipants
     }
 
     return (
