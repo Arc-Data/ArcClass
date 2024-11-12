@@ -3,6 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { FaEllipsisV, FaTrash } from 'react-icons/fa'
 import { useContext } from 'react'
 import ClassroomContext from '@/context/ClassroomContext'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 
 const AssignmentItem = ({ assignment, modifyPermission }) => {
     const { handleDeleteAssignment } = useContext(ClassroomContext)
@@ -14,26 +15,42 @@ const AssignmentItem = ({ assignment, modifyPermission }) => {
                 <span>0/0</span>
                 <FaUserGroup/>
                 {modifyPermission && 
-                <DropdownMenu >
-                    <DropdownMenuTrigger asChild>
-                        { modifyPermission && (
-                        <button className="invisible p-2 ml-auto rounded-full group-hover:visible hover:bg-gray-200">
-                            <FaEllipsisV />
-                        </button>
-                        )
-                        }
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem>
-                            <FaPencil/>
-                            <span>Edit</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDeleteAssignment(assignment.id)} className="text-red-500">
-                            <FaTrash/>
-                            <span>Delete</span>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog>
+                    <DropdownMenu >
+                        <DropdownMenuTrigger asChild>
+                            { modifyPermission && (
+                            <button className="invisible p-2 ml-auto rounded-full group-hover:visible hover:bg-gray-200">
+                                <FaEllipsisV />
+                            </button>) }
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem>
+                                <FaPencil/>
+                                <span>Edit</span>
+                            </DropdownMenuItem>
+                            <DialogTrigger asChild>
+                                <DropdownMenuItem>
+                                    <FaTrash/>
+                                    <span>Delete</span>
+                                </DropdownMenuItem>
+                            </DialogTrigger>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>
+                                Deleting Assignment
+                            </DialogTitle>
+                            <DialogDescription>
+                                This action cannot be undone. This will delete the assignment and all related submissions
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <button onClick={() => handleDeleteAssignment(assignment.id)} className='px-4 py-2.5 rounded-xl text-white bg-red-500'>Delete</button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
                 }
             </p>
         </div>

@@ -21,7 +21,9 @@ export const HomeProvider = ({ children }) => {
         const classroom = await createClassroom(data)
         const updatedClassroomList = [...classrooms, classroom]
         setClassrooms(updatedClassroomList)
-        setFilteredList()
+        setFilteredList(updatedClassroomList)
+
+        return classroom.id
     }
 
     const handleJoinClassroom = async (code) => {
