@@ -12,9 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-/* TODO : Add Admin Related Controls
-Add 
-*/
+// TODO : Add Admin Related Controls
 
 namespace backend.Controllers
 {
@@ -89,7 +87,6 @@ namespace backend.Controllers
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto requestDto)
         {
             if (string.IsNullOrWhiteSpace(requestDto.Refresh))  return BadRequest("Refresh token is required");
-            Console.WriteLine(requestDto.Refresh);
 
             var (succeeded, newToken, newRefreshToken) = await _accountService.RefreshTokenAsync(requestDto.Refresh);
 

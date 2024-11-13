@@ -1,12 +1,7 @@
-import Classroom404 from "@/components/errors/Classroom404"
 import PostSkeleton from "@/components/Skeleton/PostSkeleton"
 import { Skeleton } from "@/components/ui/skeleton"
-import AuthContext from "@/context/AuthContext"
-import useClassroomManager from "@/hooks/useClassroomManager"
-import usePostManager from "@/hooks/usePostManager"
 import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import PostCard from "@/components/PostCard"
 import PostInput from "@/components/PostInput"
 import ClassroomContext from "@/context/ClassroomContext"
@@ -18,71 +13,41 @@ import ClassroomContext from "@/context/ClassroomContext"
 // [ ] - Define Announcements
 */
 
-// NOTE : Would be absolutely nice if i could leverage React 19 for most of this
-
 const Classroom = () => {
     const { id } = useParams()
-    const { authTokens } = useContext(AuthContext)
-    const { classroom, loading } = useContext(ClassroomContext)
-    const { posts, loading:postLoading, getPosts, createPost, deletePost, optimisticLoading } = usePostManager(authTokens)
-    const [ openDeleteModal, setOpenDeleteModal ] = useState()
-    const [ selectedPostId, setSelectedPostId ] = useState()
+    const { 
+        classroom, 
+        loading,
+    
+        posts,
+        postLoading,
+        optimisticLoading,
 
-    const handleOpenDeleteModal = (id) => {
-        setSelectedPostId(id)
-        setOpenDeleteModal(prev => !prev)
-    }
+        handleGetPosts,
+        handleCreatePost,
+    } = useContext(ClassroomContext)
 
-    const handleDeletePost = async () => {
-        deletePost(selectedPostId)
-        setOpenDeleteModal(prev => !prev)
-    }
+    /* NOTE : Delete Post Handler needs a better naming
+    // deletePost is not exactly a good term as this function is still 
+    // technically a handler that passes control but to yet another handler
+    // simply because the openDeleteModal exists only in this component
 
-    const handlePostSubmit = async (e) => {
-        e.preventDefault()
-        const content = e.target.elements.content.value
-        try {
-            await createPost(id, content)
-        }
-        catch (error) {
-            console.log(error)
-        } 
-    }
-
+    // currently ==============================================
+    // deletePost()             - a Classroom Component method
+    // ---- handleDeletePost()  - a ClassroomContext method
+    // -------- deletePost()    - a useClassroomManager method/hook
+    */
+   
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                await getPosts(id)
-            }
-            catch (error) {
-                console.log(error)
-            }
+            if (posts === undefined) await handleGetPosts()
         }
 
         fetchData()
-    }, [id])
+    }, [id, posts])
 
     return (
         <div className="px-8 py-4">
-            <Dialog 
-                open={openDeleteModal} 
-                className
-                onOpenChange={setOpenDeleteModal}>
-                <DialogContent>
-                    <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
-                    </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <button 
-                            onClick={handleDeletePost}
-                            className="text-white bg-red-600 text-md px-2.5 py-2.5 rounded-lg">Delete</button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
             <div className="relative overflow-hidden rounded-lg h-60">
                 <img
                     src="/banner1.jpg"
@@ -112,15 +77,13 @@ const Classroom = () => {
                 :
                 <div className="space-y-10">
                     <div className="border shadow">
-                        <PostInput onSubmitPost={handlePostSubmit} placeholder={"Announce something to the class"}/>
+                        <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"}/>
                     </div>
                     {optimisticLoading && <PostSkeleton count={1} />}
-                    {posts.map(post => (
+                    {posts && posts.map(post => (
                         <PostCard 
                             key={post.id} 
-                            classroom={classroom} 
                             post={post} 
-                            openModal={handleOpenDeleteModal} 
                             />
                     ))}
                 </div>

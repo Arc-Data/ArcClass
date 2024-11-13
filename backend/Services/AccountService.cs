@@ -30,8 +30,6 @@ namespace backend.Services
         }
         public async Task<(bool Succeeded, string? Token, string? refreshToken, IEnumerable<IdentityError>? Errors)> CreateUserAsync(CreateUserDto userDto)
         {
-            Console.WriteLine("Somehwere in here");
-            
             AppUser user;
             if (userDto.Account == AccountType.Student)
             {
@@ -119,6 +117,8 @@ namespace backend.Services
             var newRefreshToken = _tokenService.GenerateRefreshToken(existingToken.UserId);
             
             _context.RefreshTokens.Remove(existingToken);
+            await _context.SaveChangesAsync();
+
             await _context.RefreshTokens.AddAsync(newRefreshToken);
             await _context.SaveChangesAsync();
             

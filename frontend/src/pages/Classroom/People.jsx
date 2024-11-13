@@ -10,14 +10,16 @@ import { useParams } from "react-router-dom"
 // TODO : Create User Avatar + Data Component
 
 const People = () => {
-    const { loading, participants, handleGetClassroomParticipants, participantsLoading } = useContext(ClassroomContext)
+    const { loading, classroom, participants, handleGetClassroomParticipants } = useContext(ClassroomContext)
     const { id } = useParams()
+    const [ participantsLoading, setParticipantsLoading ] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
-            if (participants == undefined) {
+            if (participants === undefined) {
                 await handleGetClassroomParticipants()
             }
+            setParticipantsLoading(false)
         }
 
         fetchData()
@@ -27,10 +29,10 @@ const People = () => {
         return (<div></div>)
     }
 
-
     return (
         <div>
             <div className="w-full p-4 mx-auto">
+                {console.log("On render")}
                 <p className="py-2 my-4 text-lg border-b">Teacher</p>
                 {participantsLoading ? 
                 <UserSkeleton/> 
@@ -40,7 +42,7 @@ const People = () => {
                         <FaUser size={16}/>
                     </div>
                     <div>
-                        <p className="text-sm font-body">{participants.teacher.fullName}</p>
+                        <p className="text-sm font-body">{classroom.teacher.fullName}</p>
                     </div>
                 </div>
                 }

@@ -4,21 +4,27 @@ import AuthContext from "./AuthContext"
 import { useParams } from "react-router-dom"
 import useAssignmentManager from "@/hooks/useAssignmentManager"
 import dayjs from "dayjs"
+import usePostManager from "@/hooks/usePostManager"
 
 const ClassroomContext = createContext()
 
 export default ClassroomContext
 
-export const ClassroomProvider = ({ children }) => {
-    const [ classroom, setClassroom ] = useState()
-    const [ assignments, setAssignments ] = useState()
-    const [ participants, setParticipants ] = useState()
-    const { authTokens } = useContext(AuthContext)
-    const { id } = useParams()
+// TODO : Loading states should be as close as possible to the component they are working with
 
+export const ClassroomProvider = ({ children }) => {
+    const { authTokens } = useContext(AuthContext)
+    const [ classroom, setClassroom ] = useState()
     const { loading, getClassroom, getClassroomParticipants } = useClassroomManager(authTokens)
-    const [ participantsLoading, setParticipantsLoading ] = useState(true)
+    const [ assignments, setAssignments ] = useState()
+    const { id } = useParams()
+    
+    const [ participants, setParticipants ] = useState()
     const [ errors, setErrors ] = useState()
+
+    const [ posts, setPosts ] = useState()
+    const { loading:postLoading, getPosts, createPost, deletePost, optimisticLoading } = usePostManager(authTokens) 
+    const [ postError, setPostErrors ] = useState()
     
     const {
         createAssignment,
@@ -74,16 +80,57 @@ export const ClassroomProvider = ({ children }) => {
 
     const handleGetClassroomParticipants = async () => {
         try {
-            console.log("I am here")
             const fetchParticipants = await getClassroomParticipants(id)
             setParticipants(fetchParticipants)
-            console.log(fetchParticipants)
         }
         catch (error) {
             console.log(error)
         }
-        finally {
-            setParticipantsLoading(false)
+       
+    }
+
+    const handleGetPosts = async () => {
+        try {
+            const fetchPosts = await getPosts(id)
+            setPosts(fetchPosts)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleCreatePost = async (e) => {
+        e.preventDefault()
+        const content = e.target.elements.content.value
+
+        try {
+            const post = await createPost(id, content)
+            const updatedPosts = [post, ...posts]
+            setPosts(updatedPosts)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    // TODO : Finish this edit function
+    const handleEditPost = async () => {
+        try {
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleDeletePost = async (postId) => {
+        try {
+            deletePost(postId)
+            const updatedPosts = posts.filter(post => post.id != postId)
+        setPosts(updatedPosts)
+        }
+        catch (error) {
+            console.log(error)
         }
     }
 
@@ -99,6 +146,9 @@ export const ClassroomProvider = ({ children }) => {
         }
 
         setAssignments()
+        setPosts()
+        setParticipants()
+
         fetchData()
     }, [id])
 
@@ -109,12 +159,21 @@ export const ClassroomProvider = ({ children }) => {
         assignments,
         assignmentsGroup,
         participants,
-        participantsLoading,
+
+        posts,
+        getPosts,
+        postLoading,
+        optimisticLoading,
 
         handleGetAssignmentList,
         handleCreateAssignment,
         handleDeleteAssignment,
-        handleGetClassroomParticipants
+        handleGetClassroomParticipants,
+
+        handleGetPosts,
+        handleCreatePost,
+        handleDeletePost,
+        handleEditPost,
     }
 
     return (

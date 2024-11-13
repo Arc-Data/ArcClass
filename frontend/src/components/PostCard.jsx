@@ -3,22 +3,23 @@ import dayjs from "@/utils/dayjs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import PostInput from "./PostInput"
 import { useContext, useState } from "react"
-import ClassroomContext from "@/context/ClassroomContext"
 import PostComment from "./PostComment"
 import useCommentManager from "@/hooks/useCommentManager"
 import AuthContext from "@/context/AuthContext"
 import { FaPencil, FaUserGroup } from "react-icons/fa6"
 import { Textarea } from "./ui/textarea"
 import usePostManager from "@/hooks/usePostManager"
-import { Spinner } from "flowbite-react"
 import PostSkeleton from "./Skeleton/PostSkeleton"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
+import ClassroomContext from "@/context/ClassroomContext"
 
 /* TODO : Obtain only the latest comment at first into loading all comments
 
 */
 
-const PostCard = ({ classroom, post, openModal }) => {
+const PostCard = ({ post }) => {
     const { user, authTokens } = useContext(AuthContext)
+    const { classroom, handleDeletePost } = useContext(ClassroomContext)
 
     const [ comments, setComments ] = useState(post.comments)
     const [ showAllComments, setShowAllComments ] = useState(false)
@@ -98,30 +99,50 @@ const PostCard = ({ classroom, post, openModal }) => {
                             <p>{post.user.fullName}</p>
                             <p className="text-sm">{dayjs(post.createdAt).format('MMM DD, h:mm A')}</p>
                         </div>
-                        <DropdownMenu className="">
-                            <DropdownMenuTrigger asChild>
-                                <button className="p-4 ml-auto rounded-full hover:bg-gray-200">
-                                    <FaEllipsisV size={16}/>
-                                </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="z-40 bg-background-default border-2 shadow *:p-2 rounded-lg *:cursor-pointer">
-                                {post.user.id == user.nameid && 
-                                <DropdownMenuItem onClick={() => setEditing(true)}
-                                className="z-30 flex items-center gap-2">
-                                    <FaPencil/>
-                                    <span>Edit</span>
-                                </DropdownMenuItem>
-                                }
-                                {(classroom.teacher?.id == user.nameid || post.user.id == user.nameid) &&
-                                <DropdownMenuItem onClick={() => openModal(post.id)}
-                                    className="z-30 flex items-center gap-2 text-red-500">
-                                    <FaTrash/>
-                                    <span>Delete</span>
-                                </DropdownMenuItem>
-                                }
-                                
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Dialog>
+                            <DropdownMenu className="">
+                                <DropdownMenuTrigger asChild>
+                                    <button className="p-4 ml-auto rounded-full hover:bg-gray-200">
+                                        <FaEllipsisV size={16}/>
+                                    </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="z-40 bg-background-default border-2 shadow *:p-2 rounded-lg *:cursor-pointer">
+                                    {post.user.id == user.nameid && 
+                                    <DropdownMenuItem onClick={() => setEditing(true)}
+                                    className="z-30 flex items-center gap-2">
+                                        <FaPencil/>
+                                        <span>Edit</span>
+                                    </DropdownMenuItem>
+                                    }
+                                    <DialogTrigger asChild>
+                                        {(classroom.teacher?.id == user.nameid || post.user.id == user.nameid) &&
+                                        <DropdownMenuItem 
+                                        className="z-30 flex items-center gap-2 text-red-500">
+                                            <FaTrash/>
+                                            <span>Delete</span>
+                                        </DropdownMenuItem>
+                                        }
+                                    </DialogTrigger>
+                                    
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Are you absolutely sure</DialogTitle>
+                                    <DialogDescription>
+                                        This action cannot be undone. This will permanently delete your account
+                                        and remove your data from our servers.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <button
+                                        onClick={() => handleDeletePost(post.id)}
+                                        className="text-white bg-red-600 text-md px-2.5 py-2.5 rounded-lg">
+                                        Delete
+                                    </button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                     {!isEditing ? 
                     <p>{content}</p>
