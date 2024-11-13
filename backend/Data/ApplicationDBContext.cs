@@ -75,6 +75,18 @@ namespace backend.Data
                 .HasForeignKey(c => c.ClassroomId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Classroom>()
+                .HasMany(c => c.Materials)
+                .WithOne(m => m.Classroom)
+                .HasForeignKey(m => m.ClassroomId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Post>()
+                .HasMany(p => p.Materials)
+                .WithOne(m => m.Post)
+                .HasForeignKey(m => m.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<Post>()
                 .HasMany(p => p.Comments)
                 .WithOne(c => c.Post)

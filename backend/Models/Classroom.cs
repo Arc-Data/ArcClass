@@ -20,5 +20,6 @@ namespace backend.Models
         public IList<StudentClassroom> StudentClassrooms { get; set; } = [];
         public IList<Post> Posts { get; set; } = [];
         public IList<Assignment> Assignments { get; set; } = [];
+        public IList<Material> Materials { get; set; } = [];
     }
 }
