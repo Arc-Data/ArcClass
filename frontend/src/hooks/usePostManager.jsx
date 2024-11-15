@@ -2,7 +2,6 @@ import axios from "@/utils/axios"
 import { useState } from "react"
 
 const usePostManager = (authTokens) => {
-    const [ posts, setPosts ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ optimisticLoading, setOptimisticLoading ] = useState(false)
 
@@ -20,12 +19,19 @@ const usePostManager = (authTokens) => {
        
     }
 
-    const createPost = async (id, content) => {
+    const createPost = async (id, content, files) => {
         setOptimisticLoading(true)
 
-        const response = await axios.post(`api/classroom/${id}/post`, { content }, {
+        const formData = new FormData()
+        formData.append('content', content)
+        files.forEach((file, index) => {
+            formData.append(`files`, file); // No need for indexing; append as array
+        });
+
+        const response = await axios.post(`api/classroom/${id}/post`, formData , {
             headers: {
-                Authorization: `Bearer ${authTokens.access}`
+                Authorization: `Bearer ${authTokens.access}`,
+                'Content-Type': 'multipart/form-data'
             }
         })
 
@@ -42,21 +48,14 @@ const usePostManager = (authTokens) => {
     }
 
     const editPost = async (id, content) => {
-        try {
-            await axios.put(`api/post/${id}`, { content }, {
-                headers: {
-                    Authorization: `Bearer ${authTokens.access}`
-                }
-            })
-
-        }
-        catch (error) {
-            console.log(error)
-        }
+        await axios.put(`api/post/${id}`, { content }, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
     }
 
     return {
-        posts, 
         loading,
         optimisticLoading,
 

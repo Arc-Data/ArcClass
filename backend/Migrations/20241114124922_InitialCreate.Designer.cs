@@ -12,7 +12,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241026040905_InitialCreate")]
+    [Migration("20241114124922_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -257,6 +257,39 @@ namespace backend.Migrations
                     b.UseTptMappingStrategy();
                 });
 
+            modelBuilder.Entity("backend.Models.Assignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClassroomId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxGrade")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
+
+                    b.ToTable("Assignments");
+                });
+
             modelBuilder.Entity("backend.Models.Classroom", b =>
                 {
                     b.Property<string>("Id")
@@ -319,6 +352,38 @@ namespace backend.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("backend.Models.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClassroomId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("Materials");
                 });
 
             modelBuilder.Entity("backend.Models.Post", b =>
@@ -468,6 +533,17 @@ namespace backend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("backend.Models.Assignment", b =>
+                {
+                    b.HasOne("backend.Models.Classroom", "Classroom")
+                        .WithMany("Assignments")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+                });
+
             modelBuilder.Entity("backend.Models.Classroom", b =>
                 {
                     b.HasOne("backend.Models.Teacher", "Teacher")
@@ -493,6 +569,24 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("backend.Models.Material", b =>
+                {
+                    b.HasOne("backend.Models.Classroom", "Classroom")
+                        .WithMany("Materials")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Post", "Post")
+                        .WithMany("Materials")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Classroom");
 
                     b.Navigation("Post");
                 });
@@ -575,6 +669,10 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Classroom", b =>
                 {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Materials");
+
                     b.Navigation("Posts");
 
                     b.Navigation("StudentClassrooms");
@@ -583,6 +681,8 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Materials");
                 });
 
             modelBuilder.Entity("backend.Models.Student", b =>

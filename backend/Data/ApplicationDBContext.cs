@@ -26,6 +26,7 @@ namespace backend.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<Material> Materials { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

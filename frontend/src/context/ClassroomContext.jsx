@@ -24,7 +24,6 @@ export const ClassroomProvider = ({ children }) => {
 
     const [ posts, setPosts ] = useState()
     const { loading:postLoading, getPosts, createPost, deletePost, optimisticLoading } = usePostManager(authTokens) 
-    const [ postError, setPostErrors ] = useState()
     
     const {
         createAssignment,
@@ -99,24 +98,11 @@ export const ClassroomProvider = ({ children }) => {
         }
     }
 
-    const handleCreatePost = async (e) => {
-        e.preventDefault()
-        const content = e.target.elements.content.value
-
-        try {
-            const post = await createPost(id, content)
+    const handleCreatePost = async (content, files) => {
+    try {
+            const post = await createPost(id, content, files)
             const updatedPosts = [post, ...posts]
             setPosts(updatedPosts)
-        }
-        catch (error) {
-            console.log(error)
-        }
-    }
-
-    // TODO : Finish this edit function
-    const handleEditPost = async () => {
-        try {
-
         }
         catch (error) {
             console.log(error)
@@ -173,7 +159,6 @@ export const ClassroomProvider = ({ children }) => {
         handleGetPosts,
         handleCreatePost,
         handleDeletePost,
-        handleEditPost,
     }
 
     return (

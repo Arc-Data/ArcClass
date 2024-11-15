@@ -13,10 +13,6 @@ import PostSkeleton from "./Skeleton/PostSkeleton"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import ClassroomContext from "@/context/ClassroomContext"
 
-/* TODO : Obtain only the latest comment at first into loading all comments
-
-*/
-
 const PostCard = ({ post }) => {
     const { user, authTokens } = useContext(AuthContext)
     const { classroom, handleDeletePost } = useContext(ClassroomContext)

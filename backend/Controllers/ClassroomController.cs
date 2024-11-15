@@ -20,6 +20,7 @@ using backend.Dtos.Classroom;
 using backend.Dtos.Account;
 using backend.Dtos.Post;
 using backend.Dtos.Assignment;
+using backend.Services;
 
 namespace backend.Controllers
 {
@@ -33,8 +34,10 @@ namespace backend.Controllers
         private readonly IStudentClassroomRepository _studentClassroomRepo;
         private readonly IPostRepository _postRepo;
         private readonly IAssignmentRepository _assignmentRepo;
+        private readonly IFileStorageService _fileStorageService;
+        private readonly IMaterialRepository _materialRepo;
 
-        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo, IStudentClassroomRepository studentClassroomRepo, IPostRepository postRepo, IAssignmentRepository assignmentRepo)
+        public ClassroomController(IClassroomService classroomService, UserManager<AppUser> userManager, IClassroomRepository classroomRepo, IStudentClassroomRepository studentClassroomRepo, IPostRepository postRepo, IAssignmentRepository assignmentRepo, IFileStorageService fileStorageService, IMaterialRepository materialRepo)
         {
             _classroomService = classroomService;
             _userManager = userManager;
@@ -42,6 +45,8 @@ namespace backend.Controllers
             _studentClassroomRepo = studentClassroomRepo;
             _postRepo = postRepo;
             _assignmentRepo = assignmentRepo;
+            _fileStorageService = fileStorageService;
+            _materialRepo = materialRepo;
         }
 
         /* NOTE : Regarding Roles Based Approach (ramble)
@@ -248,6 +253,47 @@ namespace backend.Controllers
             return Ok(postsDto);
         }
 
+        [HttpPost("{id}/assignment/test")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> CreateAssignmentTest([FromRoute] string id, [FromForm] CreateAssignmentDto assignmentDto, [FromForm] List<FormFile> files)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var classroom = await _classroomRepo.GetByIdAsync(id);
+            if (classroom == null) return NotFound();
+            
+            if (classroom.TeacherId != User.GetId()) return Unauthorized();
+            
+            var assignment = new Assignment 
+            {
+                Title = assignmentDto.Title,
+                Description = assignmentDto.Description,
+                SubmissionDate = assignmentDto.SubmissionDate,
+                ClassroomId = id,
+                MaxGrade = assignmentDto.MaxGrade,
+            };
+
+            await _assignmentRepo.CreateAsync(assignment);
+
+            if (files.Count > 0)
+            {
+                foreach (var file in files) 
+                {
+                    var filePath = await _fileStorageService.SaveFileAsync(file, id);
+                    // TODO : Create Material Model
+                    // var material = new Material 
+                    // {
+                    //     FileName = file.FileName,
+                    //     FilePath = filePath,
+                    //     ClassroomId = id,
+                        
+                    // };
+                }
+            }
+            
+            return Ok(assignment.ToAssignmentDto());
+        }
+
         [HttpPost("{id}/assignment")]
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromBody] CreateAssignmentDto assignmentDto)
@@ -284,9 +330,38 @@ namespace backend.Controllers
             return Ok(assignmentsDto);
         }
 
+        // [HttpPost("{id}/post")]
+        // [Authorize]
+        // public async Task<IActionResult> CreatePost([FromRoute] string id, [FromBody] CreatePostDto postDto)
+        // {
+        //     if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        //     var classroom = await _classroomRepo.GetByIdAsync(id);
+        //     if (classroom == null) return NotFound("Classroom not found");
+            
+        //     var userId = User.GetId();
+        //     var isUserAuthorized = await _classroomService.IsUserAuthorizedToPost(classroom, userId);
+        //     if (!isUserAuthorized) return Forbid();
+            
+        //     var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+        //     var post = new Post
+        //     {
+        //         Content = postDto.Content,
+        //         DateModified = DateTime.UtcNow,
+        //         CreatedAt = DateTime.UtcNow,
+        //         AppUser = user,
+        //         Classroom = classroom,
+        //     };
+
+        //     await _postRepo.CreateAsync(post);
+
+        //     return Ok(post.ToPostDto());
+        // }
+
         [HttpPost("{id}/post")]
         [Authorize]
-        public async Task<IActionResult> CreatePost([FromRoute] string id, [FromBody] CreatePostDto postDto)
+        public async Task<IActionResult> CreatePostTest([FromRoute] string id, [FromForm] CreatePostDto postDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -309,6 +384,23 @@ namespace backend.Controllers
             };
 
             await _postRepo.CreateAsync(post);
+
+            if (postDto.Files.Count > 0)
+            {
+                foreach (var file in postDto.Files) 
+                {
+                    var filePath = await _fileStorageService.SaveFileAsync(file, id);
+                    var material = new Material 
+                    {
+                        FileName = file.FileName,
+                        FilePath = filePath,
+                        ClassroomId = id,
+                        PostId = post.Id,    
+                    };
+
+                    await _materialRepo.CreateAsync(material);
+                }
+            }
 
             return Ok(post.ToPostDto());
         }

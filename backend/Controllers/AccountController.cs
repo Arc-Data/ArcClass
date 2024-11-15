@@ -64,10 +64,6 @@ namespace backend.Controllers
             return BadRequest(ModelState);
         }
 
-        /* FIXME : Something about Login is taking too long
-        
-        */
-
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {

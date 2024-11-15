@@ -380,7 +380,7 @@ namespace backend.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Material");
+                    b.ToTable("Materials");
                 });
 
             modelBuilder.Entity("backend.Models.Post", b =>
