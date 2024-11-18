@@ -50,19 +50,40 @@ namespace backend.Repositories
 
         public async Task<bool> TryDeletePost(int id, string userId)
         {
-            var post = await _context.Posts
-            .Include(p => p.Classroom)
-            .Where(p => p.Id == id && (
-                p.Classroom!.TeacherId == userId || p.UserId == userId)
-            )
-            .FirstOrDefaultAsync();
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            if (post == null) return false;
+            try 
+            {
+                var post = await _context.Posts
+                .Include(p => p.Classroom)
+                .Where(p => p.Id == id && (
+                    p.Classroom!.TeacherId == userId || p.UserId == userId)
+                )
+                .FirstOrDefaultAsync();
 
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
+                if (post == null) return false;
 
-            return true;
+                var materials = await _context.Materials
+                    .Where(m => m.PostId == id)
+                    .ToListAsync();
+
+                foreach (var material in materials)
+                {
+                    material.PostId = null;
+                }
+
+                _context.Posts.Remove(post);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch 
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+
         }
 
         public async Task<Post?> UpdateAsync(Post post)

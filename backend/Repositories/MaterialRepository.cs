@@ -30,6 +30,11 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<Material?> GetByIdAsync(int id)
+        {
+            return await _context.Materials.FindAsync(id);
+        }
+
         public async Task<IList<Material>> GetByPostIdAsync(int id)
         {
             return await _context.Materials.Where(m => m.PostId == id).ToListAsync();
