@@ -27,7 +27,8 @@ namespace backend.Mappers
                     },
                 ClassroomId = post.ClassroomId,
                 NumberOfComments = post.NumberOfComments,
-                Comments = post.Comments.Select(comment => comment.ToCommentDto()).ToList()
+                Comments = post.Comments.Select(comment => comment.ToCommentDto()).ToList(),
+                Materials = post.Materials.Select(material => material.ToMaterialDto()).ToList()
             };
             
         }

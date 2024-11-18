@@ -32,7 +32,6 @@ const People = () => {
     return (
         <div>
             <div className="w-full p-4 mx-auto">
-                {console.log("On render")}
                 <p className="py-2 my-4 text-lg border-b">Teacher</p>
                 {participantsLoading ? 
                 <UserSkeleton/> 

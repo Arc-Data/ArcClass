@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
@@ -27,6 +28,11 @@ namespace backend.Repositories
         public Task<IList<Material>> GetByClassroomIdAsync(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IList<Material>> GetByPostIdAsync(int id)
+        {
+            return await _context.Materials.Where(m => m.PostId == id).ToListAsync();
         }
     }
 }

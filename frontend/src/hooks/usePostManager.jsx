@@ -24,8 +24,8 @@ const usePostManager = (authTokens) => {
 
         const formData = new FormData()
         formData.append('content', content)
-        files.forEach((file, index) => {
-            formData.append(`files`, file); // No need for indexing; append as array
+        files.forEach(file => {
+            formData.append(`files`, file); 
         });
 
         const response = await axios.post(`api/classroom/${id}/post`, formData , {

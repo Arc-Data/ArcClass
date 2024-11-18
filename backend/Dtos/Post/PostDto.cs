@@ -18,5 +18,6 @@ namespace backend.Dtos.Post
         public string Content { get; set; } = string.Empty;
         public int NumberOfComments { get; set; }
         public IList<CommentDto> Comments { get; set; } = [];
+        public IList<MaterialDto> Materials { get; set; } = [];
     }
 }

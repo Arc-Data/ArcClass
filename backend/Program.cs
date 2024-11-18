@@ -14,7 +14,8 @@ using Microsoft.OpenApi.Models;
 
 /*
 //  [ ] : Use a Logger
-//  [ ] : Learn how to sanitize inputs in ASP.NET applications
+//  [ ] : Learn how to sanitize inputs in ASP.NET 
+//  [ ] : File Uploads Security
 */
 
 var builder = WebApplication.CreateBuilder(args);

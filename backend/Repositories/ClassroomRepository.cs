@@ -9,6 +9,26 @@ using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
+/* NOTE : Regarding Redundant Fetches. Some with more data than others
+// For example, the GetById function returns a classroom object that includes
+// the teacher associated with it alongside the number of studentclassrooms associated with it,
+// which is pretty important in order to load the number of participants correctly
+// 
+//      see CreateAssignment - 
+//      this code is the lead up to ensuring the teacher who owns the classroom
+//      is the one responsible for creating the assignment 
+// 
+//      var classroom = await _classroomRepo.GetByIdAsync(id);
+//      if (classroom == null) return NotFound();
+        
+//      if (classroom.TeacherId != User.GetId()) return Unauthorized();
+// 
+// this code however does not need the implementation of including studentclassrooms
+// revisit the code whether it is advisable to create multiple functions of GetByIdAsync  
+// with the Includes part slightly differing from each other 
+// (one with teacher only - one with studentclassrooms included)
+*/
+
 namespace backend.Repositories
 {
     public class ClassroomRepository : IClassroomRepository
@@ -67,7 +87,8 @@ namespace backend.Repositories
                         .OrderByDescending(c => c.CreatedAt)
                         .Take(2)
                         .ToList(),
-                    NumberOfComments = p.Comments.Count()
+                    NumberOfComments = p.Comments.Count(),
+                    Materials = p.Materials
                 })
                 .ToListAsync();
         }

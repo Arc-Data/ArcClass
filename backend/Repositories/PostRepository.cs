@@ -22,6 +22,8 @@ namespace backend.Repositories
 
         /* NOTE: Eligible for Deletion
         // uhhh.. pun intended?
+        // temporarily resorted to delete methods that
+        // involve fetching and validating at the same time (see TryDeletePost)
         */
         public async Task<Post?> DeleteAsync(int id)
         {
@@ -36,6 +38,7 @@ namespace backend.Repositories
         {
             return await _context.Posts
                 .Include(p => p.Classroom)
+                .Include(p => p.Materials)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 

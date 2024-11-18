@@ -29,6 +29,8 @@ const PostCard = ({ post }) => {
     const { editPost } = usePostManager(authTokens)
     const { createComment, deleteComment, loadComments } = useCommentManager(authTokens)
 
+    console.log(post)
+
     const handleCancel = () => {
         setEditing(false)
         setContent(post.content)
