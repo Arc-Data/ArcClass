@@ -70,12 +70,12 @@ const Classroom = () => {
                 </div>
                 }
             </div>
-            <div className="mt-8 grid grid-cols-[2fr_1fr] gap-4 ">
+            <div className="mt-8 grid md:grid-cols-[2fr_1fr]  gap-4 ">
                 {postLoading 
                 ?
-                <PostSkeleton count={4}/>
+                <PostSkeleton count={4} className="order-2"/>
                 :
-                <div className="space-y-10">
+                <div className="space-y-10 ">
                     <div className="border shadow">
                         <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"}/>
                     </div>

@@ -6,11 +6,6 @@ const AuthContext = createContext()
 
 export default AuthContext;
 
-/* NOTE: SQL Timeout
-// Single instance of sql timeout 
-// Keep on the lookout for whether coincidence
-*/
-
 export const AuthProvider = ({ children }) => {
     const [ authTokens, setAuthTokens ] = useState(() => {
         const tokens = localStorage.getItem("authTokens")

@@ -1,6 +1,4 @@
 import { useContext, useState } from "react"
-import useClassroomManager from "../hooks/useClassroomManager"
-import AuthContext from "../context/AuthContext"
 import { Datepicker, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from "flowbite-react"
 import { FaCalendar, FaPlus, FaTimes } from "react-icons/fa"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"

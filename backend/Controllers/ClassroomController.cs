@@ -55,6 +55,7 @@ namespace backend.Controllers
         Strategy might be good to implement later if the possibility of a fourth
         Entity (might not happen right now. But should rethink the entire scheme around version 2)
 
+
         The current things that needed to be noted are the possibilities of 
         having more than one role potentially rising to some issues. 
         Roles.Contains() returns a list of strings regarding the roles and it 

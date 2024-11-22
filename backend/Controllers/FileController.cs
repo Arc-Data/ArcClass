@@ -7,6 +7,9 @@ using backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/* TODO : Handle a wide range of file types
+// Consider restricting other types of file extensions
+*/
 namespace backend.Controllers
 {
     [ApiController]

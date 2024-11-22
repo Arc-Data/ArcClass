@@ -9,9 +9,6 @@ namespace backend.Dtos
     {
         public int Id { get; set; }
         public string FileName { get; set; } = string.Empty;
-        public string GetDownloadUrl()
-        {
-            return $"/api/files/{Id}";
-        }        
+        
     }
 }

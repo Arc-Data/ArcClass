@@ -2,7 +2,7 @@ import { FaEllipsisV, FaTrash, FaUser } from "react-icons/fa"
 import dayjs from "@/utils/dayjs"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import PostInput from "./PostInput"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import PostComment from "./PostComment"
 import useCommentManager from "@/hooks/useCommentManager"
 import AuthContext from "@/context/AuthContext"
@@ -12,6 +12,14 @@ import usePostManager from "@/hooks/usePostManager"
 import PostSkeleton from "./Skeleton/PostSkeleton"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import ClassroomContext from "@/context/ClassroomContext"
+import axios from "@/utils/axios"
+import useFileManager from "@/hooks/useFileManager"
+import DisplayFiles from "./DisplayFiles"
+
+/* TODO: Confirmation to delete associated materials
+// Deleted posts will not automatically delete associated materials
+// unless the classroom itself is deleted.
+*/
 
 const PostCard = ({ post }) => {
     const { user, authTokens } = useContext(AuthContext)
@@ -28,8 +36,6 @@ const PostCard = ({ post }) => {
 
     const { editPost } = usePostManager(authTokens)
     const { createComment, deleteComment, loadComments } = useCommentManager(authTokens)
-
-    console.log(post)
 
     const handleCancel = () => {
         setEditing(false)
@@ -142,8 +148,13 @@ const PostCard = ({ post }) => {
                             </DialogContent>
                         </Dialog>
                     </div>
-                    {!isEditing ? 
+                    {!isEditing ?
+                    <>
                     <p>{content}</p>
+                    {post.materials.length !== 0 && 
+                    <DisplayFiles materials={post.materials}/>
+                    }
+                    </>
                     :
                     <form onSubmit={handleSubmit} className="space-y-2">
                         <Textarea className="text-base" required value={content} onChange={(e) => setContent(e.target.value)}></Textarea>
