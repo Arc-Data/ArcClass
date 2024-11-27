@@ -3,6 +3,8 @@ import { Textarea } from "./ui/textarea"
 import { FaFileUpload, FaTimes, FaUser } from "react-icons/fa"
 import { Button } from "./ui/button"
 
+// TODO : File Format Restrictions
+
 const PostInput = ({ onSubmitPost, placeholder }) => {
     const [ isEditing, setIsEditing ] = useState(false)
     const [ files, setFiles ] = useState([])

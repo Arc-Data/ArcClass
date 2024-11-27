@@ -1,17 +1,7 @@
-import { useEffect, useMemo, useState } from "react"
-import { FaFile, FaFileDownload, FaFilePdf } from "react-icons/fa"
+import mimeTypeToIcon from "@/utils/mimeTypeToIcon";
+import { useEffect, useState } from "react"
 import { IoMdDownload } from "react-icons/io";
 
-
-
-const mimeTypeToIcon = (mimeType) => {
-    switch (mimeType) {
-        case 'application/pdf':
-            return (<FaFilePdf />)
-        default:
-            return (<FaFile />)
-    }
-}
 
 const FileBlock = ({ file, handleClick }) => {
     const [ objectUrl, setObjectUrl ] = useState()
