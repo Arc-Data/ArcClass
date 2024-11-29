@@ -38,7 +38,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        handleCreateAssignment(id, data)
+        handleCreateAssignment(id, data, files)
         setIsOpen(false)
     }
 
@@ -90,7 +90,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
             </DialogTrigger>
             <DialogContent className="max-w-6xl font-body">
                 <form onSubmit={handleSubmit}>
-                    <div className="flex flex-col max-h-[90vh]">
+                    <div className="flex flex-col max-h-[80vh]">
                         <DialogHeader>
                             <DialogTitle>
                             Create Class Assignment

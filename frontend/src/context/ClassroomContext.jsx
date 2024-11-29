@@ -45,9 +45,9 @@ export const ClassroomProvider = ({ children }) => {
         return group
     }, [assignments])
 
-    const handleCreateAssignment = async (id, data) => {
+    const handleCreateAssignment = async (id, data, files) => {
         try {
-            const assignment = await createAssignment(id, data)
+            const assignment = await createAssignment(id, data, files)
             const updatedAssignments = [...assignments, assignment]
             setAssignments(updatedAssignments)
         }

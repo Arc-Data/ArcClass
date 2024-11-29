@@ -16,6 +16,6 @@ namespace backend.Dtos.Assignment
         [Range(1, int.MaxValue, ErrorMessage = "Max Grade must be greater than zero.")]
         public int MaxGrade { get; set; }
         public int MyProperty { get; set; }
-        public List<IFormFile>? Files { get; set; }
+        public List<IFormFile> Files { get; set; } = [];
     }
 }

@@ -11,6 +11,7 @@ import ClassroomContext from "@/context/ClassroomContext"
 // Unauthorized Joining, User Moderation.
 // [ ] - No Posts
 // [ ] - Define Announcements
+// [ ] - Announcements Responsivenesss
 */
 
 const Classroom = () => {

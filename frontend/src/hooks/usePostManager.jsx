@@ -24,6 +24,7 @@ const usePostManager = (authTokens) => {
 
         const formData = new FormData()
         formData.append('content', content)
+        
         files.forEach(file => {
             formData.append(`files`, file); 
         });

@@ -14,15 +14,10 @@ const PostInput = ({ onSubmitPost, placeholder }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         
-        const form = e.currentTarget
-        const formData = new FormData(form)
-
+        const formData = new FormData(e.currentTarget)
         const content = formData.get('content')
-
-        console.log(content, files)
         onSubmitPost(content, files)
 
-        // onSubmitPost(e);
         setIsEditing(false)
         setFiles([])
     }

@@ -254,50 +254,9 @@ namespace backend.Controllers
             return Ok(postsDto);
         }
 
-        [HttpPost("{id}/assignment/test")]
-        [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> CreateAssignmentTest([FromRoute] string id, [FromForm] CreateAssignmentDto assignmentDto, [FromForm] List<FormFile> files)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var classroom = await _classroomRepo.GetByIdAsync(id);
-            if (classroom == null) return NotFound();
-            
-            if (classroom.TeacherId != User.GetId()) return Unauthorized();
-            
-            var assignment = new Assignment 
-            {
-                Title = assignmentDto.Title,
-                Description = assignmentDto.Description,
-                SubmissionDate = assignmentDto.SubmissionDate,
-                ClassroomId = id,
-                MaxGrade = assignmentDto.MaxGrade,
-            };
-
-            await _assignmentRepo.CreateAsync(assignment);
-
-            if (files.Count > 0)
-            {
-                foreach (var file in files) 
-                {
-                    var filePath = await _fileStorageService.SaveFileAsync(file, id);
-                    // TODO : Create Material Model
-                    // var material = new Material 
-                    // {
-                    //     FileName = file.FileName,
-                    //     FilePath = filePath,
-                    //     ClassroomId = id,
-                        
-                    // };
-                }
-            }
-            
-            return Ok(assignment.ToAssignmentDto());
-        }
-
         [HttpPost("{id}/assignment")]
         [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromBody] CreateAssignmentDto assignmentDto)
+        public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromForm] CreateAssignmentDto assignmentDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -316,6 +275,22 @@ namespace backend.Controllers
             };
 
             await _assignmentRepo.CreateAsync(assignment);
+
+            if (assignmentDto.Files.Count > 0)
+            {
+                foreach (var file in assignmentDto.Files) 
+                {
+                    var filePath = await _fileStorageService.SaveFileAsync(file, id);
+                    var material = new Material 
+                    {
+                        FileName = file.FileName,
+                        FilePath = filePath,
+                        ClassroomId = id,
+                    };
+
+                    await _materialRepo.CreateAsync(material);
+                }
+            }
             
             return Ok(assignment.ToAssignmentDto());
         }
@@ -331,38 +306,9 @@ namespace backend.Controllers
             return Ok(assignmentsDto);
         }
 
-        // [HttpPost("{id}/post")]
-        // [Authorize]
-        // public async Task<IActionResult> CreatePost([FromRoute] string id, [FromBody] CreatePostDto postDto)
-        // {
-        //     if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        //     var classroom = await _classroomRepo.GetByIdAsync(id);
-        //     if (classroom == null) return NotFound("Classroom not found");
-            
-        //     var userId = User.GetId();
-        //     var isUserAuthorized = await _classroomService.IsUserAuthorizedToPost(classroom, userId);
-        //     if (!isUserAuthorized) return Forbid();
-            
-        //     var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-        //     var post = new Post
-        //     {
-        //         Content = postDto.Content,
-        //         DateModified = DateTime.UtcNow,
-        //         CreatedAt = DateTime.UtcNow,
-        //         AppUser = user,
-        //         Classroom = classroom,
-        //     };
-
-        //     await _postRepo.CreateAsync(post);
-
-        //     return Ok(post.ToPostDto());
-        // }
-
         [HttpPost("{id}/post")]
         [Authorize]
-        public async Task<IActionResult> CreatePostTest([FromRoute] string id, [FromForm] CreatePostDto postDto)
+        public async Task<IActionResult> CreatePost([FromRoute] string id, [FromForm] CreatePostDto postDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
