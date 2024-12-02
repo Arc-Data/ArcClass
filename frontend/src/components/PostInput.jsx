@@ -5,7 +5,7 @@ import { Button } from "./ui/button"
 
 // TODO : File Format Restrictions
 
-const PostInput = ({ onSubmitPost, placeholder }) => {
+const PostInput = ({ onSubmitPost, placeholder, filesHidden }) => {
     const [ isEditing, setIsEditing ] = useState(false)
     const [ files, setFiles ] = useState([])
     const fileInputRef = useRef(null)
@@ -13,7 +13,7 @@ const PostInput = ({ onSubmitPost, placeholder }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        
+
         const formData = new FormData(e.currentTarget)
         const content = formData.get('content')
         onSubmitPost(content, files)
@@ -29,7 +29,7 @@ const PostInput = ({ onSubmitPost, placeholder }) => {
     }
 
     const removeFile = (fileToRemove) => {
-        setFiles(files.filter(file => fike !== fileToRemove ))
+        setFiles(files.filter(file => file !== fileToRemove ))
     }
 
     const openFileDialog = () => {
@@ -68,7 +68,7 @@ const PostInput = ({ onSubmitPost, placeholder }) => {
                     </div>
                 )}
                 <div className="flex justify-between gap-2 mt-4">
-                    <div>
+                    <div className={`${filesHidden && 'hidden'}`}>
                         <input 
                             type="file" 
                             ref={fileInputRef}

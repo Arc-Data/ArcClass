@@ -26,6 +26,14 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<Assignment?> GetAssignmentDetailAsync(int id)
+        {
+            return await _context.Assignments
+                .Include(a => a.Comments)
+                .Include(a => a.Materials)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<Assignment?> GetByIdAsync(int id)
         {
             return await _context.Assignments

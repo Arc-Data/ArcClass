@@ -13,6 +13,7 @@ namespace backend.Interfaces
         Task<Assignment?> UpdateAsync(Assignment assignment);
         Task<IList<Assignment>> GetAll();
         Task<Assignment?> GetByIdAsync(int id);
+        Task<Assignment?> GetAssignmentDetailAsync(int id);
         Task<IList<Assignment>> GetClassroomAssignments(string id); 
     }
 }

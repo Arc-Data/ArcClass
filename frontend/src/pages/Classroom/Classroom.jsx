@@ -78,7 +78,7 @@ const Classroom = () => {
                 :
                 <div className="space-y-10 ">
                     <div className="border shadow">
-                        <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"}/>
+                        <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"} filesHidden={false}/>
                     </div>
                     {optimisticLoading && <PostSkeleton count={1} />}
                     {posts && posts.map(post => (

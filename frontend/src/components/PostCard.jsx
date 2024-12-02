@@ -67,11 +67,9 @@ const PostCard = ({ post }) => {
         }
     }
 
-    const handleCreateComment = async (e, id) => {
-        e.preventDefault()
+    const handleCreateComment = async (content, files) => {
         try {
-            const content = e.target.elements.content.value
-            const comment = await createComment(id, content)
+            const comment = await createComment(post.id, content, files)
             setComments(prev => [...prev, comment])
             setCount(prev => prev + 1)
         }
@@ -188,7 +186,7 @@ const PostCard = ({ post }) => {
                                         comment={comment} 
                                         onDeleteComment={handleDeleteComment}
                                     />))}
-            <PostInput onSubmitPost={(e) => handleCreateComment(e, post.id)} placeholder={"Add a comment"}/>
+            <PostInput onSubmitPost={(e) => handleCreateComment(e, post.id)} placeholder={"Add a comment"} filesHidden={true}/>
         </div>
     )
 }

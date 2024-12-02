@@ -37,18 +37,28 @@ const useAssignmentManager = (authTokens) => {
     }
 
     const deleteAssignment = async (id) => {
-        const response = await axios.delete(`api/assignments/${id}`, {
+        await axios.delete(`api/assignments/${id}`, {
             headers: {
                 Authorization: `Bearer ${authTokens.access}`
             }
         })
-        console.log(response)
-    }   
+    }  
+    
+    const getAssignment = async (id) => {
+        const response = await axios.get(`api/assignments/${id}`, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
+
+        return response.data
+    }
     
     return {
         createAssignment,
         getAssignmentList,
         deleteAssignment,
+        getAssignment,
     }
 }
 

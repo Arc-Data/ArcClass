@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 //  [ ] : Use a Logger
 //  [ ] : Learn how to sanitize inputs in ASP.NET 
 //  [ ] : File Uploads Security
+//  [ ] : Consider research on projection vs mapping
 */
 
 var builder = WebApplication.CreateBuilder(args);

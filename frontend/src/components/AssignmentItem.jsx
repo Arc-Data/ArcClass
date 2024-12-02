@@ -4,32 +4,44 @@ import { FaEllipsisV, FaTrash } from 'react-icons/fa'
 import { useContext } from 'react'
 import ClassroomContext from '@/context/ClassroomContext'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import { Link } from 'react-router-dom'
 
 const AssignmentItem = ({ assignment, modifyPermission }) => {
     const { handleDeleteAssignment } = useContext(ClassroomContext)
 
+    const deleteAssignment = (e) => {
+        e.preventDefault() // Prevent link navigation
+        e.stopPropagation() // Stop event bubbling
+        handleDeleteAssignment(assignment.id)
+    }
+
+    const handleDropdownClick = (e) => {
+        e.preventDefault() // Prevent link navigation
+        e.stopPropagation() // Stop event bubbling
+    }
+
     return (
-        <div className='flex items-center justify-between p-4 border rounded-lg shadow-sm cursor-pointer group border-secondary-default hover:shadow'>
+        <Link to={`${assignment.id}`} className='flex items-center justify-between p-4 border rounded-lg shadow-sm cursor-pointer group border-secondary-default hover:shadow'>
             <p>{assignment.title}</p>
-            <p className='flex items-center gap-4'>
+            <div className='flex items-center gap-4' onClick={handleDropdownClick}>
                 <span>0/0</span>
                 <FaUserGroup/>
                 {modifyPermission && 
                 <Dialog>
-                    <DropdownMenu >
+                    <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            { modifyPermission && (
+                            {modifyPermission && (
                             <button className="invisible p-2 ml-auto rounded-full group-hover:visible hover:bg-gray-200">
                                 <FaEllipsisV />
-                            </button>) }
+                            </button>)}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                 <FaPencil/>
                                 <span>Edit</span>
                             </DropdownMenuItem>
                             <DialogTrigger asChild>
-                                <DropdownMenuItem>
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                                     <FaTrash/>
                                     <span>Delete</span>
                                 </DropdownMenuItem>
@@ -46,15 +58,15 @@ const AssignmentItem = ({ assignment, modifyPermission }) => {
                             </DialogDescription>
                         </DialogHeader>
                         <DialogFooter>
-                            <button onClick={() => handleDeleteAssignment(assignment.id)} className='px-4 py-2.5 rounded-xl text-white bg-red-500'>Delete</button>
+                            <button onClick={deleteAssignment} className='px-4 py-2.5 rounded-xl text-white bg-red-500'>Delete</button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
-
                 }
-            </p>
-        </div>
+            </div>
+        </Link>
     )
 }
 
 export default AssignmentItem
+

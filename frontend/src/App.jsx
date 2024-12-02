@@ -18,10 +18,12 @@ import ClassroomLayout from "./layouts/ClassroomLayout"
 import People from "./pages/Classroom/People"
 import Assignments from "./pages/Classroom/Assignments"
 import { HomeProvider } from "./context/HomeContext"
+import AssignmentDetail from "./pages/AssignmentDetail"
 
 /* 
-// TODO : Create Profile Customization Section
+// [ ] : Create Profile Customization Section
 // Optionally a mobile menu option similar to anilist 
+// [ ] : Centralized button designs
 */
 
 function App() {
@@ -46,14 +48,15 @@ function App() {
 							<Route path="/home" element={<Home/>} />	
 							<Route path="/calendar" element={<Calendar/>} />
 							{/* to use classroom provider */}
-							<Route element={
+							<Route path="/classroom/:id" element={
 								<ClassroomProvider>
 									<ClassroomLayout />
 								</ClassroomProvider>
 								} >
-								<Route path="/classroom/:id" element={<Classroom/>} />	
-								<Route path="/classroom/:id/assignments" element={<Assignments/>} />
-								<Route path="/classroom/:id/people" element={<People />} />
+								<Route path="" element={<Classroom/>} />	
+								<Route path="assignments" element={<Assignments/>} />
+								<Route path="assignments/:assignmentId" element={<AssignmentDetail/>} />
+								<Route path="people" element={<People />} />
 							</Route>	
 							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}
 								<Route index element={<JoinClassroomModal />} /> {/* Open the modal on this route */}

@@ -19,5 +19,19 @@ namespace backend.Mappers
                 MaxGrade = assignment.MaxGrade,
             };
         }
+
+        public static AssignmentDetailDto ToAssignmentDetailDto(this Assignment assignment)
+        {
+            return new AssignmentDetailDto
+            {
+                Id = assignment.Id,
+                Title = assignment.Title,
+                Description = assignment.Description,
+                SubmissionDate = assignment.SubmissionDate,
+                MaxGrade = assignment.MaxGrade, 
+                Comments = assignment.Comments.Select(comment => comment.ToCommentDto()).ToList(),
+                Files = assignment.Materials.Select(material => material.ToMaterialDto()).ToList()
+            };
+        }
     }
 }

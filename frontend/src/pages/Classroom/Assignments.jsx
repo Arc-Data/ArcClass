@@ -5,7 +5,6 @@ import { useContext, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import dayjs from "@/utils/dayjs"
 import AuthContext from "@/context/AuthContext"
-import { Spinner } from "flowbite-react"
 
 const Assignments = () => {
     const { user } = useContext(AuthContext)

@@ -2,11 +2,11 @@ import axios from "@/utils/axios"
 import { useState } from "react"
 
 const useCommentManager = (authTokens) => {
-    const createComment = async (id, content) => {
+    const createComment = async (id, content, files) => {
         try {
             const response = await axios.post(`api/post/${id}/comments`, { content }, {
                 headers: {
-                    Authorization: `Bearer ${authTokens.access}`
+                    Authorization: `Bearer ${authTokens.access}`,
                 }
             })
 
