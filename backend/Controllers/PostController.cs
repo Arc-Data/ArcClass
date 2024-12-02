@@ -13,8 +13,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-/* TODO: Reduce data fetches on delete methods
+/*
+// [ ] - Reduce data fetches on delete methods
 // Refer to TryDeletePost for validating on fetch
+// [ ] - Delete related materials from the server on specific delete requests
 */
 namespace backend.Controllers
 {

@@ -13,6 +13,8 @@ namespace backend.Models
         public string FilePath { get; set; } = string.Empty;
         public string ClassroomId { get; set; } = string.Empty;
         public Classroom? Classroom { get; set; } 
+        public int? AssignmentId { get; set; }
+        public Assignment? Assignment { get; set; }
         public int? PostId { get; set; }
         public Post? Post { get; set; }
     }

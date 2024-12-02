@@ -57,17 +57,17 @@ namespace backend.Data
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Assignment>()
-                .HasOne(a => a.Classroom)
-                .WithMany(c => c.Assignments)
-                .HasForeignKey(a => a.ClassroomId)
-                .OnDelete(DeleteBehavior.Cascade);
             
             builder.Entity<Post>()
                 .HasOne(p => p.AppUser)
                 .WithMany(u => u.Posts)
                 .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Assignment>()
+                .HasOne(a => a.Classroom)
+                .WithMany(c => c.Assignments)
+                .HasForeignKey(a => a.ClassroomId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Post>()
@@ -76,17 +76,37 @@ namespace backend.Data
                 .HasForeignKey(c => c.ClassroomId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Assignment>()
+                .HasOne(a => a.Post)
+                .WithOne(p => p.Assignment)
+                .HasForeignKey<Assignment>(a => a.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Assignment>()
+                .HasMany(a => a.Materials)
+                .WithOne(m => m.Assignment)
+                .HasForeignKey(m => m.AssignmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Assignment>()
+                .HasMany(a => a.Comments)
+                .WithOne(c => c.Assignment)
+                .HasForeignKey(a => a.AssignmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // TODO : Delete material files on classroom deletion
             builder.Entity<Classroom>()
                 .HasMany(c => c.Materials)
                 .WithOne(m => m.Classroom)
                 .HasForeignKey(m => m.ClassroomId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // TODO : Delete material files on post delete
             builder.Entity<Post>()
                 .HasMany(p => p.Materials)
                 .WithOne(m => m.Post)
                 .HasForeignKey(m => m.PostId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Post>()
                 .HasMany(p => p.Comments)
@@ -104,7 +124,7 @@ namespace backend.Data
                 .HasOne(c => c.Teacher)
                 .WithMany(t => t.Classrooms)
                 .HasForeignKey(c => c.TeacherId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<StudentClassroom>()
                 .HasKey(sc => new { sc.ClassroomId, sc.StudentId });

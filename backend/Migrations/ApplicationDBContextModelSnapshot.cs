@@ -273,6 +273,9 @@ namespace backend.Migrations
                     b.Property<int>("MaxGrade")
                         .HasColumnType("int");
 
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("SubmissionDate")
                         .HasColumnType("datetime2");
 
@@ -283,6 +286,9 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClassroomId");
+
+                    b.HasIndex("PostId")
+                        .IsUnique();
 
                     b.ToTable("Assignments");
                 });
@@ -325,6 +331,9 @@ namespace backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AssignmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -335,14 +344,15 @@ namespace backend.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
 
                     b.HasIndex("PostId");
 
@@ -358,6 +368,9 @@ namespace backend.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AssignmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ClassroomId")
                         .IsRequired()
@@ -375,6 +388,8 @@ namespace backend.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
 
                     b.HasIndex("ClassroomId");
 
@@ -406,7 +421,6 @@ namespace backend.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -538,7 +552,15 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("backend.Models.Post", "Post")
+                        .WithOne("Assignment")
+                        .HasForeignKey("backend.Models.Assignment", "PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Classroom");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("backend.Models.Classroom", b =>
@@ -546,42 +568,54 @@ namespace backend.Migrations
                     b.HasOne("backend.Models.Teacher", "Teacher")
                         .WithMany("Classrooms")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("backend.Models.Comment", b =>
                 {
+                    b.HasOne("backend.Models.Assignment", "Assignment")
+                        .WithMany("Comments")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("backend.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("backend.Models.AppUser", "AppUser")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("Assignment");
 
                     b.Navigation("Post");
                 });
 
             modelBuilder.Entity("backend.Models.Material", b =>
                 {
+                    b.HasOne("backend.Models.Assignment", "Assignment")
+                        .WithMany("Materials")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("backend.Models.Classroom", "Classroom")
                         .WithMany("Materials")
                         .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("backend.Models.Post", "Post")
                         .WithMany("Materials")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Assignment");
 
                     b.Navigation("Classroom");
 
@@ -599,8 +633,7 @@ namespace backend.Migrations
                     b.HasOne("backend.Models.AppUser", "AppUser")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("AppUser");
 
@@ -664,6 +697,13 @@ namespace backend.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
+            modelBuilder.Entity("backend.Models.Assignment", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Materials");
+                });
+
             modelBuilder.Entity("backend.Models.Classroom", b =>
                 {
                     b.Navigation("Assignments");
@@ -677,6 +717,8 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Post", b =>
                 {
+                    b.Navigation("Assignment");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Materials");

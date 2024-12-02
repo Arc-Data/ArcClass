@@ -18,11 +18,11 @@ namespace backend.Mappers
                 Content = comment.Content,
                 DateModified = comment.DateModified,
                 CreatedAt = comment.CreatedAt,
-                User = new UserDto
+                User = comment.AppUser != null ? new UserDto
                 {
-                    Id = comment.AppUser!.Id,
+                    Id = comment.AppUser.Id,
                     FullName = $"{comment.AppUser.FirstName} {comment.AppUser.LastName}"
-                }
+                } : null
             };
         }
     }

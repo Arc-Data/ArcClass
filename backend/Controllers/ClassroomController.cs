@@ -260,13 +260,29 @@ namespace backend.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            var userId = User.GetId();
+
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
             
             if (classroom.TeacherId != User.GetId()) return Unauthorized();
             
+            var now = DateTime.UtcNow;
+            var post = new Post 
+            {
+                Content = $"{classroom.Teacher!.FirstName} "
+                            + $"{classroom.Teacher!.LastName} "
+                            + "created a new assignment"
+                            + $"{assignmentDto.Title}",
+                DateModified = now,
+                CreatedAt = now,
+                UserId = userId,
+                Classroom = classroom,
+            };
+
             var assignment = new Assignment 
             {
+                Post = post,
                 Title = assignmentDto.Title,
                 Description = assignmentDto.Description,
                 SubmissionDate = assignmentDto.SubmissionDate,
@@ -321,11 +337,12 @@ namespace backend.Controllers
             
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
+            var now = DateTime.UtcNow;
             var post = new Post
             {
                 Content = postDto.Content,
-                DateModified = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow,
+                DateModified = now,
+                CreatedAt = now,
                 AppUser = user,
                 Classroom = classroom,
             };

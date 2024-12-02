@@ -10,11 +10,15 @@ namespace backend.Models
     public class Assignment
     {
         public int Id { get; set; }
+        public int PostId { get; set; }
+        public Post? Post { get; set; }
         public Classroom? Classroom { get; set; }
         public string ClassroomId { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime? SubmissionDate { get; set; }
         public int MaxGrade { get; set; }   
+        public IList<Material> Materials { get; set; } = [];
+        public IList<Comment> Comments { get; set; } = [];
     }
 }
