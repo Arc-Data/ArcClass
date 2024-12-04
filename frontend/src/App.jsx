@@ -40,27 +40,24 @@ function App() {
 						</Route>
 					</Route>
 					<Route element={<UserRoutes/>}>
-						{/* to replace with HomeProvider */}
 						<Route element={
 							<HomeProvider>
 								<DefaultLayout />
 							</HomeProvider>}>
+							
 							<Route path="/home" element={<Home/>} />	
 							<Route path="/calendar" element={<Calendar/>} />
-							{/* to use classroom provider */}
+
 							<Route path="/classroom/:id" element={
-								<ClassroomProvider>
-									<ClassroomLayout />
-								</ClassroomProvider>
-								} >
-								<Route path="" element={<Classroom/>} />	
-								<Route path="assignments" element={<Assignments/>} />
-								<Route path="assignments/:assignmentId" element={<AssignmentDetail/>} />
-								<Route path="people" element={<People />} />
+								<ClassroomProvider><ClassroomLayout /></ClassroomProvider>} >
+									<Route path="" element={<Classroom/>} />	
+									<Route path="assignments" element={<Assignments/>} />
+									<Route path="people" element={<People />} />
 							</Route>	
 							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}
 								<Route index element={<JoinClassroomModal />} /> {/* Open the modal on this route */}
                             </Route>
+							<Route path="/assignments/:assignmentId" element={<AssignmentDetail/>} />
 						</Route>
 					</Route>
 					

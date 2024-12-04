@@ -16,9 +16,11 @@ import axios from "@/utils/axios"
 import useFileManager from "@/hooks/useFileManager"
 import DisplayFiles from "./DisplayFiles"
 
-/* TODO: Confirmation to delete associated materials
+/* 
+// [ ]: Confirmation to delete associated materials
 // Deleted posts will not automatically delete associated materials
 // unless the classroom itself is deleted.
+// [ ] : Review comment fetching logic  
 */
 
 const PostCard = ({ post }) => {
@@ -164,7 +166,7 @@ const PostCard = ({ post }) => {
                     }
                 </div>
             </div>
-            {count > 1 && 
+            {count > 2 && 
             <button 
                 className={
                     `flex items-center gap-4 p-2 mx-10 my-3 text-sm font-bold font-heading text-left rounded-xl hover:text-text-900 hover:bg-background-50
@@ -186,7 +188,9 @@ const PostCard = ({ post }) => {
                                         comment={comment} 
                                         onDeleteComment={handleDeleteComment}
                                     />))}
-            <PostInput onSubmitPost={(e) => handleCreateComment(e, post.id)} placeholder={"Add a comment"} filesHidden={true}/>
+            <div className="px-8 py-4 hover:bg-gray-200">
+                <PostInput onSubmitPost={(e) => handleCreateComment(e, post.id)} placeholder={"Add a comment"} filesHidden={true}/>
+            </div>
         </div>
     )
 }

@@ -43,7 +43,7 @@ const PostInput = ({ onSubmitPost, placeholder, filesHidden }) => {
       }, [isEditing])
 
     return (
-        <div className="flex w-full gap-4 px-8 py-4 cursor-pointer hover:bg-gray-200">
+        <div className="flex w-full gap-4 cursor-pointer">
             <div className="grid flex-shrink-0 w-10 h-10 border rounded-full bg-background-default place-items-center">
                 <FaUser size={18} />
             </div>

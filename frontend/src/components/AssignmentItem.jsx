@@ -10,18 +10,18 @@ const AssignmentItem = ({ assignment, modifyPermission }) => {
     const { handleDeleteAssignment } = useContext(ClassroomContext)
 
     const deleteAssignment = (e) => {
-        e.preventDefault() // Prevent link navigation
-        e.stopPropagation() // Stop event bubbling
+        e.preventDefault() 
+        e.stopPropagation() 
         handleDeleteAssignment(assignment.id)
     }
 
     const handleDropdownClick = (e) => {
-        e.preventDefault() // Prevent link navigation
-        e.stopPropagation() // Stop event bubbling
+        e.preventDefault()
+        e.stopPropagation() 
     }
 
     return (
-        <Link to={`${assignment.id}`} className='flex items-center justify-between p-4 border rounded-lg shadow-sm cursor-pointer group border-secondary-default hover:shadow'>
+        <Link to={`/assignments/${assignment.id}`} className='flex items-center justify-between p-4 border rounded-lg shadow-sm cursor-pointer group border-secondary-default hover:shadow'>
             <p>{assignment.title}</p>
             <div className='flex items-center gap-4' onClick={handleDropdownClick}>
                 <span>0/0</span>

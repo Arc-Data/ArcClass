@@ -15,30 +15,6 @@ const Home = () => {
     const { role } = useContext(AuthContext)
     const { filteredList: classrooms, loading, handleFilterClassroomList, searchQuery } = useContext(HomeContext)
 
-    //     {
-    //         "id": "CT8ZA3",
-    //         "subject": "Semester",
-    //         "section": "Something",
-    //         "semesterStart": "2024-10-23T16:00:00",
-    //         "semesterEnd": null,
-    //         "teacher": {
-    //             "id": "6b395212-5bca-4fcb-9ec1-badfda52b7b7",
-    //             "fullName": "Teacher1 Teacher"
-    //         }
-    //     },
-    //     {
-    //         "id": "OKHAHO",
-    //         "subject": "English For I Dunno",
-    //         "section": "BSIT 4-1N",
-    //         "semesterStart": "2024-10-16T16:00:00",
-    //         "semesterEnd": null,
-    //         "teacher": {
-    //             "id": "6b395212-5bca-4fcb-9ec1-badfda52b7b7",
-    //             "fullName": "Teacher1 Teacher"
-    //         }
-    //     },
-    // ]
-
     const classCards = () => classrooms && classrooms.map(classroom => {
         return (
             <Link key={classroom.id} to={`/classroom/${classroom.id}`} className="flex flex-col shadow">

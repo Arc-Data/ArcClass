@@ -77,7 +77,7 @@ const Classroom = () => {
                 <PostSkeleton count={4} className="order-2"/>
                 :
                 <div className="space-y-10 ">
-                    <div className="border shadow">
+                    <div className="px-8 py-4 border shadow hover:bg-gray-200">
                         <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"} filesHidden={false}/>
                     </div>
                     {optimisticLoading && <PostSkeleton count={1} />}
