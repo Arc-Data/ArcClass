@@ -16,6 +16,7 @@ namespace backend.Models
         public string Content { get; set; } = string.Empty;
         public Classroom? Classroom { get; set; }
         public Assignment? Assignment { get; set; }
+        public int? AssignmentId { get; set; }
         public string ClassroomId { get; set; } = string.Empty;
         public IList<Material> Materials { get; set; } = [];
         public IList<Comment> Comments { get; set; } = [];

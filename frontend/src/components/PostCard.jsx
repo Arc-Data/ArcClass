@@ -92,7 +92,7 @@ const PostCard = ({ post }) => {
     }
 
     return (
-        <div key={post.id} className="w-full gap-4 border rounded-lg shadow">
+        <div className="w-full gap-4 border rounded-lg shadow">
             <div className="flex gap-4 px-8 py-4 border-b">
                 <div className="grid w-10 h-10 border rounded-full place-items-center">
                     <FaUser size={18} />

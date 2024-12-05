@@ -76,10 +76,10 @@ namespace backend.Data
                 .HasForeignKey(c => c.ClassroomId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Assignment>()
-                .HasOne(a => a.Post)
-                .WithOne(p => p.Assignment)
-                .HasForeignKey<Assignment>(a => a.PostId)
+            builder.Entity<Post>()
+                .HasOne(p => p.Assignment)
+                .WithMany()
+                .HasForeignKey(p => p.AssignmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Assignment>()

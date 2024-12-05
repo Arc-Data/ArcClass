@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.Account;
+using backend.Dtos.Assignment;
 using backend.Dtos.Comment;
 using backend.Models;
 
@@ -19,5 +20,7 @@ namespace backend.Dtos.Post
         public int NumberOfComments { get; set; }
         public IList<CommentDto> Comments { get; set; } = [];
         public IList<MaterialDto> Materials { get; set; } = [];
+        public AssignmentDto? Assignment { get; set; }
+        public int? AssignmentId { get; set; }
     }
 }

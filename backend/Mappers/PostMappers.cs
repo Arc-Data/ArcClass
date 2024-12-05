@@ -13,6 +13,11 @@ namespace backend.Mappers
     {
         public static PostDto ToPostDto(this Post post)
         {
+            Console.WriteLine();
+            Console.WriteLine("In here somehow");
+            Console.WriteLine(post.AssignmentId);
+            Console.WriteLine();
+            Console.WriteLine();
 
             return new PostDto 
             {
@@ -27,6 +32,7 @@ namespace backend.Mappers
                     },
                 ClassroomId = post.ClassroomId,
                 NumberOfComments = post.NumberOfComments,
+                AssignmentId = post.AssignmentId,
                 Comments = post.Comments.Select(comment => comment.ToCommentDto()).ToList(),
                 Materials = post.Materials.Select(material => material.ToMaterialDto()).ToList()
             };

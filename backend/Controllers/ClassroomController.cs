@@ -248,9 +248,7 @@ namespace backend.Controllers
             var isUserAuthorized = await _classroomService.IsUserAuthorizedToPost(classroom, userId);
             if (!isUserAuthorized) return Forbid();
             
-            var posts = await _classroomRepo.GetPostsAsync(classroom.Id);
-            var postsDto = posts.Select(p => p.ToPostDto()).ToList();
-
+            var postsDto = await _classroomRepo.GetPostsAsync(classroom.Id);
             return Ok(postsDto);
         }
 
@@ -270,6 +268,16 @@ namespace backend.Controllers
             if (classroom.TeacherId != User.GetId()) return Unauthorized();
             
             var now = DateTime.UtcNow;
+
+            var assignment = new Assignment 
+            {
+                Title = assignmentDto.Title,
+                Description = assignmentDto.Description,
+                SubmissionDate = assignmentDto.SubmissionDate,
+                ClassroomId = id,
+                MaxGrade = assignmentDto.MaxGrade,
+            };
+
             var post = new Post 
             {
                 Content = $"{classroom.Teacher!.FirstName} "
@@ -279,20 +287,11 @@ namespace backend.Controllers
                 DateModified = now,
                 CreatedAt = now,
                 UserId = userId,
+                Assignment = assignment,
                 Classroom = classroom,
             };
-
-            var assignment = new Assignment 
-            {
-                Post = post,
-                Title = assignmentDto.Title,
-                Description = assignmentDto.Description,
-                SubmissionDate = assignmentDto.SubmissionDate,
-                ClassroomId = id,
-                MaxGrade = assignmentDto.MaxGrade,
-            };
-
-            await _assignmentRepo.CreateAsync(assignment);
+            
+            await _postRepo.CreateAsync(post);
 
             if (assignmentDto.Files.Count > 0)
             {

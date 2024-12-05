@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Dtos.Post;
 using backend.Models;
 
 namespace backend.Interfaces
@@ -13,6 +14,6 @@ namespace backend.Interfaces
         Task<Classroom?> GetByIdAsync(string id);
         Task<List<Classroom>> GetTeacherClassroomsAsync(string teacherId);
         Task<Classroom?> DeleteAsync(string id);
-        Task<IList<Post>> GetPostsAsync(string classroomId);
+        Task<IList<PostDto>> GetPostsAsync(string classroomId);
     }
 }

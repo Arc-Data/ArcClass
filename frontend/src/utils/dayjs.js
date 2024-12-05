@@ -5,4 +5,9 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(RelativeTime)
 dayjs.extend(utc)
 
+export const getDeadline = (submissionDate) => {
+    return dayjs(submissionDate).fromNow()
+}
+
+
 export default dayjs;

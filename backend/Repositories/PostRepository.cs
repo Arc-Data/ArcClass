@@ -35,10 +35,11 @@ namespace backend.Repositories
         }
 
         public async Task<Post?> GetByIdAsync(int id)
-        {
+    {
             return await _context.Posts
                 .Include(p => p.Classroom)
                 .Include(p => p.Materials)
+                .Include(p => p.Assignment)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 

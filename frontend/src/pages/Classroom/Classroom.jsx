@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom"
 import PostCard from "@/components/PostCard"
 import PostInput from "@/components/PostInput"
 import ClassroomContext from "@/context/ClassroomContext"
+import AssignmentCard from "@/components/AssignmentCard"
 
 /*
 // [ ] - Conceptualize Privacy Related Settings and User Control Systems
@@ -81,12 +82,20 @@ const Classroom = () => {
                         <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"} filesHidden={false}/>
                     </div>
                     {optimisticLoading && <PostSkeleton count={1} />}
-                    {posts && posts.map(post => (
+                    {posts && posts.map(post => post.assignment ? 
+                        (
+                            <AssignmentCard 
+                                post={post} 
+                                key={post.id} />
+                        ) 
+                        : 
+                        (
                         <PostCard 
                             key={post.id} 
                             post={post} 
                             />
-                    ))}
+                        )
+                        )}
                 </div>
                 }
                 <div className="flex flex-col">

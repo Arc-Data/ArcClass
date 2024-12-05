@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using backend.Data;
+using backend.Dtos.Account;
+using backend.Dtos.Assignment;
+using backend.Dtos.Comment;
+using backend.Dtos.Post;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -70,25 +74,46 @@ namespace backend.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IList<Post>> GetPostsAsync(string classroomId)
+        /* NOTE : This probably needs a rework considering it does both 
+        // data modelling and fetching in one function 
+        */
+        public async Task<IList<PostDto>> GetPostsAsync(string classroomId)
         {
             return await _context.Posts
                 .Include(p => p.AppUser)
+                .Include(p => p.Assignment)
                 .Where(p => p.ClassroomId == classroomId)
                 .OrderByDescending(p => p.CreatedAt)
-                .Select(p => new Post
+                .Select(p => new PostDto
                 {
                     Id = p.Id,
                     CreatedAt = p.CreatedAt,
-                    AppUser = p.AppUser,
+                    User = new UserDto
+                    {
+                        Id = p.AppUser!.Id,
+                        FullName =  $"{p.AppUser.FirstName} {p.AppUser.LastName}"
+
+                    },
                     ClassroomId = p.ClassroomId,
+                    Assignment = p.Assignment != null ? new AssignmentDto 
+                    {
+                       Id = p.Assignment.Id,
+                       Title = p.Assignment.Title,
+                       SubmissionDate = p.Assignment.SubmissionDate,
+                       MaxGrade = p.Assignment.MaxGrade
+                    } : null,
                     Content = p.Content,
                     Comments = p.Comments
                         .OrderByDescending(c => c.CreatedAt)
                         .Take(2)
-                        .ToList(),
+                        .Select(c => new CommentDto
+                        {
+                            Id = c.Id,
+                            Content = c.Content,
+                            CreatedAt = c.CreatedAt,
+                        }).ToList(),
                     NumberOfComments = p.Comments.Count(),
-                    Materials = p.Materials
+                    Materials = p.Materials.Select(material => material.ToMaterialDto()).ToList()
                 })
                 .ToListAsync();
         }
