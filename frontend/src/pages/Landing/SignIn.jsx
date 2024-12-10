@@ -2,55 +2,24 @@ import { useContext, useState } from "react"
 import { Link } from "react-router-dom"
 import AuthContext from "../../context/AuthContext"
 import { Spinner } from "flowbite-react"
+import { useActionState } from "react"
 
 const SignIn = () => {
     const { loginUser } = useContext(AuthContext)
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    })
-    const [loading, setLoading] = useState(false)
-    const [errors, setErrors] = useState()
-
-    const handleSubmit = async (e) => {
-        setLoading(true)
-        e.preventDefault()
-        
-        try {
-            await loginUser(formData)
-        }
-        catch (error) {
-            setErrors(error.response.data)
-        }
-        finally 
-        {
-            setLoading(false)
-        }
-    }
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target
-        setFormData(prevData => ({
-            ...prevData,
-            [name]: value
-        }))
-        
-        setErrors();
-    }
+    const [error, submitAction, loading] = useActionState(loginUser, null)
 
     return (
-        <form className="px-6 py-4 space-y-4" onSubmit={handleSubmit}>
+        <form className="px-6 py-4 space-y-4" action={submitAction}>
             <p className="text-2xl font-heading">Login</p>
-            {errors && <p className="text-red-500">{errors}</p>} {/* General error message */}
+            {error && <p className="text-red-500">{error}</p>}
 
             <div>
                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
                 <input 
-                    type="text" 
+                    type="email" 
                     id="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleInputChange} 
+                    required
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="johndoe@gmail.com" required />
             </div>
             <div>
@@ -59,8 +28,7 @@ const SignIn = () => {
                     type="password" 
                     id="password"
                     name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
+                    required
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Password" required />
             </div>
             {loading ? 

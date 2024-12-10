@@ -27,14 +27,18 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('authTokens', JSON.stringify(response.data))
     }
     
-    const loginUser = async (data) => {
+    const loginUser = async (prevState, formData) => {
         try {
+            const data = {
+                email: formData.get("email"),
+                password: formData.get("password")
+            }
+
             const response = await axios.post('api/account/login', data)
             saveTokenData(response)
         }
         catch (error) {
-            console.log(error)
-            throw error
+            return error.response.data
         }
     }
 
@@ -121,8 +125,8 @@ export const AuthProvider = ({ children }) => {
     }, [authTokens])
 
     return (
-        <AuthContext.Provider value={contextData}>
+        <AuthContext value={contextData}>
             {loading ? null : children}
-        </AuthContext.Provider>
+        </AuthContext>
     )
 }

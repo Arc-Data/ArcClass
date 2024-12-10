@@ -82,6 +82,8 @@ namespace backend.Repositories
             return await _context.Posts
                 .Include(p => p.AppUser)
                 .Include(p => p.Assignment)
+                .Include(p => p.Comments)
+                    .ThenInclude(c => c.AppUser)
                 .Where(p => p.ClassroomId == classroomId)
                 .OrderByDescending(p => p.CreatedAt)
                 .Select(p => new PostDto
@@ -111,6 +113,11 @@ namespace backend.Repositories
                             Id = c.Id,
                             Content = c.Content,
                             CreatedAt = c.CreatedAt,
+                            User = new UserDto 
+                            {
+                                Id = c.AppUser!.Id,
+                                FullName =  $"{c.AppUser.FirstName} {c.AppUser.LastName}"
+                            }
                         }).ToList(),
                     NumberOfComments = p.Comments.Count(),
                     Materials = p.Materials.Select(material => material.ToMaterialDto()).ToList()

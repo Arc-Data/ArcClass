@@ -14,7 +14,7 @@ const AssignmentCard = ({ post }) => {
                 <div className="flex-1 space-y-4">
                     <div className="flex items-center justify-between">
                         <p className="text-sm">{dayjs(post.createdAt).format('MMM DD, h:mm A')}</p>
-                        <p className="p-1 px-4 border rounded-lg shadow group-hover:bg-primary-default grou-hover:text-white">{getDeadline(post.assignment.submissionDate)}</p>
+                        <p className="p-1 px-4 border rounded-lg shadow group-hover:bg-primary-default group-hover:text-white">{getDeadline(post.assignment.submissionDate)}</p>
                     </div>
                     <p>{post.user.fullName} created a new assignment. "<span className="font-medium font-body">{post.assignment.title}</span>"</p>
                 </div>
