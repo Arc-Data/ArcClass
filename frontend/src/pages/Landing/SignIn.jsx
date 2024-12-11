@@ -20,7 +20,8 @@ const SignIn = () => {
                     id="email"
                     name="email"
                     required
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="johndoe@gmail.com" required />
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                    placeholder="johndoe@gmail.com" />
             </div>
             <div>
                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Password</label>
@@ -29,7 +30,8 @@ const SignIn = () => {
                     id="password"
                     name="password"
                     required
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Password" required />
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                    placeholder="Password"/>
             </div>
             {loading ? 
             <div className="text-center">

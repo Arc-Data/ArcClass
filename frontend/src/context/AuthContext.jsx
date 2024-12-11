@@ -59,13 +59,22 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const registerUser = async (data) => {
+    const registerUser = async (prevState, formData) => {
         try {
+            const data = {
+                email: formData.get('email'),
+                password: formData.get('password'),
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                middleName: formData.get('middleName'),
+                account: formData.get('account'),
+              }
+
             const response = await axios.post('api/account', data)
             saveTokenData(response)
         }
         catch (error) {
-            throw error;
+            return error.response.data
         }
     }
 
