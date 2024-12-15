@@ -28,12 +28,17 @@ namespace backend.Mappers
             };
         }
 
-        public static AssignmentClassroomDto ToAssignmentClassroomDto(this Classroom classroom
+        public static AssignmentClassroomDto ToAssignmentClassroomDto(this Classroom classroom)
         {
             return new AssignmentClassroomDto 
             {
                 Id = classroom.Id,
-                Subject = classroom.Subject
+                Subject = classroom.Subject,
+                Teacher = new TeacherDto 
+                {
+                    Id = classroom.TeacherId!,
+                    FullName = $"{classroom.Teacher!.FirstName} {classroom.Teacher!.LastName}"
+                }
             };
         }
         public static ClassroomExistsDto ToClassroomExistsDto(this Classroom classroom)

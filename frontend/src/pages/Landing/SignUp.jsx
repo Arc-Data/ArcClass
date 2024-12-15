@@ -13,7 +13,6 @@ const SignUp = () => {
     const [ errors, submitAction, loading ] = useActionState(registerUser, null)
     
     const handleAccountChange = (value) => {
-        console.log("In here", value)
         setAccountType(value)
         setFormStep(1)
     }
@@ -22,10 +21,9 @@ const SignUp = () => {
         <div>
             <div className={`${formStep === 0 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'} transition-opacity duration-300 transform`}>
                 {formStep === 0 && (
-                    <div className="px-6 py-4"> 
+                    <div className="px-6 py-4 space-y-4"> 
                         <h2 className="mt-12 text-xl font-medium text-center md:mt-4">Are you a...</h2>
-                     
-                            <div>
+                        <div>
                             <label
                                 htmlFor="student"
                                 className="flex items-center justify-between w-full p-5 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 peer-checked:border-blue-600 peer-checked:text-blue-600"
@@ -35,7 +33,7 @@ const SignUp = () => {
                                 <MdNavigateNext />
                             </label>
                             </div>
-                            <div>
+                        <div>
                             <label
                                 htmlFor="teacher"
                                 className="flex items-center justify-between w-full p-5 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 peer-checked:border-blue-600 peer-checked:text-blue-600"
@@ -44,9 +42,9 @@ const SignUp = () => {
                                 <span>Teacher</span>
                                 <MdNavigateNext />
                             </label>
-                            </div>
-
-                    </div>
+                        </div>
+                        <p className="mt-8">Already have an account? <span><Link to="/signin" className="text-primary-default">Login</Link></span></p>
+                        </div>
                 )}
             </div>
     

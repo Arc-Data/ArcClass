@@ -22,13 +22,6 @@ namespace backend.Mappers
 
         public static AssignmentDetailDto ToAssignmentDetailDto(this Assignment assignment)
         {
-            Console.WriteLine("In here");
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.WriteLine(assignment.Classroom);
-            Console.WriteLine("");
-            Console.WriteLine("");
-
             return new AssignmentDetailDto
             {
                 Id = assignment.Id,

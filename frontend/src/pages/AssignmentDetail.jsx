@@ -3,10 +3,13 @@ import DisplayFiles from "@/components/DisplayFiles"
 import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import useAssignmentManager from "@/hooks/useAssignmentManager"
-import { useContext, useEffect, useRef, useState } from "react"
+import { Suspense, useContext, useEffect, useRef, useState } from "react"
 import { FaArrowLeft, FaUserGroup } from "react-icons/fa6"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import PostInput from "@/components/PostInput"
+import { getDeadline } from "@/utils/dayjs"
+import SubmissionSection from "@/components/AssignmentDetail/SubmissionSection"
+import { FaUser } from "react-icons/fa"
 
 const AssignmentDetail = () => {
     const { authTokens } = useContext(AuthContext)
@@ -18,22 +21,13 @@ const AssignmentDetail = () => {
     
     const [ erorrs, setErrors ] = useState([])
 
-    const fileRef = useRef(null)
+    console.log(assignment)
+
     const navigate = useNavigate()
 
     const handleBack = () => {
         navigate(-1)
     }
-
-    const handleFileChange = () => {
-        
-    }
-
-    const openFileDialog = () => {
-        fileRef.current?.click()
-    }
-
-    console.log(assignment)
 
     useEffect(() => {
         const fetchAssignmentData = async () => {
@@ -60,13 +54,30 @@ const AssignmentDetail = () => {
     }
 
     return (
-        <div className="grid w-full grid-cols-1 gap-4 px-4 py-4 md:grid-cols-3">
-            <div className="col-span-2">
-                <Button onClick={handleBack} variant="outline" className="mb-4 ">
-                    <FaArrowLeft className="w-4 h-4 mr-2" />
-                    Back
-                </Button>
-                <h1 className="text-2xl font-bold font-heading">{assignment.title}</h1>
+        <div className="grid w-full grid-cols-1 gap-12 px-4 py-4 md:px-16">
+            <div className="col-span-2 space-y-4">
+                <div className="flex gap-8 py-1 border-b">
+                    <Button onClick={handleBack} variant="outline" className="mb-4 ">
+                        <FaArrowLeft className="w-4 h-4 mr-2" />
+                        Back
+                    </Button>
+                    <p className="py-2">
+                       <Link to={`/classroom/${assignment.classroom.id}`} className="hover:underline" >in: {assignment.classroom.subject}</Link>
+                    </p>
+                    <Button className="ml-auto">View Submission</Button>
+                </div>
+                <div className="flex items-center justify-between py-4">
+                    <div>
+                        <h1 className="text-2xl font-bold font-heading">{assignment.title}</h1>
+                        <div className="flex gap-2 mt-4">
+                            <div className="grid w-6 h-6 border rounded-full place-items-center">
+                                <FaUser size={12}/>
+                            </div>  
+                            <p className="text-text-600">{assignment.classroom.teacher.fullName}</p>
+                        </div>  
+                    </div>
+                    <p>{getDeadline(assignment.submissionDate)}</p>
+                </div>
                 <p className="mt-4">{assignment.description}</p>
                 <div className="mt-20">
                     <DisplayFiles materials={assignment.files}/>
@@ -78,7 +89,8 @@ const AssignmentDetail = () => {
                     <PostInput placeholder={"Add a comment"}/>
                 </div>
             </div>
-            <div className="md:col-span-1">
+            {/* <SubmissionSection /> */}
+            {/* <div className="md:col-span-1">
                 <div className="sticky p-8 bg-white border rounded-lg shadow-sm top-4">
                     <h2 className="text-lg font-bold font-heading">
                     Your submissions
@@ -98,8 +110,7 @@ const AssignmentDetail = () => {
                         Submit files
                     </button>
                 </div>
-            </div>
-            
+            </div> */}
         </div>
     )
 }
