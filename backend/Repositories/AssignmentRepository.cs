@@ -30,6 +30,7 @@ namespace backend.Repositories
         {
             return await _context.Assignments
                 .Include(a => a.Comments)
+                .Include(a => a.Classroom)
                 .Include(a => a.Materials)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }

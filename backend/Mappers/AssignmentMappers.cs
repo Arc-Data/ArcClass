@@ -22,6 +22,13 @@ namespace backend.Mappers
 
         public static AssignmentDetailDto ToAssignmentDetailDto(this Assignment assignment)
         {
+            Console.WriteLine("In here");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine(assignment.Classroom);
+            Console.WriteLine("");
+            Console.WriteLine("");
+
             return new AssignmentDetailDto
             {
                 Id = assignment.Id,
@@ -30,7 +37,8 @@ namespace backend.Mappers
                 SubmissionDate = assignment.SubmissionDate,
                 MaxGrade = assignment.MaxGrade, 
                 Comments = assignment.Comments.Select(comment => comment.ToCommentDto()).ToList(),
-                Files = assignment.Materials.Select(material => material.ToMaterialDto()).ToList()
+                Files = assignment.Materials.Select(material => material.ToMaterialDto()).ToList(),
+                Classroom = assignment.Classroom!.ToAssignmentClassroomDto()
             };
         }
     }

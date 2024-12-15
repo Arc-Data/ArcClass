@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.Account;
+using backend.Dtos.Assignment;
 using backend.Dtos.Classroom;
 using backend.Models;
 
@@ -27,6 +28,14 @@ namespace backend.Mappers
             };
         }
 
+        public static AssignmentClassroomDto ToAssignmentClassroomDto(this Classroom classroom
+        {
+            return new AssignmentClassroomDto 
+            {
+                Id = classroom.Id,
+                Subject = classroom.Subject
+            };
+        }
         public static ClassroomExistsDto ToClassroomExistsDto(this Classroom classroom)
         {
             return new ClassroomExistsDto 
