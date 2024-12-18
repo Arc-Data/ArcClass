@@ -4,15 +4,17 @@ import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import useAssignmentManager from "@/hooks/useAssignmentManager"
 import { Suspense, useContext, useEffect, useRef, useState } from "react"
-import { FaArrowLeft, FaUserGroup } from "react-icons/fa6"
+import { FaArrowLeft, FaEllipsis, FaGear, FaPencil, FaUserGroup } from "react-icons/fa6"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import PostInput from "@/components/PostInput"
 import { getDeadline } from "@/utils/dayjs"
 import SubmissionSection from "@/components/AssignmentDetail/SubmissionSection"
-import { FaUser } from "react-icons/fa"
+import { FaEllipsisV, FaPlus, FaTrash, FaUser } from "react-icons/fa"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 
 const AssignmentDetail = () => {
-    const { authTokens } = useContext(AuthContext)
+    const { user, authTokens } = useContext(AuthContext)
     const [ loading, setLoading ] = useState(true)
     const [ assignment, setAssignment ] = useState()
     const [ comments, setComments ] = useState(() => assignment ? assignment.comments : [])
@@ -53,18 +55,37 @@ const AssignmentDetail = () => {
         )
     }
 
+
     return (
         <div className="grid w-full grid-cols-1 gap-12 px-4 py-4 md:px-16">
             <div className="col-span-2 space-y-4">
-                <div className="flex gap-8 py-1 border-b">
-                    <Button onClick={handleBack} variant="outline" className="mb-4 ">
-                        <FaArrowLeft className="w-4 h-4 mr-2" />
+                <div className="flex items-center gap-8 py-1 py-4 border-b">
+                    <Button onClick={handleBack} variant="outline" className="">
+                        <FaArrowLeft className="mr-2" />
                         Back
                     </Button>
-                    <p className="py-2">
-                       <Link to={`/classroom/${assignment.classroom.id}`} className="hover:underline" >in: {assignment.classroom.subject}</Link>
-                    </p>
-                    <Button className="ml-auto">View Submission</Button>
+                    <Link to={`/classroom/${assignment.classroom.id}`} className="hover:underline" >in: {assignment.classroom.subject}</Link>
+                    <Button className="ml-auto bg-primary-default hover:bg-secondary-default">View Submissions</Button>
+                    {assignment.classroom.teacher.id == user.nameid
+                    &&
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button className="grid p-2 rounded-full cursor-pointer hover:bg-gray-200 place-items-center">
+                                <FaEllipsisV size={12}/>
+                            </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem className="z-30 flex items-center gap-2">
+                                <FaPencil/>
+                                <span>Edit</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="z-30 flex items-center gap-2">
+                                <FaTrash/>
+                                <span>Delete</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    }
                 </div>
                 <div className="flex items-center justify-between py-4">
                     <div>
@@ -78,10 +99,16 @@ const AssignmentDetail = () => {
                     </div>
                     <p>{getDeadline(assignment.submissionDate)}</p>
                 </div>
-                <p className="mt-4">{assignment.description}</p>
-                <div className="mt-20">
+                <p className="py-4">{assignment.description}</p>
+                {assignment.files && assignment.files.length > 0 && 
+                <div className="pt-8 pb-4 space-y-4 border-t">
+                    <div className="text-right">
+                        <Button className="" variant="outline"><FaPlus className="mr-2"/>Add more files</Button>
+                    </div>
                     <DisplayFiles materials={assignment.files}/>
                 </div>
+
+                }
                 <div className="col-span-2 py-8 mt-40 space-y-4 border-t">
                     {comments.length > 2 && 
                     <div className="flex items-center gap-2 p-2">  <FaUserGroup /> Comments</div>
