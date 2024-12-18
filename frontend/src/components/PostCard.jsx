@@ -21,6 +21,7 @@ import DisplayFiles from "./DisplayFiles"
 // Deleted posts will not automatically delete associated materials
 // unless the classroom itself is deleted.
 // [ ] : Review comment fetching logic  
+// [ ] : This needs to get optimized ngl
 */
 
 const PostCard = ({ post }) => {
@@ -151,8 +152,8 @@ const PostCard = ({ post }) => {
                     {!isEditing ?
                     <>
                     <p>{content}</p>
-                    {post.materials.length !== 0 && 
-                    <DisplayFiles materials={post.materials}/>
+                    {post.materials && post.materials.length > 0 &&  
+                        <DisplayFiles materials={post.materials}/>
                     }
                     </>
                     :

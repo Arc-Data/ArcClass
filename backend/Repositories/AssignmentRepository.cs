@@ -21,6 +21,12 @@ namespace backend.Repositories
             return assignment;
         }
 
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Assignments
+                .AnyAsync(i => i.Id == id);
+        }
+
         public Task<IList<Assignment>> GetAll()
         {
             throw new NotImplementedException();
