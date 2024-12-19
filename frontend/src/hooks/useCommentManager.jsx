@@ -1,5 +1,4 @@
 import axios from "@/utils/axios"
-import { useState } from "react"
 
 const useCommentManager = (authTokens) => {
     const createAssignmentComment = async (id, content) => {

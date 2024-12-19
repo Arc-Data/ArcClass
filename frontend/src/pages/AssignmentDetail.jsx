@@ -3,18 +3,15 @@ import DisplayFiles from "@/components/DisplayFiles"
 import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import useAssignmentManager from "@/hooks/useAssignmentManager"
-import { Suspense, useContext, useEffect, useRef, useState } from "react"
-import { FaArrowLeft, FaEllipsis, FaGear, FaPencil, FaUserGroup } from "react-icons/fa6"
+import { useContext, useEffect, useState, useTransition } from "react"
+import { FaArrowLeft, FaPencil, FaUserGroup } from "react-icons/fa6"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import PostInput from "@/components/PostInput"
 import { getDeadline } from "@/utils/dayjs"
-import SubmissionSection from "@/components/AssignmentDetail/SubmissionSection"
 import { FaEllipsisV, FaPlus, FaTrash, FaUser } from "react-icons/fa"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import { useActionState } from "react"
 import useCommentManager from "@/hooks/useCommentManager"
-import { secondsToHours } from "date-fns"
 
 const AssignmentDetail = () => {
     const { user, authTokens } = useContext(AuthContext)
@@ -26,8 +23,7 @@ const AssignmentDetail = () => {
     const { createAssignmentComment } = useCommentManager(authTokens)
 
     const [ erorrs, setErrors ] = useState([])
-
-    console.log(comments)
+    const [ commentLoading, startTransition ] = useTransition()
 
     const navigate = useNavigate()
 
@@ -36,12 +32,28 @@ const AssignmentDetail = () => {
     }
 
     const handleCreateComment = async (content) => {
+        const tempId = Date.now()
+        const optimisticComment = {
+            id: tempId, 
+            content,
+            user: {
+                id: user.nameid,
+                fullname: "Something"
+            },
+            createdAt: new Date().toISOString()
+        }
+
+        setComments(prev => [...prev, optimisticComment])
+
         try {
-            const comment = await createAssignmentComment(assignmentId, content)
-            setComments(prev => [...prev, comment])
+            startTransition( async () => {
+                const comment = await createAssignmentComment(assignmentId, content)
+                setComments(prev => prev.map(c => c.id === tempId ? comment : c))
+            })
         }
         catch (error) {
             console.log("Error while creating assignment comment", error)
+            setComments(prev => prev.filter(c => c.id !== tempId))
             setErrors(error)
         }
     }
@@ -131,28 +143,6 @@ const AssignmentDetail = () => {
                     <PostInput onSubmitPost={content => handleCreateComment(content)} placeholder={"Add a comment"} filesHidden={true}/>
                 </div>
             </div>
-            {/* <SubmissionSection /> */}
-            {/* <div className="md:col-span-1">
-                <div className="sticky p-8 bg-white border rounded-lg shadow-sm top-4">
-                    <h2 className="text-lg font-bold font-heading">
-                    Your submissions
-                    </h2>
-                    <p>You have no assignment submissions yet</p>
-                    <input 
-                        type="file" 
-                        multiple
-                        ref={fileRef}
-                        onChange={handleFileChange}
-                        className="hidden" 
-                    />
-                    <button 
-                        className="w-full p-2 mt-8 transition-colors border rounded hover:bg-primary-default hover:text-white"
-                        onClick={openFileDialog}
-                        >
-                        Submit files
-                    </button>
-                </div>
-            </div> */}
         </div>
     )
 }
