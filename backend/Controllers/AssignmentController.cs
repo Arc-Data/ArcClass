@@ -46,7 +46,7 @@ namespace backend.Controllers
             return Ok(assignment.ToAssignmentDetailDto());
         }
 
-        [HttpPost]
+        [HttpPost("{id}/comments")]
         [Authorize]
         public async Task<IActionResult> CreateComment([FromRoute] int id, [FromBody] CreatePostDto commentDto) 
         {

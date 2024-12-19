@@ -9,9 +9,6 @@ import { Textarea } from "./ui/textarea"
 
 const PostComment = ({ comment, onDeleteComment }) => {
     const { authTokens, user, role } = useContext(AuthContext)
-
-    console.log(comment)
-
     const [ content, setContent ] = useState(comment.content)
     const { editComment } = useCommentManager(authTokens)
 

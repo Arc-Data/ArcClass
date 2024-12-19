@@ -70,9 +70,10 @@ const PostCard = ({ post }) => {
         }
     }
 
-    const handleCreateComment = async (content, files) => {
+    const handleCreateComment = async (content) => {
+        console.log(content)
         try {
-            const comment = await createComment(post.id, content, files)
+            const comment = await createComment(post.id, content)
             setComments(prev => [...prev, comment])
             setCount(prev => prev + 1)
         }
@@ -154,7 +155,7 @@ const PostCard = ({ post }) => {
                     <p>{content}</p>
                     {post.materials && post.materials.length > 0 &&  
                         <DisplayFiles materials={post.materials}/>
-                    }
+                    }1
                     </>
                     :
                     <form onSubmit={handleSubmit} className="space-y-2">
@@ -190,7 +191,7 @@ const PostCard = ({ post }) => {
                                         onDeleteComment={handleDeleteComment}
                                     />))}
             <div className="px-8 py-4 hover:bg-gray-200">
-                <PostInput onSubmitPost={(e) => handleCreateComment(e, post.id)} placeholder={"Add a comment"} filesHidden={true}/>
+                <PostInput onSubmitPost={content => handleCreateComment(content)} placeholder={"Add a comment"} filesHidden={true}/>
             </div>
         </div>
     )
