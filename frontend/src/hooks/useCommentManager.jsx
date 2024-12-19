@@ -2,6 +2,15 @@ import axios from "@/utils/axios"
 import { useState } from "react"
 
 const useCommentManager = (authTokens) => {
+    const createAssignmentComment = async (id, content) => {
+        const response = await axios.post(`api/assignments/${id}/comments`, { content }, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
+        return response.data
+    }
+
     const createComment = async (id, content, files) => {
         try {
             const response = await axios.post(`api/post/${id}/comments`, { content }, {
@@ -70,6 +79,7 @@ const useCommentManager = (authTokens) => {
         loadComments,   
         deleteComment,
         editComment,
+        createAssignmentComment,
     }
 }
 

@@ -12,6 +12,9 @@ import SubmissionSection from "@/components/AssignmentDetail/SubmissionSection"
 import { FaEllipsisV, FaPlus, FaTrash, FaUser } from "react-icons/fa"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { useActionState } from "react"
+import useCommentManager from "@/hooks/useCommentManager"
+import { secondsToHours } from "date-fns"
 
 const AssignmentDetail = () => {
     const { user, authTokens } = useContext(AuthContext)
@@ -20,15 +23,27 @@ const AssignmentDetail = () => {
     const [ comments, setComments ] = useState(() => assignment ? assignment.comments : [])
     const { assignmentId } = useParams()
     const { getAssignment } = useAssignmentManager(authTokens)
-    
+    const { createAssignmentComment } = useCommentManager(authTokens)
+
     const [ erorrs, setErrors ] = useState([])
 
-    console.log(assignment)
+    console.log(comments)
 
     const navigate = useNavigate()
 
     const handleBack = () => {
         navigate(-1)
+    }
+
+    const handleCreateComment = async (content) => {
+        try {
+            const comment = await createAssignmentComment(assignmentId, content)
+            setComments(prev => [...prev, comment])
+        }
+        catch (error) {
+            console.log("Error while creating assignment comment", error)
+            setErrors(error)
+        }
     }
 
     useEffect(() => {
@@ -113,7 +128,7 @@ const AssignmentDetail = () => {
                     {comments.length > 2 && 
                     <div className="flex items-center gap-2 p-2">  <FaUserGroup /> Comments</div>
                     }
-                    <PostInput placeholder={"Add a comment"}/>
+                    <PostInput onSubmitPost={content => handleCreateComment(content)} placeholder={"Add a comment"} filesHidden={true}/>
                 </div>
             </div>
             {/* <SubmissionSection /> */}
