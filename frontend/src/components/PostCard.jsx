@@ -155,7 +155,7 @@ const PostCard = ({ post }) => {
                     <p>{content}</p>
                     {post.materials && post.materials.length > 0 &&  
                         <DisplayFiles materials={post.materials}/>
-                    }1
+                    }
                     </>
                     :
                     <form onSubmit={handleSubmit} className="space-y-2">

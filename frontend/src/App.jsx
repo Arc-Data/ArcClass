@@ -57,7 +57,7 @@ function App() {
 							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}
 								<Route index element={<JoinClassroomModal />} /> {/* Open the modal on this route */}
                             </Route>
-							<Route path="/assignments/:assignmentId" element={<AssignmentDetail/>} />
+							<Route path="/assignments/:id" element={<AssignmentDetail/>} />
 						</Route>
 					</Route>
 					

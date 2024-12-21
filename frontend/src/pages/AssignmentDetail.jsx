@@ -3,65 +3,35 @@ import DisplayFiles from "@/components/DisplayFiles"
 import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import useAssignmentManager from "@/hooks/useAssignmentManager"
-import { useContext, useEffect, useState, useTransition } from "react"
-import { FaArrowLeft, FaPencil, FaUserGroup } from "react-icons/fa6"
+import { useContext, useEffect, useState } from "react"
+import { FaArrowLeft, FaPencil } from "react-icons/fa6"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import PostInput from "@/components/PostInput"
 import { getDeadline } from "@/utils/dayjs"
 import { FaEllipsisV, FaPlus, FaTrash, FaUser } from "react-icons/fa"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import useCommentManager from "@/hooks/useCommentManager"
+import CommentSection from "@/components/AssignmentDetail/CommentSection"
+import { BiAlarmExclamation } from "react-icons/bi";
+
 
 const AssignmentDetail = () => {
+    const { id } = useParams()
     const { user, authTokens } = useContext(AuthContext)
     const [ loading, setLoading ] = useState(true)
     const [ assignment, setAssignment ] = useState()
-    const [ comments, setComments ] = useState(() => assignment ? assignment.comments : [])
-    const { assignmentId } = useParams()
     const { getAssignment } = useAssignmentManager(authTokens)
-    const { createAssignmentComment } = useCommentManager(authTokens)
 
     const [ erorrs, setErrors ] = useState([])
-    const [ commentLoading, startTransition ] = useTransition()
-
     const navigate = useNavigate()
 
     const handleBack = () => {
         navigate(-1)
     }
 
-    const handleCreateComment = async (content) => {
-        const tempId = Date.now()
-        const optimisticComment = {
-            id: tempId, 
-            content,
-            user: {
-                id: user.nameid,
-                fullname: "Something"
-            },
-            createdAt: new Date().toISOString()
-        }
-
-        setComments(prev => [...prev, optimisticComment])
-
-        try {
-            startTransition( async () => {
-                const comment = await createAssignmentComment(assignmentId, content)
-                setComments(prev => prev.map(c => c.id === tempId ? comment : c))
-            })
-        }
-        catch (error) {
-            console.log("Error while creating assignment comment", error)
-            setComments(prev => prev.filter(c => c.id !== tempId))
-            setErrors(error)
-        }
-    }
-
     useEffect(() => {
         const fetchAssignmentData = async () => {
             try {
-                const fetchAssignment = await getAssignment(assignmentId)
+                const fetchAssignment = await getAssignment(id)
                 setAssignment(fetchAssignment)
             }
             catch (error) {
@@ -72,7 +42,7 @@ const AssignmentDetail = () => {
         }
 
         fetchAssignmentData()
-    }, [assignmentId])
+    }, [id])
 
     if (loading) {
         return (
@@ -86,7 +56,7 @@ const AssignmentDetail = () => {
     return (
         <div className="grid w-full grid-cols-1 gap-12 px-4 py-4 md:px-16">
             <div className="col-span-2 space-y-4">
-                <div className="flex items-center gap-8 py-1 py-4 border-b">
+                <div className="flex items-center gap-8 py-4 border-b">
                     <Button onClick={handleBack} variant="outline" className="">
                         <FaArrowLeft className="mr-2" />
                         Back
@@ -124,7 +94,8 @@ const AssignmentDetail = () => {
                             <p className="text-text-600">{assignment.classroom.teacher.fullName}</p>
                         </div>  
                     </div>
-                    <p>{getDeadline(assignment.submissionDate)}</p>
+                    <Button variant="outline" className="text-base">
+                        <BiAlarmExclamation className="mr-2"/>Deadline: {getDeadline(assignment.submissionDate)}</Button>
                 </div>
                 <p className="py-4">{assignment.description}</p>
                 {assignment.files && assignment.files.length > 0 && 
@@ -134,14 +105,8 @@ const AssignmentDetail = () => {
                     </div>
                     <DisplayFiles materials={assignment.files}/>
                 </div>
-
                 }
-                <div className="col-span-2 py-8 mt-40 space-y-4 border-t">
-                    {comments.length > 2 && 
-                    <div className="flex items-center gap-2 p-2">  <FaUserGroup /> Comments</div>
-                    }
-                    <PostInput onSubmitPost={content => handleCreateComment(content)} placeholder={"Add a comment"} filesHidden={true}/>
-                </div>
+                <CommentSection commentsData={assignment.comments}/>
             </div>
         </div>
     )

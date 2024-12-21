@@ -84,6 +84,7 @@ namespace backend.Repositories
                 .Include(p => p.Assignment)
                 .Include(p => p.Comments)
                     .ThenInclude(c => c.AppUser)
+                .AsSplitQuery()
                 .Where(p => p.ClassroomId == classroomId)
                 .OrderByDescending(p => p.CreatedAt)
                 .Select(p => new PostDto
