@@ -13,6 +13,8 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import CommentSection from "@/components/AssignmentDetail/CommentSection"
 import { BiAlarmExclamation } from "react-icons/bi";
 import { Separator } from "@/components/ui/separator"
+import { MdOutlineInsertComment } from "react-icons/md";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 
 
 const AssignmentDetail = () => {
@@ -66,23 +68,46 @@ const AssignmentDetail = () => {
                     <Button className="ml-auto bg-primary-default hover:bg-secondary-default">View Submissions</Button>
                     {assignment.classroom.teacher.id == user.nameid
                     &&
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <button className="grid p-2 rounded-full cursor-pointer hover:bg-gray-200 place-items-center">
-                                <FaEllipsisV size={12}/>
-                            </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem className="z-30 flex items-center gap-2">
-                                <FaPencil/>
-                                <span>Edit</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="z-30 flex items-center gap-2">
-                                <FaTrash/>
-                                <span>Delete</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Dialog>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className="grid p-2 rounded-full cursor-pointer hover:bg-gray-200 place-items-center">
+                                    <FaEllipsisV size={12}/>
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem className="z-30 flex items-center gap-2">
+                                    <FaPencil/>
+                                    <span>Edit</span>
+                                </DropdownMenuItem>
+                                <DialogTrigger asChild>
+                                    <DropdownMenuItem className="z-30 flex items-center gap-2">
+                                        <FaTrash/>
+                                        <span>Delete</span>
+                                    </DropdownMenuItem>
+                                </DialogTrigger>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Deleting Assigment</DialogTitle>
+                                <DialogDescription>
+                                    This action is irreversible and will also delete associated comments and files including submissions. Proceed?
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex flex-col p-4 text-sm text-text-600">
+                                {assignment.files.length > 0 &&
+                                <div className="flex gap-4">
+                                    <MdOutlineInsertComment />
+                                    <p>{assignment.files.length} files</p>
+                                </div>
+                                }
+                            </div>
+                            <DialogFooter>
+                                <Button variant="destructive">Delete</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                     }
                 </div>
                 <div className="flex items-center justify-between py-4">
