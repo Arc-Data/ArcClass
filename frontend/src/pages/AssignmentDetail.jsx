@@ -15,6 +15,8 @@ import { BiAlarmExclamation } from "react-icons/bi";
 import { Separator } from "@/components/ui/separator"
 import { MdOutlineInsertComment } from "react-icons/md";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog"
+import Classroom404 from "@/components/errors/Classroom404"
+import Assignment404 from "@/components/errors/Assignment404"
 
 
 const AssignmentDetail = () => {
@@ -22,9 +24,9 @@ const AssignmentDetail = () => {
     const { user, authTokens } = useContext(AuthContext)
     const [ loading, setLoading ] = useState(true)
     const [ assignment, setAssignment ] = useState()
-    const { getAssignment } = useAssignmentManager(authTokens)
+    const { getAssignment, deleteAssignment } = useAssignmentManager(authTokens)
 
-    const [ erorrs, setErrors ] = useState([])
+    const [ error, setError ] = useState()
     const navigate = useNavigate()
 
     const handleBack = () => {
@@ -39,6 +41,7 @@ const AssignmentDetail = () => {
             }
             catch (error) {
                 console.log(error)
+                setError(error)
             } finally {
                 setLoading(false)
             }
@@ -46,6 +49,16 @@ const AssignmentDetail = () => {
 
         fetchAssignmentData()
     }, [id])
+
+    // TODO : error status 500s template
+    if (error) {
+        console.log(error)
+        if (error.status === 404) {
+            return (<Assignment404 />)
+        } else {
+            return (<div>Server Error</div>)
+        }
+    }  
 
     if (loading) {
         return (
@@ -104,7 +117,7 @@ const AssignmentDetail = () => {
                                 }
                             </div>
                             <DialogFooter>
-                                <Button variant="destructive">Delete</Button>
+                                <Button variant="destructive" onClick={() => deleteAssignment(assignment.id)}>Delete</Button>
                             </DialogFooter>
                         </DialogContent>
                     </Dialog>
