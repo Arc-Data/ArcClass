@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.Interfaces;
 using backend.Models;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
     
-    public class AssignmentRepository(ApplicationDBContext context) : IAssignmentRepository
+    public class AssignmentRepository(ApplicationDBContext context, IFileStorageService fileService) : IAssignmentRepository
     {
         private readonly ApplicationDBContext _context = context;
+        private readonly IFileStorageService _fileService = fileService;
 
         public async Task<Assignment?> CreateAsync(Assignment assignment)
         {
@@ -65,9 +67,28 @@ namespace backend.Repositories
         {
             var assignment = await _context.Assignments
                 .Include(a => a.Classroom)
+                .Include(a => a.Comments)
+            .Include(a => a.Materials)
                 .Where(a => a.Id == id && a.Classroom!.TeacherId == userId)
                 .FirstOrDefaultAsync();
+
             if (assignment == null) return false;
+
+            foreach (var material in assignment.Materials) {
+                _fileService.DeleteFileAsync(material.FilePath); 
+                _context.Materials.Remove(material);
+
+            }
+
+            if (assignment.Comments.Any()) {
+                _context.Comments.RemoveRange(assignment.Comments);
+            }
+
+            var post = await _context.Posts.FirstOrDefaultAsync(post => post.AssignmentId == id);
+
+            if (post != null) {
+                _context.Posts.Remove(post);
+            }
 
             _context.Assignments.Remove(assignment);
             await _context.SaveChangesAsync();

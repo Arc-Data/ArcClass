@@ -19,9 +19,28 @@ namespace backend.Services
                 throw new ArgumentException("BaseUploadPath configuration is missing or invalid.");
             }
         }
-        public Task DeleteFileAsync(string filePath)
+        public void DeleteFileAsync(string filePath)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentException("File path is invalid");
+            }
+
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (Exception ex)
+                {
+                    throw new IOException($"Error deleting file at {filePath}", ex);
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException("File not found", filePath);
+            }
         }
 
         public async Task<string> SaveFileAsync(IFormFile file, string classroomId)

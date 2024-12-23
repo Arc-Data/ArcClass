@@ -12,6 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/component
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import CommentSection from "@/components/AssignmentDetail/CommentSection"
 import { BiAlarmExclamation } from "react-icons/bi";
+import { Separator } from "@/components/ui/separator"
 
 
 const AssignmentDetail = () => {
@@ -89,9 +90,12 @@ const AssignmentDetail = () => {
                         <h1 className="text-2xl font-bold font-heading">{assignment.title}</h1>
                         <div className="flex gap-2 mt-4">
                             <div className="grid w-6 h-6 border rounded-full place-items-center">
-                                <FaUser size={12}/>
+                                <FaUser size={12}/> 
                             </div>  
                             <p className="text-text-600">{assignment.classroom.teacher.fullName}</p>
+                            <Separator orientation="vertical" className="text-primary-default bg-primary-default w-[20px]"/>
+                            <p className="text-text-600">{assignment.maxGrade} pts.</p>
+
                         </div>  
                     </div>
                     <Button variant="outline" className="text-base">
