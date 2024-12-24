@@ -89,6 +89,10 @@ export const AuthProvider = ({ children }) => {
         setUser(null)
         localStorage.removeItem('authTokens')
     }
+
+    const hasRole = (role) => {
+        return user.role.includes(role)
+    }
     
     const contextData = {
         loginUser,
@@ -97,6 +101,7 @@ export const AuthProvider = ({ children }) => {
         refreshToken,
         user,
         role,
+        hasRole,    
         authTokens
     }
 

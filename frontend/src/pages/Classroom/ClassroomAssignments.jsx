@@ -6,9 +6,15 @@ import { useParams } from "react-router-dom"
 import dayjs from "@/utils/dayjs"
 import AuthContext from "@/context/AuthContext"
 
-const Assignments = () => {
-    const { user } = useContext(AuthContext)
-    const { classroom, assignments, assignmentsGroup, handleGetAssignmentList, loading } = useContext(ClassroomContext)
+const ClassroomAssignments = () => {
+    const { user, hasRole } = useContext(AuthContext)
+    const { 
+        classroom, 
+        assignments, 
+        assignmentsGroup, 
+        handleGetAssignmentList, 
+        handleDeleteAssignment,
+        loading } = useContext(ClassroomContext)
     const { id } = useParams()
 
     useEffect(() => {
@@ -27,10 +33,11 @@ const Assignments = () => {
 
     return (
         <div className="w-full px-4 mx-auto">
-            <div className="flex justify-between w-full mt-8 mb-12">
-                <div className="self-end text-md font-heading">Activity List</div>
+            {hasRole("Teacher") && 
+            <div className="flex justify-end w-full p-4 mt-4">
                 <CreateAssignmentModal isTeacher={ classroom.teacher.id == user.nameid }/>
             </div>
+            }
             <div className="space-y-6">
                 {assignmentsGroup && Object.keys(assignmentsGroup)
                     .sort((a, b) => dayjs(b).diff(dayjs(a)))
@@ -39,7 +46,7 @@ const Assignments = () => {
                         <div key={dateKey} className="">
                             <p className="my-4 text-lg font-medium">{dateKey}</p>
                             <div className="space-y-2">
-                                {assignmentsGroup[dateKey].map(assignment => <AssignmentItem key={assignment.id} assignment={assignment} modifyPermission={ classroom.teacher.id == user.nameid }/>)}
+                                {assignmentsGroup[dateKey].map(assignment => <AssignmentItem key={assignment.id} assignment={assignment} modifyPermission={ classroom.teacher.id == user.nameid } onDelete={handleDeleteAssignment}/>)}
                             </div>
                         </div>
                     ))}
@@ -48,4 +55,4 @@ const Assignments = () => {
     )
 }
 
-export default Assignments
+export default ClassroomAssignments

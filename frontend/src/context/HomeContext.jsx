@@ -9,7 +9,7 @@ const HomeContext = createContext()
 export default HomeContext
 
 export const HomeProvider = ({ children }) => {
-    const { authTokens } = useContext(AuthContext)
+    const { user, hasRole, authTokens } = useContext(AuthContext)
     const [ classrooms, setClassrooms ] = useState([])
     const [ filteredList, setFilteredList ] = useState([])
     const [ assignmentCount, setAssignmentCount] = useState(0)
@@ -83,19 +83,21 @@ export const HomeProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            startTransition(() => {
-                const fetchCount = async () => {
-                    try {
-                        const count = await getAssignmentCount()
-                        setAssignmentCount(count)
+            if (hasRole("Student")) {
+                startTransition(() => {
+                    const fetchCount = async () => {
+                        try {
+                            const count = await getAssignmentCount()
+                            setAssignmentCount(count)
+                        }
+                        catch (error) {
+                            console.log(error)
+                        }
                     }
-                    catch (error) {
-                        console.log(error)
-                    }
-                }
-
-                fetchCount()
-            })
+    
+                    fetchCount()
+                })
+            }
             try {
                 const fetchClassrooms = await getClassroomList()
                 setClassrooms(fetchClassrooms)

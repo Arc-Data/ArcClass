@@ -1,15 +1,16 @@
-import { Link, NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader } from "./ui/sidebar"
 import { FaHome } from "react-icons/fa"
 import { FaCalendar } from "react-icons/fa6"
-import { useContext, useEffect, useState } from "react"
-import ClassroomContext from "@/context/ClassroomContext"
+import { useContext } from "react"
+import { MdOutlineAssignment } from "react-icons/md";
 import { Skeleton } from "./ui/skeleton"
 import HomeContext from "@/context/HomeContext"
-import { Button } from "./ui/button"
+import AuthContext from "@/context/AuthContext"
 
 
 const AppSidebar = () => {
+    const { hasRole } = useContext(AuthContext)
     const { classrooms, loading, assignmentCount }  = useContext(HomeContext)
 
     const classroomLinks = classrooms && classrooms.map(classroom => {
@@ -47,9 +48,22 @@ const AppSidebar = () => {
                     <FaCalendar />
                     <div className="flex items-center flex-1">
                         <p>Calendar</p>
+                    </div>
+                </NavLink>
+                {hasRole("Student") && 
+                <NavLink to="/assignments"
+                className={({ isActive }) =>
+                        `flex items-center gap-8 px-4 py-2 text-md rounded-full hover:bg-primary-default hover:text-white ${
+                            isActive ? 'bg-primary-600 text-white' : ''
+                        }`}
+                >
+                    <MdOutlineAssignment />
+                    <div className="flex items-center flex-1">
+                        <p>Assignments</p>
                         <p className="grid w-5 h-5 ml-auto text-sm text-white rounded bg-primary-default place-items-center" variant="secondary">{assignmentCount}</p>
                     </div>
                 </NavLink>
+                }
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>

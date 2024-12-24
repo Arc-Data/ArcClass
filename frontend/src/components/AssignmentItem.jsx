@@ -5,14 +5,14 @@ import { useContext } from 'react'
 import ClassroomContext from '@/context/ClassroomContext'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { Link } from 'react-router-dom'
+import useAssignmentManager from '@/hooks/useAssignmentManager'
 
-const AssignmentItem = ({ assignment, modifyPermission }) => {
-    const { handleDeleteAssignment } = useContext(ClassroomContext)
-
+const AssignmentItem = ({ assignment, modifyPermission, onDelete }) => {
+    
     const deleteAssignment = (e) => {
-        e.preventDefault() 
-        e.stopPropagation() 
-        handleDeleteAssignment(assignment.id)
+        e.preventDefault()
+        e.stopPropagation()
+        onDelete(assignment.id)
     }
 
     const handleDropdownClick = (e) => {

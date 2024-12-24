@@ -16,12 +16,10 @@ import JoinClassroomModal from "./modals/JoinClassroomModal"
 import { ClassroomProvider } from "./context/ClassroomContext"
 import ClassroomLayout from "./layouts/ClassroomLayout"
 import People from "./pages/Classroom/People"
-import Assignments from "./pages/Classroom/Assignments"
 import { HomeProvider } from "./context/HomeContext"
 import AssignmentDetail from "./pages/AssignmentDetail"
-import CalendarLayout from "./layouts/CalendarLayout"
-import CalendarList from "./pages/Calendar/CalendarList"
-import { CalendarProvider } from "./context/CalendarContext"
+import ClassroomAssignments from "./pages/Classroom/ClassroomAssignments"
+import Assignments from "./pages/Assignments"
 
 /* 
 // [ ] : Create Profile Customization Section
@@ -29,6 +27,7 @@ import { CalendarProvider } from "./context/CalendarContext"
 // [ ] : Centralized button designs
 // [ ] : Toasters!
 // [ ] : Custom default page
+// [ ] : Add a feature in progress component
 */
 
 function App() {
@@ -51,19 +50,13 @@ function App() {
 							</HomeProvider>}>
 							
 							<Route path="/home" element={<Home/>} />	
-								<Route path="/calendar" element={
-									<CalendarProvider>
-										<CalendarLayout/>
-									</CalendarProvider> 
-								} >
-									<Route path="" element={<CalendarList />} />
-									<Route path="view" element={<Calendar />} />
-								</Route>
+							<Route path="/calendar" element={<Calendar />} />
+							<Route path="/assignments" element={<Assignments/>} />
 							
 							<Route path="/classroom/:id" element={
 								<ClassroomProvider><ClassroomLayout /></ClassroomProvider>} >
 									<Route path="" element={<Classroom/>} />	
-									<Route path="assignments" element={<Assignments/>} />
+									<Route path="assignments" element={<ClassroomAssignments/>} />
 									<Route path="people" element={<People />} />
 							</Route>	
 							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}
