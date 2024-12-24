@@ -19,11 +19,14 @@ namespace backend.Controllers
     public class AssignmentController(
         IAssignmentRepository assignmentRepo,
         ICommentRepository commentRepo, 
-        UserManager<AppUser> userManager) : ControllerBase
+        UserManager<AppUser> userManager,
+        IStudentClassroomRepository studentClassroomRepo
+        ) : ControllerBase
     {
         private readonly IAssignmentRepository _assignmentRepo = assignmentRepo;
         private readonly UserManager<AppUser> _userManager = userManager;
         private readonly ICommentRepository _commentRepo = commentRepo;
+        private readonly IStudentClassroomRepository _studentClassroomRepo = studentClassroomRepo;
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Teacher")]

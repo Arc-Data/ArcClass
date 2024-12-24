@@ -1,7 +1,8 @@
 import useClassroomManager from "@/hooks/useClassroomManager";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useTransition } from "react";
 import AuthContext from "./AuthContext";
 import { useNavigate } from "react-router-dom";
+import useAssignmentManager from "@/hooks/useAssignmentManager";
 
 const HomeContext = createContext()
 
@@ -11,6 +12,7 @@ export const HomeProvider = ({ children }) => {
     const { authTokens } = useContext(AuthContext)
     const [ classrooms, setClassrooms ] = useState([])
     const [ filteredList, setFilteredList ] = useState([])
+    const [ assignmentCount, setAssignmentCount] = useState(0)
     
     const [ searchQuery, setSearchQuery ] = useState("")
 
@@ -18,6 +20,8 @@ export const HomeProvider = ({ children }) => {
     const navigate = useNavigate()
 
     const { createClassroom, getClassroomList, joinClassroom, deleteClassroom, leaveClassroom, loading } = useClassroomManager(authTokens)
+    const { getAssignmentCount } = useAssignmentManager(authTokens)
+    const [ isCountPending, startTransition ] = useTransition()
 
     const handleAddClassroom = async (data) => {
         const classroom = await createClassroom(data)
@@ -79,6 +83,20 @@ export const HomeProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchData = async () => {
+            startTransition(() => {
+                const fetchCount = async () => {
+                    try {
+                        const count = await getAssignmentCount()
+                        console.log(count)
+                        setAssignmentCount(count)
+                    }
+                    catch (error) {
+                        console.log(error)
+                    }
+                }
+
+                fetchCount()
+            })
             try {
                 const fetchClassrooms = await getClassroomList()
                 setClassrooms(fetchClassrooms)
@@ -98,6 +116,7 @@ export const HomeProvider = ({ children }) => {
         loading,
         searchQuery,
         errors,
+    assignmentCount,
 
         handleAddClassroom,
         handleJoinClassroom,

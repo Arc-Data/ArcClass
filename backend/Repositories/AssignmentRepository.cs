@@ -34,6 +34,12 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<int> GetAssignmentCounts()
+        {
+            await Task.Delay(3000);
+            return 1;
+        }
+
         public async Task<Assignment?> GetAssignmentDetailAsync(int id)
         {
             return await _context.Assignments

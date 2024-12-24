@@ -14,5 +14,6 @@ namespace backend.Interfaces
         Task<IList<StudentClassroom>> GetStudentClassroomsAsync(string studentId);
         Task<bool> StudentExistsInClassroom(Student student, Classroom classroom);
         Task<IList<Student>> GetClassroomParticipants(string id);
+        Task<int> GetStudentClassroomAssignmentCounts(string id);
     }
 }

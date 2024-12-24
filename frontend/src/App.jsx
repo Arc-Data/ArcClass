@@ -19,12 +19,14 @@ import People from "./pages/Classroom/People"
 import Assignments from "./pages/Classroom/Assignments"
 import { HomeProvider } from "./context/HomeContext"
 import AssignmentDetail from "./pages/AssignmentDetail"
+import CalendarLayout from "./layouts/CalendarLayout"
 
 /* 
 // [ ] : Create Profile Customization Section
 // Optionally a mobile menu option similar to anilist 
 // [ ] : Centralized button designs
 // [ ] : Toasters!
+// [ ] : Custom default page
 */
 
 function App() {
@@ -47,7 +49,10 @@ function App() {
 							</HomeProvider>}>
 							
 							<Route path="/home" element={<Home/>} />	
-							<Route path="/calendar" element={<Calendar/>} />
+							<Route path="/calendar" element={<CalendarLayout/>} >
+								<Route path="view" element={<Calendar />} />
+							</Route>
+							
 
 							<Route path="/classroom/:id" element={
 								<ClassroomProvider><ClassroomLayout /></ClassroomProvider>} >

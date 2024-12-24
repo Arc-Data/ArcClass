@@ -6,10 +6,11 @@ import { useContext, useEffect, useState } from "react"
 import ClassroomContext from "@/context/ClassroomContext"
 import { Skeleton } from "./ui/skeleton"
 import HomeContext from "@/context/HomeContext"
+import { Button } from "./ui/button"
 
 
 const AppSidebar = () => {
-    const { classrooms, loading }  = useContext(HomeContext)
+    const { classrooms, loading, assignmentCount }  = useContext(HomeContext)
 
     const classroomLinks = classrooms && classrooms.map(classroom => {
         return (
@@ -44,7 +45,10 @@ const AppSidebar = () => {
                         }`}
                 >
                     <FaCalendar />
-                    <span>Calendar</span>
+                    <div className="flex items-center flex-1">
+                        <p>Calendar</p>
+                        <p className="grid w-5 h-5 ml-auto text-sm text-white rounded bg-primary-default place-items-center" variant="secondary">{assignmentCount}</p>
+                    </div>
                 </NavLink>
             </SidebarHeader>
             <SidebarContent>

@@ -14,6 +14,7 @@ namespace backend.Interfaces
         Task<IList<Assignment>> GetAll();
         Task<Assignment?> GetByIdAsync(int id);
         Task<Assignment?> GetAssignmentDetailAsync(int id);
+        Task<int> GetAssignmentCounts();
         Task<bool> ExistsAsync(int id);
         Task<IList<Assignment>> GetClassroomAssignments(string id); 
     }

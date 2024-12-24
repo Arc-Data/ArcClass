@@ -47,6 +47,17 @@ namespace backend.Repositories
                 .ToListAsync();
         }
 
+        public async Task<int> GetStudentClassroomAssignmentCounts(string id)
+        {
+            // NOTE : Would it be safe to put a not null operator in here 
+            return await _context.StudentClassrooms
+                .Where(sc => sc.StudentId == id)
+                .Include(sc => sc.Classroom)
+                .ThenInclude(c => c.Assignments)
+                .SelectMany(sc => sc.Classroom.Assignments)
+                .CountAsync();
+        }
+
         public async Task<IList<StudentClassroom>> GetStudentClassroomsAsync(string studentId)
         {
             return await _context.StudentClassrooms

@@ -1,4 +1,4 @@
-import { FaUser } from "react-icons/fa"
+// import { FaUser } from "react-icons/fa"
 import dayjs, { getDeadline } from "../utils/dayjs"
 import { Link } from "react-router-dom"
 
