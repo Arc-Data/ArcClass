@@ -24,6 +24,7 @@ import AssignmentDetail from "./pages/AssignmentDetail"
 // [ ] : Create Profile Customization Section
 // Optionally a mobile menu option similar to anilist 
 // [ ] : Centralized button designs
+// [ ] : Toasters!
 */
 
 function App() {

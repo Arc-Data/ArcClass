@@ -15,15 +15,16 @@ import { BiAlarmExclamation } from "react-icons/bi";
 import { Separator } from "@/components/ui/separator"
 import { MdOutlineInsertComment } from "react-icons/md";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog"
-import Classroom404 from "@/components/errors/Classroom404"
 import Assignment404 from "@/components/errors/Assignment404"
 
 
+// TODO : Close dialog on delete
 const AssignmentDetail = () => {
     const { id } = useParams()
     const { user, authTokens } = useContext(AuthContext)
     const [ loading, setLoading ] = useState(true)
     const [ assignment, setAssignment ] = useState()
+    const [ openDeleteModal, setOpenDeleteModal ] = useState(false)
     const { getAssignment, deleteAssignment } = useAssignmentManager(authTokens)
 
     const [ error, setError ] = useState()
@@ -31,6 +32,12 @@ const AssignmentDetail = () => {
 
     const handleBack = () => {
         navigate(-1)
+    }
+
+    const handleDeleteAssignment = () => {
+        deleteAssignment(id)
+        setOpenDeleteModal(false)
+        setError({ status: 404} )
     }
 
     useEffect(() => {
@@ -52,7 +59,6 @@ const AssignmentDetail = () => {
 
     // TODO : error status 500s template
     if (error) {
-        console.log(error)
         if (error.status === 404) {
             return (<Assignment404 />)
         } else {
@@ -81,7 +87,7 @@ const AssignmentDetail = () => {
                     <Button className="ml-auto bg-primary-default hover:bg-secondary-default">View Submissions</Button>
                     {assignment.classroom.teacher.id == user.nameid
                     &&
-                    <Dialog>
+                    <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <button className="grid p-2 rounded-full cursor-pointer hover:bg-gray-200 place-items-center">
@@ -117,7 +123,7 @@ const AssignmentDetail = () => {
                                 }
                             </div>
                             <DialogFooter>
-                                <Button variant="destructive" onClick={() => deleteAssignment(assignment.id)}>Delete</Button>
+                                <Button variant="destructive" type="submit" onClick={handleDeleteAssignment}>Delete</Button>
                             </DialogFooter>
                         </DialogContent>
                     </Dialog>
