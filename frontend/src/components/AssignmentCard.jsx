@@ -1,10 +1,8 @@
-// import { FaUser } from "react-icons/fa"
+import { FaUser } from "react-icons/fa"
 import dayjs, { getDeadline } from "../utils/dayjs"
 import { Link } from "react-router-dom"
 
 const AssignmentCard = ({ post }) => {
-    console.log(post)
-
     return (
         <Link to={`/assignments/${post.assignment.id}`} className="block w-full gap-4 border rounded-lg shadow cursor-pointer group hover:bg-gray-200">
             <div className="flex gap-4 px-8 py-4">

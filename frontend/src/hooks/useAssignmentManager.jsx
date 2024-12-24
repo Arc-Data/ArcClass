@@ -54,6 +54,16 @@ const useAssignmentManager = (authTokens) => {
             }
         })
     }  
+
+    const getStudentAssignments = async () => {
+        const response = await axios.get(`api/student/classrooms/assignments`, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        })
+
+        return response.data
+    }
     
     const getAssignment = async (id) => {
         const response = await axios.get(`api/assignments/${id}`, {
@@ -71,6 +81,7 @@ const useAssignmentManager = (authTokens) => {
         deleteAssignment,
         getAssignment,
         getAssignmentCount,
+        getStudentAssignments,
     }
 }
 

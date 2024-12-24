@@ -87,7 +87,6 @@ export const HomeProvider = ({ children }) => {
                 const fetchCount = async () => {
                     try {
                         const count = await getAssignmentCount()
-                        console.log(count)
                         setAssignmentCount(count)
                     }
                     catch (error) {
@@ -116,7 +115,7 @@ export const HomeProvider = ({ children }) => {
         loading,
         searchQuery,
         errors,
-    assignmentCount,
+        assignmentCount,
 
         handleAddClassroom,
         handleJoinClassroom,
@@ -126,8 +125,8 @@ export const HomeProvider = ({ children }) => {
     }
 
     return (
-        <HomeContext.Provider value={contextData}>
+        <HomeContext value={contextData}>
             { children }
-        </HomeContext.Provider>
+        </HomeContext>
     )
 }

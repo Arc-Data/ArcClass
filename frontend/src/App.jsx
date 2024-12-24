@@ -20,6 +20,8 @@ import Assignments from "./pages/Classroom/Assignments"
 import { HomeProvider } from "./context/HomeContext"
 import AssignmentDetail from "./pages/AssignmentDetail"
 import CalendarLayout from "./layouts/CalendarLayout"
+import CalendarList from "./pages/Calendar/CalendarList"
+import { CalendarProvider } from "./context/CalendarContext"
 
 /* 
 // [ ] : Create Profile Customization Section
@@ -49,11 +51,15 @@ function App() {
 							</HomeProvider>}>
 							
 							<Route path="/home" element={<Home/>} />	
-							<Route path="/calendar" element={<CalendarLayout/>} >
-								<Route path="view" element={<Calendar />} />
-							</Route>
+								<Route path="/calendar" element={
+									<CalendarProvider>
+										<CalendarLayout/>
+									</CalendarProvider> 
+								} >
+									<Route path="" element={<CalendarList />} />
+									<Route path="view" element={<Calendar />} />
+								</Route>
 							
-
 							<Route path="/classroom/:id" element={
 								<ClassroomProvider><ClassroomLayout /></ClassroomProvider>} >
 									<Route path="" element={<Classroom/>} />	

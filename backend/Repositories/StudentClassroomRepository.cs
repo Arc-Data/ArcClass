@@ -58,6 +58,16 @@ namespace backend.Repositories
                 .CountAsync();
         }
 
+        public async Task<IList<Assignment>> GetStudentClassroomAssignments(string userId)
+        {
+            return await _context.StudentClassrooms
+                .Where(sc => sc.StudentId == userId)
+                .Include(sc => sc.Classroom)
+                    .ThenInclude(c => c.Assignments)
+                .SelectMany(sc => sc.Classroom.Assignments)
+                .ToListAsync();
+        }
+
         public async Task<IList<StudentClassroom>> GetStudentClassroomsAsync(string studentId)
         {
             return await _context.StudentClassrooms
