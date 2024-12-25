@@ -10,7 +10,6 @@ import BaseRoutes from "./routes/BaseRoutes"
 import UserRoutes from "./routes/UserRoutes"
 import Home from "./pages/Home"
 import DefaultLayout from "./layouts/DefaultLayout"
-import Calendar from "./pages/Calendar"
 import Classroom from "./pages/Classroom/Classroom"
 import JoinClassroomModal from "./modals/JoinClassroomModal"
 import { ClassroomProvider } from "./context/ClassroomContext"
@@ -20,6 +19,7 @@ import { HomeProvider } from "./context/HomeContext"
 import AssignmentDetail from "./pages/AssignmentDetail"
 import ClassroomAssignments from "./pages/Classroom/ClassroomAssignments"
 import Assignments from "./pages/Assignments"
+import CalendarView from "./pages/CalendarView"
 
 /* 
 // [ ] : Create Profile Customization Section
@@ -50,7 +50,7 @@ function App() {
 							</HomeProvider>}>
 							
 							<Route path="/home" element={<Home/>} />	
-							<Route path="/calendar" element={<Calendar />} />
+							<Route path="/calendar" element={<CalendarView />} />
 							<Route path="/assignments" element={<Assignments/>} />
 							
 							<Route path="/classroom/:id" element={
