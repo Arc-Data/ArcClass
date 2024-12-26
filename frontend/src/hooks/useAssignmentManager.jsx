@@ -55,11 +55,19 @@ const useAssignmentManager = (authTokens) => {
         })
     }  
 
-    const getStudentAssignments = async () => {
+    const getStudentAssignments = async (start = null, end = null) => {
+        console.log(start, end)
+        console.log("Im here")
+        const params = {}
+
+        if (start) params.start = start.toISOString()
+        if (end) params.end = end.toISOString()
+
         const response = await axios.get(`api/student/classrooms/assignments`, {
             headers: {
                 Authorization: `Bearer ${authTokens.access}`
-            }
+            },
+            params,
         })
 
         return response.data

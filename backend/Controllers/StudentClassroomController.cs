@@ -31,7 +31,7 @@ namespace backend.Controllers
 
         [HttpGet("assignments")]
         [Authorize]
-        public async Task<IActionResult> GetAssignments([FromQuery] string? start, [FromQuery] string? end) 
+        public async Task<IActionResult> GetStudentAssignmentsInRange([FromQuery] string? start, [FromQuery] string? end) 
         {
             var userId = User.GetId();
             if (userId == null) return Forbid();
