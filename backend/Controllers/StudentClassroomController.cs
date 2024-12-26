@@ -31,12 +31,25 @@ namespace backend.Controllers
 
         [HttpGet("assignments")]
         [Authorize]
-        public async Task<IActionResult> GetAssignments() 
+        public async Task<IActionResult> GetAssignments([FromQuery] string? start, [FromQuery] string? end) 
         {
             var userId = User.GetId();
             if (userId == null) return Forbid();
 
-            var assignments = await _studentClassroomRepo.GetStudentClassroomAssignments(userId);
+            DateTime? startDate = null;
+            DateTime? endDate = null;
+
+            if (!string.IsNullOrEmpty(start) && DateTime.TryParse(start, out var parsedStart))
+            {
+                startDate = parsedStart;
+            }
+
+            if (!string.IsNullOrEmpty(end) && DateTime.TryParse(end, out var parsedEnd))
+            {
+                endDate = parsedEnd;
+            }
+
+            var assignments = await _studentClassroomRepo.GetStudentClassroomAssignments(userId, startDate, endDate);
             var assignmentsDto = assignments.Select(a => a.ToAssignmentDto());
             return Ok(assignmentsDto);
         }

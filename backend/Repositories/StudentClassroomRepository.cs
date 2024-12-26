@@ -53,21 +53,32 @@ namespace backend.Repositories
             return await _context.StudentClassrooms
                 .Where(sc => sc.StudentId == id)
                 .Include(sc => sc.Classroom)
-                .ThenInclude(c => c.Assignments)
-                .SelectMany(sc => sc.Classroom.Assignments)
+                    .ThenInclude(c => c!.Assignments)
+                .AsSplitQuery()
+                .SelectMany(sc => sc.Classroom!.Assignments)
                 .CountAsync();
         }
 
-        public async Task<IList<Assignment>> GetStudentClassroomAssignments(string userId)
+        public async Task<IList<Assignment>> GetStudentClassroomAssignments(string userId, DateTime? startDate = null, DateTime? endDate = null)
         {
-            return await _context.StudentClassrooms
+            var query = _context.StudentClassrooms
                 .Where(sc => sc.StudentId == userId)
                 .Include(sc => sc.Classroom)
-                    .ThenInclude(c => c.Assignments)
-                .SelectMany(sc => sc.Classroom.Assignments)
-                .ToListAsync();
-        }
+                    .ThenInclude(c => c!.Assignments)
+                .SelectMany(sc => sc.Classroom!.Assignments);
 
+            if (startDate.HasValue) 
+            {
+                query = query.Where(a => a.SubmissionDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                query = query.Where(a => a.SubmissionDate <= endDate.Value);
+            }
+                
+            return await query.ToListAsync();
+        }
         public async Task<IList<StudentClassroom>> GetStudentClassroomsAsync(string studentId)
         {
             return await _context.StudentClassrooms
