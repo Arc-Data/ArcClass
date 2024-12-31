@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import AppSidebar from "@/components/AppSidebar"
+import Navigation from "@/components/Navigation"
 
 /* TODO : Save sidebar settings on local state
 Sidebar does not remember its own default state when
@@ -12,7 +13,7 @@ const DefaultLayout = () => {
 		<SidebarProvider>
 			<AppSidebar />
 			<main className="w-full">
-				<SidebarTrigger/>
+				<Navigation />
 				<div className="p-4">
 					<Outlet />
 				</div>

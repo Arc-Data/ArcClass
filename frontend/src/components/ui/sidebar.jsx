@@ -224,65 +224,24 @@ Sidebar.displayName = "Sidebar"
 
 const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
-  const { user, role, logoutUser } = React.useContext(AuthContext)
 
   return (
     (
-    <div className="w-full border-b bg-background-default" >
-      <div className="flex items-center gap-4 py-2.5 w-full mx-auto px-2">
-        <Button
-          ref={ref}
-          data-sidebar="trigger"
-          variant="ghost"
-          size="icon"
-          className={cn("p-2 hover:bg-gray-200", className)}
-          onClick={(event) => {
-            onClick?.(event)
-            toggleSidebar()
-          }}
-          {...props}>
-          <IoMenu size={20} />
-          <span className="sr-only">Toggle Sidebar</span>
-        </Button>
-        <Link to="/" className="text-2xl font-heading">ArcClass</Link>
-        <div className="flex items-center gap-8 ml-auto mr-4">
-            {role === "Teacher"
-            &&
-            <CreateClassroomModal/>
-            }
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="p-4 ml-auto rounded-full hover:bg-gray-200">
-                  <FaUser size={16}/>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[240px]">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <div className="flex items-center gap-2 p-2.5">
-                  <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
-                    <FaUser size={18}/>
-                  </div>
-                  <div className="truncate text-ellipsis font-body">
-                    <p className="text-sm font-thin">{user.given_name} {user.family_name}</p>
-                    <p className="text-sm font-thin">{user.email}</p>
-                  </div>
-                </div>
-                <DropdownMenuSeparator/>
-                <div className="*:px-2.5 *:w-full">
-                  <button className="mt-4 flex gap-4 items-center font-medium py-2.5 outline-none hover:bg-primary-default" >
-                      <FaGear/>
-                      <span>Settings</span>
-                  </button>
-                  <button className="flex gap-4 items-center font-medium py-2.5 outline-none hover:bg-primary-default" onClick={logoutUser}>
-                      <FaArrowRightFromBracket/>
-                      <span>Logout</span>
-                  </button>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
-      </div>
-    </div>)
+      <Button
+        ref={ref}
+        data-sidebar="trigger"
+        variant="ghost"
+        size="icon"
+        className={cn("p-2 hover:bg-gray-200", className)}
+        onClick={(event) => {
+          onClick?.(event)
+          toggleSidebar()
+        }}
+        {...props}>
+        <IoMenu size={20} />
+        <span className="sr-only">Toggle Sidebar</span>
+      </Button>
+    )
   );
 })
 SidebarTrigger.displayName = "SidebarTrigger"
