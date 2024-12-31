@@ -91,7 +91,7 @@ const JoinClassroomModal = () => {
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <div onClick={() => setIsOpen(prev => !prev)} className="flex items-center gap-2 p-4 text-sm rounded-full bg-primary-default hover:bg-gray-200">
+            <div onClick={() => setIsOpen(prev => !prev)} className="flex items-center gap-2 p-4 text-sm rounded-full cursor-pointer bg-primary-default hover:bg-gray-200">
                 <span className="whitespace-nowrap">Join Classroom</span>
                 <FaRightFromBracket size={16}/>
             </div>

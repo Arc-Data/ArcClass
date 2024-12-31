@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react"
 import { FaArrowLeft, FaPencil } from "react-icons/fa6"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { getDeadline } from "@/utils/dayjs"
-import { FaEllipsisV, FaPlus, FaTrash, FaUser } from "react-icons/fa"
+import { FaClock, FaEllipsisV, FaPlus, FaRegClock, FaTrash, FaUser } from "react-icons/fa"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import CommentSection from "@/components/AssignmentDetail/CommentSection"
@@ -16,6 +16,10 @@ import { Separator } from "@/components/ui/separator"
 import { MdOutlineInsertComment } from "react-icons/md";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import Assignment404 from "@/components/errors/Assignment404"
+import { Textarea } from "@/components/ui/textarea"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import dayjs from "@/utils/dayjs"
+import { Calendar } from "@/components/ui/calendar"
 
 
 // TODO : Close dialog on delete
@@ -26,6 +30,9 @@ const AssignmentDetail = () => {
     const [ assignment, setAssignment ] = useState()
     const [ openDeleteModal, setOpenDeleteModal ] = useState(false)
     const { getAssignment, deleteAssignment } = useAssignmentManager(authTokens)
+    const [ isEditing, setEditing ] = useState(false)
+
+    const [ editAssignment, setEditAssignment ] = useState()
 
     const [ error, setError ] = useState()
     const navigate = useNavigate()
@@ -45,6 +52,7 @@ const AssignmentDetail = () => {
             try {
                 const fetchAssignment = await getAssignment(id)
                 setAssignment(fetchAssignment)
+                setEditAssignment(fetchAssignment)
             }
             catch (error) {
                 console.log(error)
@@ -94,8 +102,8 @@ const AssignmentDetail = () => {
                                     <FaEllipsisV size={12}/>
                                 </button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem className="z-30 flex items-center gap-2">
+                            <DropdownMenuContent align="end" className="*:cursor-pointer">
+                                <DropdownMenuItem className="z-30 flex items-center gap-2" onClick={() => setEditing(prev => !prev)}>
                                     <FaPencil/>
                                     <span>Edit</span>
                                 </DropdownMenuItem>
@@ -129,8 +137,9 @@ const AssignmentDetail = () => {
                     </Dialog>
                     }
                 </div>
-                <div className="flex items-center justify-between py-4">
-                    <div>
+                {!isEditing ? 
+                <div className="flex gap-8 py-4">
+                    <div className="flex-1 space-y-4" >
                         <h1 className="text-2xl font-bold font-heading">{assignment.title}</h1>
                         <div className="flex gap-2 mt-4">
                             <div className="grid w-6 h-6 border rounded-full place-items-center">
@@ -139,18 +148,50 @@ const AssignmentDetail = () => {
                             <p className="text-text-600">{assignment.classroom.teacher.fullName}</p>
                             <Separator orientation="vertical" className="text-primary-default bg-primary-default w-[20px]"/>
                             <p className="text-text-600">{assignment.maxGrade} pts.</p>
-
                         </div>  
+                        <p className="py-4">{assignment.description}</p>
                     </div>
-                    <Button variant="outline" className="text-base">
-                        <BiAlarmExclamation className="mr-2"/>Deadline: {getDeadline(assignment.submissionDate)}</Button>
+                    <Button variant="outline" className="text-base ">
+                        <BiAlarmExclamation className="mr-2"/>Deadline: {getDeadline(assignment.submissionDate)}
+                    </Button>
                 </div>
-                <p className="py-4">{assignment.description}</p>
+                :
+                <div className="space-y-8">
+                    <div className="flex justify-end w-full gap-8">
+                        <div className="text-sm">
+                            <p className="uppercase">Max Grade</p>
+                            <input type="number" className="w-20 py-1 border-t-0 border-x-0" value={assignment.maxGrade}/>
+                        </div>
+                        <div>
+                            <p className="text-sm uppercase">Submission Deadline</p>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <div variant="outline" className="flex items-center w-full gap-2 px-2 py-1 text-base border-t-0 border-b border-black rounded-none cursor-pointer border-x-0">
+                                        <FaRegClock/> {dayjs(editAssignment.submissionDate).format("MMM DD YYYY - HH:mm:ss")}</div>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <Calendar></Calendar>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                    </div>
+                    <div className="w-full">
+                        <div className="text-sm uppercase">Title</div>
+                        <input type="text" className="w-full py-4 text-2xl font-bold border-t-0 border-gray-800 border-x-0 font-heading" value={editAssignment.title}/>
+                    </div>
+                    <div className="w-full">
+                        <p className="text-sm uppercase">Description</p>
+                        <Textarea value={assignment.description} className="border-b"/>
+                    </div>
+                </div>
+                }
                 {assignment.files && assignment.files.length > 0 && 
                 <div className="pt-8 pb-4 space-y-4 border-t">
+                    {isEditing && 
                     <div className="text-right">
                         <Button className="" variant="outline"><FaPlus className="mr-2"/>Add more files</Button>
                     </div>
+                    }
                     <DisplayFiles materials={assignment.files}/>
                 </div>
                 }
