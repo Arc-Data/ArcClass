@@ -103,7 +103,9 @@ namespace backend.Repositories
 
         public async Task<Assignment?> UpdateAsync(Assignment assignment)
         {
-            throw new NotImplementedException();
+            _context.Assignments.Update(assignment);
+            await _context.SaveChangesAsync();
+            return assignment;
         }
     }
 }

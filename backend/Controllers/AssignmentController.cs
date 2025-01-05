@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Dtos.Assignment;
 using backend.Dtos.Post;
 using backend.Extensions;
 using backend.Interfaces;
@@ -47,6 +48,27 @@ namespace backend.Controllers
             if (assignment == null) return NotFound();
 
             return Ok(assignment.ToAssignmentDetailDto());
+        }
+        
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CreateAssignmentDto assignmentDto) {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var userId = User.GetId();
+
+            var assignment = await _assignmentRepo.GetByIdAsync(id);
+            if (assignment == null) return NotFound();
+
+            if (userId != assignment.Classroom!.TeacherId) return Forbid();
+
+            assignment.Description = assignmentDto.Description;
+            assignment.SubmissionDate = assignmentDto.SubmissionDate;
+            assignment.Title = assignmentDto.Title;
+            assignment.MaxGrade = assignmentDto.MaxGrade;
+
+            await _assignmentRepo.UpdateAsync(assignment);
+            return NoContent();
         }
 
         [HttpPost("{id}/comments")]

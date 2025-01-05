@@ -183,6 +183,10 @@ const AssignmentDetail = () => {
                         <p className="text-sm uppercase">Description</p>
                         <Textarea value={assignment.description} className="border-b"/>
                     </div>
+                    <div className="flex justify-end w-full gap-4">
+                        <Button variant="outline" onClick={() => setEditing(prev => !prev)}>Cancel</Button>
+                        <Button className="bg-primary-default">Submit</Button>
+                    </div>
                 </div>
                 }
                 {assignment.files && assignment.files.length > 0 && 
@@ -195,7 +199,9 @@ const AssignmentDetail = () => {
                     <DisplayFiles materials={assignment.files}/>
                 </div>
                 }
+                {!isEditing && 
                 <CommentSection commentsData={assignment.comments}/>
+                }
             </div>
         </div>
     )
