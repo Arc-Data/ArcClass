@@ -34,8 +34,14 @@ namespace backend.Repositories
             return post;
         }
 
+        public async Task<Post?> GetByAssignmentId(int id)
+        {
+            return await _context.Posts
+                .FirstOrDefaultAsync(p => p.AssignmentId == id);
+        }
+
         public async Task<Post?> GetByIdAsync(int id)
-    {
+        {
             return await _context.Posts
                 .Include(p => p.Classroom)
                 .Include(p => p.Materials)

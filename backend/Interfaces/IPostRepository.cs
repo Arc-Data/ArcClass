@@ -11,6 +11,7 @@ namespace backend.Interfaces
         Task<Post?> CreateAsync(Post post);
         Task<Post?> DeleteAsync(int id);
         Task<Post?> GetByIdAsync(int id);
+        Task<Post?> GetByAssignmentId(int id);
         Task<Post?> UpdateAsync(Post post);
         Task<bool> PostExists(int id);
         Task<bool> TryDeletePost(int id, string userId);

@@ -27,9 +27,6 @@ import DisplayFiles from "./DisplayFiles"
 const PostCard = ({ post }) => {
     const { user, authTokens } = useContext(AuthContext)
     const { classroom, handleDeletePost } = useContext(ClassroomContext)
-    console.log(post)
-    // const createdAt = post.createdAt
-    // const DateMofidied = post.DateMofidied
 
     const [ comments, setComments ] = useState(post.comments)
     const [ showAllComments, setShowAllComments ] = useState(false)
@@ -43,6 +40,10 @@ const PostCard = ({ post }) => {
     const { editPost } = usePostManager(authTokens)
     const { createComment, deleteComment, loadComments } = useCommentManager(authTokens)
 
+    const createdAt = dayjs(post.createdAt)
+    const dateModified = dayjs(post.dateModified)
+
+    // TODO : Updating posts should put them at the top of the posts (reflecting recency)
     const handleCancel = () => {
         setEditing(false)
         setContent(post.content)
@@ -108,6 +109,7 @@ const PostCard = ({ post }) => {
                         <div className="">
                             <p>{post.user.fullName}</p>
                             <p className="text-sm">{dayjs(post.createdAt).format('MMM DD, h:mm A')}</p>
+                            {dateModified.isAfter(createdAt) && " (edited)"}
                         </div>
                         <Dialog>
                             <DropdownMenu className="">

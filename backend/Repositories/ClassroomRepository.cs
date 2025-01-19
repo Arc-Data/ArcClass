@@ -86,11 +86,12 @@ namespace backend.Repositories
                     .ThenInclude(c => c.AppUser)
                 .AsSplitQuery()
                 .Where(p => p.ClassroomId == classroomId)
-                .OrderByDescending(p => p.CreatedAt)
+                .OrderByDescending(p => p.DateModified)
                 .Select(p => new PostDto
                 {
                     Id = p.Id,
                     CreatedAt = p.CreatedAt,
+                    DateModified = p.DateModified,
                     User = new UserDto
                     {
                         Id = p.AppUser!.Id,

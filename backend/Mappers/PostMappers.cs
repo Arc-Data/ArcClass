@@ -13,12 +13,6 @@ namespace backend.Mappers
     {
         public static PostDto ToPostDto(this Post post)
         {
-            Console.WriteLine();
-            Console.WriteLine("In here somehow");
-            Console.WriteLine(post.AssignmentId);
-            Console.WriteLine();
-            Console.WriteLine();
-
             return new PostDto 
             {
                 Id = post.Id,

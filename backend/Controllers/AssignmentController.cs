@@ -21,13 +21,15 @@ namespace backend.Controllers
         IAssignmentRepository assignmentRepo,
         ICommentRepository commentRepo, 
         UserManager<AppUser> userManager,
-        IStudentClassroomRepository studentClassroomRepo
+        IStudentClassroomRepository studentClassroomRepo,
+        IPostRepository postRepo
         ) : ControllerBase
     {
         private readonly IAssignmentRepository _assignmentRepo = assignmentRepo;
         private readonly UserManager<AppUser> _userManager = userManager;
         private readonly ICommentRepository _commentRepo = commentRepo;
         private readonly IStudentClassroomRepository _studentClassroomRepo = studentClassroomRepo;
+        private readonly IPostRepository _postRepo = postRepo;
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Teacher")]
@@ -66,6 +68,11 @@ namespace backend.Controllers
             assignment.SubmissionDate = assignmentDto.SubmissionDate;
             assignment.Title = assignmentDto.Title;
             assignment.MaxGrade = assignmentDto.MaxGrade;
+
+            // TODO : Update the Post connected to the Assignment
+            var post = await _postRepo.GetByAssignmentId(id);
+            if (post == null) return StatusCode(500, "How the hell did you even trigger this edge case");
+            post.DateModified = DateTime.UtcNow;
 
             await _assignmentRepo.UpdateAsync(assignment);
             return NoContent();
