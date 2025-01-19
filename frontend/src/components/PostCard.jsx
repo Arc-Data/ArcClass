@@ -27,6 +27,9 @@ import DisplayFiles from "./DisplayFiles"
 const PostCard = ({ post }) => {
     const { user, authTokens } = useContext(AuthContext)
     const { classroom, handleDeletePost } = useContext(ClassroomContext)
+    console.log(post)
+    // const createdAt = post.createdAt
+    // const DateMofidied = post.DateMofidied
 
     const [ comments, setComments ] = useState(post.comments)
     const [ showAllComments, setShowAllComments ] = useState(false)
@@ -92,6 +95,7 @@ const PostCard = ({ post }) => {
             console.log(error)
         }
     }
+
 
     return (
         <div className="w-full gap-4 border rounded-lg shadow">

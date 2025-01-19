@@ -29,16 +29,56 @@ const AssignmentDetail = () => {
     const [ loading, setLoading ] = useState(true)
     const [ assignment, setAssignment ] = useState()
     const [ openDeleteModal, setOpenDeleteModal ] = useState(false)
-    const { getAssignment, deleteAssignment } = useAssignmentManager(authTokens)
+    const { getAssignment, deleteAssignment, updateAssignment } = useAssignmentManager(authTokens)
     const [ isEditing, setEditing ] = useState(false)
 
-    const [ editAssignment, setEditAssignment ] = useState()
+    const [ editAssignment, setEditAssignment ] = useState({
+        maxGrade: '',
+        submissionDate: new Date(),
+        title: '',
+        description: '',
+    })
 
     const [ error, setError ] = useState()
     const navigate = useNavigate()
 
     const handleBack = () => {
         navigate(-1)
+    }
+
+    const handleCancel = () => {
+        setEditAssignment({
+            title: assignment.title,
+            maxGrade: assignment.maxGrade,
+            description: assignment.description,
+            submissionDate: assignment.submissionDate,
+        })
+        setEditing(false)
+    }
+
+    const handleEditAssignment = async () => {
+        try {
+            const response = await updateAssignment(id, editAssignment)
+            console.log(response)
+            setAssignment(prev => ({
+                ...prev, 
+                maxGrade: editAssignment.maxGrade,
+                title: editAssignment.title,
+                description: editAssignment.description,
+                submissionDate: editAssignment.submissionDate,
+            }))
+            setEditing(false)
+        } catch (error) {
+            console.log(error)
+        } 
+    }
+
+    const handleEditAssignmentInputChange = (e) => {
+        const { name, value } = e.target
+        setEditAssignment(prev => ({
+            ...prev,
+            [name]: value,
+        }))
     }
 
     const handleDeleteAssignment = () => {
@@ -52,7 +92,12 @@ const AssignmentDetail = () => {
             try {
                 const fetchAssignment = await getAssignment(id)
                 setAssignment(fetchAssignment)
-                setEditAssignment(fetchAssignment)
+                setEditAssignment({
+                    title: fetchAssignment.title,
+                    maxGrade: fetchAssignment.maxGrade,
+                    description: fetchAssignment.description,
+                    submissionDate: fetchAssignment.submissionDate,
+                })
             }
             catch (error) {
                 console.log(error)
@@ -160,7 +205,12 @@ const AssignmentDetail = () => {
                     <div className="flex justify-end w-full gap-8">
                         <div className="text-sm">
                             <p className="uppercase">Max Grade</p>
-                            <input type="number" className="w-20 py-1 border-t-0 border-x-0" value={assignment.maxGrade}/>
+                            <input 
+                                type="number" 
+                                onChange={handleEditAssignmentInputChange} 
+                                className="w-20 py-1 border-t-0 border-x-0" 
+                                name="maxGrade"
+                                value={editAssignment.maxGrade}/>
                         </div>
                         <div>
                             <p className="text-sm uppercase">Submission Deadline</p>
@@ -170,22 +220,35 @@ const AssignmentDetail = () => {
                                         <FaRegClock/> {dayjs(editAssignment.submissionDate).format("MMM DD YYYY - HH:mm:ss")}</div>
                                 </PopoverTrigger>
                                 <PopoverContent>
-                                    <Calendar></Calendar>
+                                    <Calendar
+                                        mode="single"
+                                        selected={editAssignment.submissionDate}
+                                        onSelect={(date) => setEditAssignment(prev => ({...prev, submissionDate: date}))}
+                                    ></Calendar>
                                 </PopoverContent>
                             </Popover>
                         </div>
                     </div>
                     <div className="w-full">
                         <div className="text-sm uppercase">Title</div>
-                        <input type="text" className="w-full py-4 text-2xl font-bold border-t-0 border-gray-800 border-x-0 font-heading" value={editAssignment.title}/>
+                        <input 
+                            type="text" 
+                            className="w-full py-4 text-2xl font-bold border-t-0 border-gray-800 border-x-0 font-heading" 
+                            onChange={handleEditAssignmentInputChange} 
+                            name="title"
+                            value={editAssignment.title}/>
                     </div>
                     <div className="w-full">
                         <p className="text-sm uppercase">Description</p>
-                        <Textarea value={assignment.description} className="border-b"/>
+                        <Textarea 
+                            value={editAssignment.description} 
+                            name="description"
+                            onChange={handleEditAssignmentInputChange} 
+                            className="border-b"/>
                     </div>
                     <div className="flex justify-end w-full gap-4">
-                        <Button variant="outline" onClick={() => setEditing(prev => !prev)}>Cancel</Button>
-                        <Button className="bg-primary-default">Submit</Button>
+                        <Button variant="outline" onClick={handleCancel}>Cancel</Button>
+                        <Button className="bg-primary-default" onClick={handleEditAssignment}>Submit</Button>
                     </div>
                 </div>
                 }
