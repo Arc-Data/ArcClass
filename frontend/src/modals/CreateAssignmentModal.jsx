@@ -99,7 +99,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                                 
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="grid gap-8 py-8 overflow-y-auto pspace-y-4 md:grid-cols-2">
+                        <div className="grid gap-8 py-8 space-y-4 overflow-y-auto md:grid-cols-2">
                             <div className="flex flex-col gap-4">
                                 <div className="w-full">
                                     <label htmlFor="section" className="block mb-2 text-gray-600 font-body">Title</label>

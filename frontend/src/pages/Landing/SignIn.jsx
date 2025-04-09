@@ -10,7 +10,7 @@ const SignIn = () => {
 
     return (
         <form className="px-6 py-4 space-y-4" action={submitAction}>
-            <p className="text-2xl font-heading">Login</p>
+            <p className="text-2xl font-extrabold">Login</p>
             {error && <p className="text-red-500">{error}</p>}
 
             <div>
