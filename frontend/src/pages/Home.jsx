@@ -17,7 +17,7 @@ const Home = () => {
 
     const classCards = () => classrooms && classrooms.map(classroom => {
         return (
-            <Link key={classroom.id} to={`/classroom/${classroom.id}`} className="flex flex-col shadow">
+            <Link key={classroom.id} to={`/classroom/${classroom.id}`} className="flex flex-col shadow-sm">
                 <img src="/banner1.jpg" alt="" className="object-cover h-40 rounded-t-lg" />
                 <div className="p-4">
                     <p className="font-heading">{classroom.subject}</p>
@@ -29,22 +29,22 @@ const Home = () => {
 
     return (
         <div className="w-full">
-            <search className="flex items-center max-w-4xl gap-2 mx-auto">
+            <search className="flex items-center gap-2 mx-auto">
                 <input 
                     type="search" 
                     value={searchQuery}
                     onChange={handleFilterClassroomList}
                     placeholder="Search Class Name"
-                    className="w-full text-sm border border-gray-300 rounded-lg bg-gray-50"/>
+                    className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-gray-50"/>
                 {role.includes("Student") && <JoinClassroomModal/>}
             </search>
-                {loading ? 
-                <ClassSkeleton count={5}/>
-                :
-                <div className="mt-8 grid gap-4  grid-cols-[repeat(auto-fill,300px)]">
-                    {classCards()}
-                </div>
-                }
+            {loading ? 
+            <ClassSkeleton count={5}/>
+            :
+            <div className="mt-8 grid gap-4  grid-cols-[repeat(auto-fill,300px)]">
+                {classCards()}
+            </div>
+            }
         </div>
     )
 }

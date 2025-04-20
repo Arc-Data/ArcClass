@@ -99,7 +99,7 @@ const PostCard = ({ post }) => {
 
 
     return (
-        <div className="w-full gap-4 border rounded-lg shadow">
+        <div className="w-full gap-4 border rounded-lg shadow-sm">
             <div className="flex gap-4 px-8 py-4 border-b">
                 <div className="grid w-10 h-10 border rounded-full place-items-center">
                     <FaUser size={18} />
@@ -118,7 +118,7 @@ const PostCard = ({ post }) => {
                                         <FaEllipsisV size={16}/>
                                     </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="z-40 bg-background-default border-2 shadow *:p-2 rounded-lg *:cursor-pointer">
+                                <DropdownMenuContent align="end" className="z-40 bg-background border-2 shadow-sm *:p-2 rounded-lg *:cursor-pointer">
                                     {post.user.id == user.nameid && 
                                     <DropdownMenuItem onClick={() => setEditing(true)}
                                     className="z-30 flex items-center gap-2">
@@ -168,7 +168,7 @@ const PostCard = ({ post }) => {
                         <Textarea className="text-base" required value={content} onChange={(e) => setContent(e.target.value)}></Textarea>
                         <div className="justify-end flex gap-2 *:px-4 *:py-2 *:border *:rounded-lg">
                             <button onClick={handleCancel}>Cancel</button>
-                            <button className="bg-primary-default">Edit</button>
+                            <button className="bg-primary">Edit</button>
                         </div>
                     </form>
                     }

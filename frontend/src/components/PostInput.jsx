@@ -44,7 +44,7 @@ const PostInput = ({ onSubmitPost, placeholder, filesHidden }) => {
 
     return (
         <div className="flex w-full gap-4 cursor-pointer">
-            <div className="grid flex-shrink-0 w-10 h-10 border rounded-full bg-background-default place-items-center">
+            <div className="grid shrink-0 w-10 h-10 border rounded-full bg-background place-items-center">
                 <FaUser size={18} />
             </div>
             {isEditing ? 
@@ -85,8 +85,8 @@ const PostInput = ({ onSubmitPost, placeholder, filesHidden }) => {
                         </Button>
                     </div>
                     <div className="flex gap-2">
-                        <button className="px-5 py-2 border rounded-md bg-background-100 opacity-80 hover:opacity-100 hover:shadow" onClick={() => setIsEditing(false)}>Cancel</button>
-                        <button type="submit" className="px-5 py-2 border rounded-md bg-primary-default opacity-80 hover:opacity-100 hover:shadow">Submit</button>
+                        <button className="px-5 py-2 border rounded-md bg-background-100 opacity-80 hover:opacity-100 hover:shadow-sm" onClick={() => setIsEditing(false)}>Cancel</button>
+                        <button type="submit" className="px-5 py-2 border rounded-md bg-primary opacity-80 hover:opacity-100 hover:shadow-sm">Submit</button>
                     </div>
                 </div>
             </form>

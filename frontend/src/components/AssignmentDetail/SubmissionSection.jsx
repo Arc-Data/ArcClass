@@ -14,7 +14,7 @@ const SubmissionSection = () => {
 
     return (
         <div className="md:col-span-1">
-            <div className="sticky p-8 bg-white border rounded-lg shadow-sm top-4">
+            <div className="sticky p-8 bg-white border rounded-lg shadow-xs top-4">
                 <h2 className="text-lg font-bold font-heading">
                 Your submissions
                 </h2>
@@ -33,7 +33,7 @@ const SubmissionSection = () => {
                     className="hidden" 
                 />
                 <button 
-                    className="w-full p-2 mt-8 transition-colors border rounded hover:bg-primary-default hover:text-white"
+                    className="w-full p-2 mt-8 transition-colors border rounded hover:bg-primary hover:text-white"
                     onClick={openFileDialog}
                     >
                     Submit files

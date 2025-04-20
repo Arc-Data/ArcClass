@@ -61,8 +61,8 @@ const CreateAssignmentModal = ({ isTeacher }) => {
             <div className="w-full">
                 <div className="flex items-center justify-between">
                     <p className="mb-2 text-gray-600 font-body">Related Files</p>
-                    {files.length !== 0 && <p className="text-primary-default">{files.length} selected</p>}
-                    <button type="button" onClick={handleClick} className="flex items-center gap-2 px-8 py-2 text-sm text-white rounded-lg shadow bg-primary-default rouned-lg">
+                    {files.length !== 0 && <p className="text-primary">{files.length} selected</p>}
+                    <button type="button" onClick={handleClick} className="flex items-center gap-2 px-8 py-2 text-sm text-white rounded-lg shadow-sm bg-primary rouned-lg">
                         <FaFileCirclePlus className="" size={20}/> 
                         <span className="font-bold uppercase ">Add File</span>
                     </button>
@@ -86,7 +86,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger className={`${isTeacher ? "block" : "hidden"}`} asChild>
-                <button className="px-5 py-2 rounded-full bg-primary-default">Create Assignment</button>
+                <button className="px-5 py-2 rounded-full bg-primary">Create Assignment</button>
             </DialogTrigger>
             <DialogContent className="max-w-6xl font-body">
                 <form onSubmit={handleSubmit}>
@@ -133,7 +133,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                                                 onSelect={(date) => setData(prev => ({...prev, submissionDate: date}))}
                                                 disabled={(date) => date < new Date()}
                                                 required
-                                                className="bg-background-default"/>
+                                                className="bg-background"/>
                                         </PopoverContent>
                                     </Popover>
                                 </div>
@@ -165,7 +165,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                         </div>
                     </div>
                     <DialogFooter className="mt-8">
-                        <button type="submit" className="px-5 py-2.5 rounded-xl  bg-primary-default">Create</button>
+                        <button type="submit" className="px-5 py-2.5 rounded-xl  bg-primary">Create</button>
                     </DialogFooter>
                 </form>
             </DialogContent>

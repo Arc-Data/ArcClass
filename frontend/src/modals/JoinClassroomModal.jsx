@@ -90,7 +90,7 @@ const JoinClassroomModal = () => {
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <div onClick={() => setIsOpen(prev => !prev)} className="flex items-center gap-2 p-4 text-sm rounded-full cursor-pointer bg-primary-default hover:bg-gray-200">
+            <div onClick={() => setIsOpen(prev => !prev)} className="flex items-center gap-2 p-4 text-sm rounded-full cursor-pointer bg-primary hover:bg-gray-200">
                 <span className="whitespace-nowrap">Join Classroom</span>
                 <FaRightFromBracket size={16}/>
             </div>
@@ -135,7 +135,7 @@ const JoinClassroomModal = () => {
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex items-center gap-4 mt-4">
-                    <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
+                    <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary">
                         <FaUser size={20}/>
                     </div>
                     <div>
@@ -148,7 +148,7 @@ const JoinClassroomModal = () => {
                 
                 <DialogFooter className="mt-8">
                 {!loading && 
-                <button type="submit" className="gap-2 px-8 py-4 text-sm text-center rounded-2xl bg-primary-default hover:bg-gray-200" disabled={loading}>
+                <button type="submit" className="gap-2 px-8 py-4 text-sm text-center rounded-2xl bg-primary hover:bg-gray-200" disabled={loading}>
                     Next
                 </button>
                 }

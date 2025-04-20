@@ -26,7 +26,7 @@ const ClassroomLayout = () => {
     return (
         <div>
             <Dialog open={openLeaveModal} onOpenChange={setOpenLeaveModal}>
-                <DialogContent>
+                <DialogContent className="max-w-lg">
                     <DialogHeader>
                     <DialogTitle>Deleting Classroom</DialogTitle>
                     <DialogDescription>
@@ -45,7 +45,7 @@ const ClassroomLayout = () => {
                         end
                         className={({ isActive }) =>
                             `border-b-4 border-transparent py-2 px-4 ${
-                                isActive ? ' border-b-4 border-b-accent-default' : 'hover:border-b-gray-200'
+                                isActive ? ' border-b-4 border-b-accent' : 'hover:border-b-gray-200'
                             }`
                         }
                     >
@@ -56,7 +56,7 @@ const ClassroomLayout = () => {
                         end
                         className={({ isActive }) =>
                             `border-b-4 border-transparent py-2 px-4 ${
-                                isActive ? ' border-b-4 border-b-accent-default' : 'hover:border-b-gray-200'
+                                isActive ? ' border-b-4 border-b-accent' : 'hover:border-b-gray-200'
                             }`
                         }   
                     >
@@ -66,7 +66,7 @@ const ClassroomLayout = () => {
                         to={`/classroom/${id}/people`}
                         className={({ isActive }) =>
                             `border-b-4 border-transparent py-2 px-4 ${
-                                isActive ? 'border-b-4 border-b-accent-default' : ' hover:border-b-gray-200'
+                                isActive ? 'border-b-4 border-b-accent' : ' hover:border-b-gray-200'
                             }`
                         }
                     >
@@ -82,7 +82,7 @@ const ClassroomLayout = () => {
                             <FaGear size={16}/>
                         </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="bg-background-default *:p-2 rounded-lg *:cursor-pointer">
+                    <DropdownMenuContent align="end" className="bg-background *:p-2 rounded-lg *:cursor-pointer">
                         {role.includes('Teacher') && classroom.teacher?.id == user.nameid &&
                         <DropdownMenuItem 
                             onClick={ () => setOpenLeaveModal(true)}

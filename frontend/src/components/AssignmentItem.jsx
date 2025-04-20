@@ -21,7 +21,7 @@ const AssignmentItem = ({ assignment, modifyPermission, onDelete }) => {
     }
 
     return (
-        <Link to={`/assignments/${assignment.id}`} className='flex items-center justify-between p-4 border rounded-lg shadow-sm cursor-pointer group border-secondary-default hover:shadow'>
+        <Link to={`/assignments/${assignment.id}`} className='flex items-center justify-between p-4 border rounded-lg shadow-xs cursor-pointer group border-secondary hover:shadow-sm'>
             <p>{assignment.title}</p>
             <div className='flex items-center gap-4' onClick={handleDropdownClick}>
                 <span>0/0</span>

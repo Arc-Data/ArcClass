@@ -1,158 +1,393 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway:700|Afacad%20Flux:400,500');
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+@plugin 'tailwindcss-animate';
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --text-sm: 0.75rem;
+  --text-base: 1rem;
+  --text-xl: 1.333rem;
+  --text-2xl: 1.777rem;
+  --text-3xl: 2.369rem;
+  --text-4xl: 3.158rem;
+  --text-5xl: 4.21rem;
+
+  --font-heading: Raleway;
+  --font-body: Afacad Flux;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --color-text-50: var(--text-50);
+  --color-text-100: var(--text-100);
+  --color-text-200: var(--text-200);
+  --color-text-300: var(--text-300);
+  --color-text-400: var(--text-400);
+  --color-text-500: var(--text-500);
+  --color-text-600: var(--text-600);
+  --color-text-700: var(--text-700);
+  --color-text-800: var(--text-800);
+  --color-text-900: var(--text-900);
+  --color-text-950: var(--text-950);
+  --color-text: var(--text);
+
+  --color-background-50: var(--background-50);
+  --color-background-100: var(--background-100);
+  --color-background-200: var(--background-200);
+  --color-background-300: var(--background-300);
+  --color-background-400: var(--background-400);
+  --color-background-500: var(--background-500);
+  --color-background-600: var(--background-600);
+  --color-background-700: var(--background-700);
+  --color-background-800: var(--background-800);
+  --color-background-900: var(--background-900);
+  --color-background-950: var(--background-950);
+  --color-background: var(--background);
+
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+  --color-primary: var(--primary);
+
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  --color-secondary-950: var(--secondary-950);
+  --color-secondary: var(--secondary);
+
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
+  --color-accent-950: var(--accent-950);
+  --color-accent: var(--accent);
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+
+:root {
+  --text: #0c161b;
+  --text-50: #edf4f7;
+  --text-100: #dce9ef;
+  --text-200: #b9d2df;
+  --text-300: #95bcd0;
+  --text-400: #72a6c0;
+  --text-500: #4f90b0;
+  --text-600: #3f738d;
+  --text-700: #2f566a;
+  --text-800: #203946;
+  --text-900: #101d23;
+  --text-950: #080e12;
+
+  --background: #f3f9fb;
+  --background-50: #ecf5f9;
+  --background-100: #d9ecf2;
+  --background-200: #b3d9e6;
+  --background-300: #8cc6d9;
+  --background-400: #66b3cc;
+  --background-500: #409fbf;
+  --background-600: #338099;
+  --background-700: #266073;
+  --background-800: #19404d;
+  --background-900: #0d2026;
+  --background-950: #061013;
+
+  --primary: #37a4d0;
+  --primary-50: #eaf6fa;
+  --primary-100: #d6ecf5;
+  --primary-200: #acdaec;
+  --primary-300: #83c7e2;
+  --primary-400: #5ab4d8;
+  --primary-500: #30a2cf;
+  --primary-600: #2781a5;
+  --primary-700: #1d617c;
+  --primary-800: #134153;
+  --primary-900: #0a2029;
+  --primary-950: #051015;
+
+  --secondary: #7bcbeb;
+  --secondary-50: #e9f6fc;
+  --secondary-100: #d3eef8;
+  --secondary-200: #a6dcf2;
+  --secondary-300: #7acbeb;
+  --secondary-400: #4ebae4;
+  --secondary-500: #21a8de;
+  --secondary-600: #1b87b1;
+  --secondary-700: #146585;
+  --secondary-800: #0d4359;
+  --secondary-900: #07222c;
+  --secondary-950: #031116;
+
+  --accent: #50c3f1;
+  --accent-50: #e7f7fd;
+  --accent-100: #d0effb;
+  --accent-200: #a1dff7;
+  --accent-300: #71cff4;
+  --accent-400: #42bff0;
+  --accent-500: #13aeec;
+  --accent-600: #0f8cbd;
+  --accent-700: #0b698e;
+  --accent-800: #08465e;
+  --accent-900: #04232f;
+  --accent-950: #021118;
+  --radius: 0.5rem;
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+.dark {
+  --text: #e3edf2;
+  --text-50: #080e11;
+  --text-100: #101d23;
+  --text-200: #203946;
+  --text-300: #305669;
+  --text-400: #40738c;
+  --text-500: #508faf;
+  --text-600: #73a6bf;
+  --text-700: #96bccf;
+  --text-800: #b9d2df;
+  --text-900: #dce9ef;
+  --text-950: #eef4f7;
+
+  --background: #040a0b;
+  --background-50: #071113;
+  --background-100: #0e2225;
+  --background-200: #1b444b;
+  --background-300: #296670;
+  --background-400: #368896;
+  --background-500: #44a9bb;
+  --background-600: #69bbc9;
+  --background-700: #8fccd6;
+  --background-800: #b4dde4;
+  --background-900: #daeef1;
+  --background-950: #ecf6f8;
+
+  --primary: #2f9bc6;
+  --primary-50: #051015;
+  --primary-100: #0a2029;
+  --primary-200: #134153;
+  --primary-300: #1d617c;
+  --primary-400: #2781a5;
+  --primary-500: #30a2cf;
+  --primary-600: #5ab4d8;
+  --primary-700: #83c7e2;
+  --primary-800: #acdaec;
+  --primary-900: #d6ecf5;
+  --primary-950: #eaf6fa;
+
+  --secondary: #146585;
+  --secondary-50: #031116;
+  --secondary-100: #07222c;
+  --secondary-200: #0d4359;
+  --secondary-300: #146585;
+  --secondary-400: #1b87b1;
+  --secondary-500: #21a8de;
+  --secondary-600: #4ebae4;
+  --secondary-700: #7acbeb;
+  --secondary-800: #a6dcf2;
+  --secondary-900: #d3eef8;
+  --secondary-950: #e9f6fc;
+
+  --accent: #0e81af;
+  --accent-50: #021118;
+  --accent-100: #04232f;
+  --accent-200: #08465e;
+  --accent-300: #0b698e;
+  --accent-400: #0f8cbd;
+  --accent-500: #13aeec;
+  --accent-600: #42bff0;
+  --accent-700: #71cff4;
+  --accent-800: #a1dff7;
+  --accent-900: #d0effb;
+  --accent-950: #e7f7fd;
+  --sidebar-background: 240 5.9% 10%;
+  --sidebar-foreground: 240 4.8% 95.9%;
+  --sidebar-primary: 224.3 76.3% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 4.8% 95.9%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+/*
+  ---break---
+*/
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/*
+  ---break---
+*/
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  /* --primary: oklch(0.205 0 0); */
+  --primary-foreground: oklch(0.985 0 0);
+  /* --secondary: oklch(0.97 0 0); */
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  /* --accent: oklch(0.97 0 0); */
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/*
+  ---break---
+*/
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/*
+  ---break---
+*/
 
 @layer base {
-    :root {
-      --text: #0c161b;
-      --text-50: #edf4f7;
-      --text-100: #dce9ef;
-      --text-200: #b9d2df;
-      --text-300: #95bcd0;
-      --text-400: #72a6c0;
-      --text-500: #4f90b0;
-      --text-600: #3f738d;
-      --text-700: #2f566a;
-      --text-800: #203946;
-      --text-900: #101d23;
-      --text-950: #080e12;
-
-      --background: #f3f9fb;
-      --background-50: #ecf5f9;
-      --background-100: #d9ecf2;
-      --background-200: #b3d9e6;
-      --background-300: #8cc6d9;
-      --background-400: #66b3cc;
-      --background-500: #409fbf;
-      --background-600: #338099;
-      --background-700: #266073;
-      --background-800: #19404d;
-      --background-900: #0d2026;
-      --background-950: #061013;
-
-      --primary: #37a4d0;
-      --primary-50: #eaf6fa;
-      --primary-100: #d6ecf5;
-      --primary-200: #acdaec;
-      --primary-300: #83c7e2;
-      --primary-400: #5ab4d8;
-      --primary-500: #30a2cf;
-      --primary-600: #2781a5;
-      --primary-700: #1d617c;
-      --primary-800: #134153;
-      --primary-900: #0a2029;
-      --primary-950: #051015;
-      
-      --secondary: #7bcbeb;
-      --secondary-50: #e9f6fc;
-      --secondary-100: #d3eef8;
-      --secondary-200: #a6dcf2;
-      --secondary-300: #7acbeb;
-      --secondary-400: #4ebae4;
-      --secondary-500: #21a8de;
-      --secondary-600: #1b87b1;
-      --secondary-700: #146585;
-      --secondary-800: #0d4359;
-      --secondary-900: #07222c;
-      --secondary-950: #031116;
-
-      --accent: #50c3f1;
-      --accent-50: #e7f7fd;
-      --accent-100: #d0effb;
-      --accent-200: #a1dff7;
-      --accent-300: #71cff4;
-      --accent-400: #42bff0;
-      --accent-500: #13aeec;
-      --accent-600: #0f8cbd;
-      --accent-700: #0b698e;
-      --accent-800: #08465e;
-      --accent-900: #04232f;
-      --accent-950: #021118;
-      --radius: 0.5rem;
-      --sidebar-background: 0 0% 98%;
-      --sidebar-foreground: 240 5.3% 26.1%;
-      --sidebar-primary: 240 5.9% 10%;
-      --sidebar-primary-foreground: 0 0% 98%;
-      --sidebar-accent: 240 4.8% 95.9%;
-      --sidebar-accent-foreground: 240 5.9% 10%;
-      --sidebar-border: 220 13% 91%;
-      --sidebar-ring: 217.2 91.2% 59.8%;
-    }
-    .dark {
-      --text: #e3edf2;
-      --text-50: #080e11;
-      --text-100: #101d23;
-      --text-200: #203946;
-      --text-300: #305669;
-      --text-400: #40738c;
-      --text-500: #508faf;
-      --text-600: #73a6bf;
-      --text-700: #96bccf;
-      --text-800: #b9d2df;
-      --text-900: #dce9ef;
-      --text-950: #eef4f7;
-
-      --background: #040a0b;
-      --background-50: #071113;
-      --background-100: #0e2225;
-      --background-200: #1b444b;
-      --background-300: #296670;
-      --background-400: #368896;
-      --background-500: #44a9bb;
-      --background-600: #69bbc9;
-      --background-700: #8fccd6;
-      --background-800: #b4dde4;
-      --background-900: #daeef1;
-      --background-950: #ecf6f8;
-
-      --primary: #2f9bc6;
-      --primary-50: #051015;
-      --primary-100: #0a2029;
-      --primary-200: #134153;
-      --primary-300: #1d617c;
-      --primary-400: #2781a5;
-      --primary-500: #30a2cf;
-      --primary-600: #5ab4d8;
-      --primary-700: #83c7e2;
-      --primary-800: #acdaec;
-      --primary-900: #d6ecf5;
-      --primary-950: #eaf6fa;
-
-      --secondary: #146585;
-      --secondary-50: #031116;
-      --secondary-100: #07222c;
-      --secondary-200: #0d4359;
-      --secondary-300: #146585;
-      --secondary-400: #1b87b1;
-      --secondary-500: #21a8de;
-      --secondary-600: #4ebae4;
-      --secondary-700: #7acbeb;
-      --secondary-800: #a6dcf2;
-      --secondary-900: #d3eef8;
-      --secondary-950: #e9f6fc;
-
-      --accent: #0e81af;
-      --accent-50: #021118;
-      --accent-100: #04232f;
-      --accent-200: #08465e;
-      --accent-300: #0b698e;
-      --accent-400: #0f8cbd;
-      --accent-500: #13aeec;
-      --accent-600: #42bff0;
-      --accent-700: #71cff4;
-      --accent-800: #a1dff7;
-      --accent-900: #d0effb;
-      --accent-950: #e7f7fd;
-      --sidebar-background: 240 5.9% 10%;
-      --sidebar-foreground: 240 4.8% 95.9%;
-      --sidebar-primary: 224.3 76.3% 48%;
-      --sidebar-primary-foreground: 0 0% 100%;
-      --sidebar-accent: 240 3.7% 15.9%;
-      --sidebar-accent-foreground: 240 4.8% 95.9%;
-      --sidebar-border: 240 3.7% 15.9%;
-      --sidebar-ring: 217.2 91.2% 59.8%;
-    }
+  * {
+    @apply border-border outline-ring/50;
   }
-  
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+

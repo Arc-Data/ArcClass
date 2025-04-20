@@ -10,7 +10,7 @@ import { FaArrowRightFromBracket, FaGear } from "react-icons/fa6"
 const Navigation = () => {
     const { user, role, logoutUser } = useContext(AuthContext)
     return (
-        <div className="w-full border-b bg-background-default" >
+        <div className="w-full border-b bg-background" >
             <div className="flex items-center gap-4 py-2.5 w-full mx-auto px-2">
                 <SidebarTrigger />
                 <Link to="/" className="text-2xl font-heading">ArcClass</Link>
@@ -28,7 +28,7 @@ const Navigation = () => {
                         <DropdownMenuContent className="w-[240px]">
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <div className="flex items-center gap-2 p-2.5">
-                            <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary-default">
+                            <div className="grid w-10 h-10 overflow-hidden rounded-full place-items-center bg-primary">
                             <FaUser size={18}/>
                             </div>
                             <div className="truncate text-ellipsis font-body">
@@ -38,11 +38,11 @@ const Navigation = () => {
                         </div>
                         <DropdownMenuSeparator/>
                         <div className="*:px-2.5 *:w-full">
-                            <button className="mt-4 flex gap-4 items-center font-medium py-2.5 outline-none hover:bg-primary-default" >
+                            <button className="mt-4 flex gap-4 items-center font-medium py-2.5 outline-hidden hover:bg-primary" >
                                 <FaGear/>
                                 <span>Settings</span>
                             </button>
-                            <button className="flex gap-4 items-center font-medium py-2.5 outline-none hover:bg-primary-default" onClick={logoutUser}>
+                            <button className="flex gap-4 items-center font-medium py-2.5 outline-hidden hover:bg-primary" onClick={logoutUser}>
                                 <FaArrowRightFromBracket/>
                                 <span>Logout</span>
                             </button>

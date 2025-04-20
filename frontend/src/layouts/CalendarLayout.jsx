@@ -13,14 +13,14 @@ const CalendarLayout = () => {
                     end
                     className={({ isActive }) =>
                         `border-b-4 border-transparent py-2 px-4 ${
-                            isActive ? ' border-b-4 border-b-accent-default' : 'hover:border-b-gray-200'
+                            isActive ? ' border-b-4 border-b-accent' : 'hover:border-b-gray-200'
                         }`
                     }>To Do</NavLink>
                 <NavLink 
                     to="view" 
                     className={({ isActive }) =>
                         `border-b-4 border-transparent py-2 px-4 ${
-                            isActive ? ' border-b-4 border-b-accent-default' : 'hover:border-b-gray-200'
+                            isActive ? ' border-b-4 border-b-accent' : 'hover:border-b-gray-200'
                         }`
                     }>Calendar</NavLink>
             </div>

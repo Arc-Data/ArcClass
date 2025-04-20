@@ -32,7 +32,7 @@ const PostComment = ({ comment, onDeleteComment }) => {
 
     return (
         <div className="flex gap-4 px-8 py-2 group">
-            <div className="grid flex-shrink-0 w-8 h-8 border rounded-full bg-background-default place-items-center">
+            <div className="grid shrink-0 w-8 h-8 border rounded-full bg-background place-items-center">
                 <FaUser size={16} />
             </div>
             <div className="flex-1 space-y-4">
@@ -73,7 +73,7 @@ const PostComment = ({ comment, onDeleteComment }) => {
                     <Textarea className="text-base" required value={content} onChange={(e) => setContent(e.target.value)}></Textarea>
                     <div className="justify-end flex gap-2 *:px-4 *:py-2 *:border *:rounded-lg">
                         <button onClick={handleCancel}>Cancel</button>
-                        <button className="bg-primary-default">Edit</button>
+                        <button className="bg-primary">Edit</button>
                     </div>
                 </form>
                 }

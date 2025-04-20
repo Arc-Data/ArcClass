@@ -54,17 +54,17 @@ const Classroom = () => {
                 <img
                     src="/banner1.jpg"
                     alt=""
-                    className="absolute inset-0 object-cover select-none z-90"
+                    className="absolute inset-0 z-30 object-cover select-none"
                 />
                 {loading ? 
-                <div className="absolute inset-0 flex flex-col justify-end z-90">
+                <div className="absolute inset-0 z-20 flex flex-col justify-end">
                     <div className="p-8 space-y-2">
                         <Skeleton className="w-1/3 h-6 bg-gray-400" /> 
                         <Skeleton className="w-1/4 h-3 bg-gray-400" /> 
                     </div>
                 </div>
                 :
-                <div className="absolute inset-0 flex items-end bg-black z-90 text-primary-default bg-opacity-30 ">
+                <div className="absolute inset-0 z-40 flex items-end bg-black/30 text-primary ">
                     <div className="p-8">
                         <h2 className="text-2xl font-bold">{classroom.subject}</h2>
                         <p className="mt-2">{classroom.section}</p>
@@ -78,7 +78,7 @@ const Classroom = () => {
                 <PostSkeleton count={4} className="order-2"/>
                 :
                 <div className="space-y-10 ">
-                    <div className="px-8 py-4 border shadow hover:bg-gray-200">
+                    <div className="px-8 py-4 border shadow-sm hover:bg-gray-200">
                         <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"} filesHidden={false}/>
                     </div>
                     {optimisticLoading && <PostSkeleton count={1} />}

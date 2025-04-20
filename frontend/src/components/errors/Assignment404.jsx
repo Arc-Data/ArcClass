@@ -7,7 +7,7 @@ const Assignment404 = () => {
             <div className="flex flex-col items-center">
                 <CiFileOff size={80} />
                 <p>This assignment does not exist or may have been deleted.</p>
-                <Link to="/home" className="underline text-accent-default">Go back to home</Link>
+                <Link to="/home" className="underline text-accent">Go back to home</Link>
             </div>
         </div>
     )

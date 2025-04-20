@@ -4,7 +4,7 @@ import dayjs from "@/utils/dayjs"
 const AssignmentComment = ({ comment, loading }) => {
     return (
         <div className="flex gap-4 group">
-            <div className="grid flex-shrink-0 w-8 h-8 border rounded-full bg-background-default place-items-center">
+            <div className="grid shrink-0 w-8 h-8 border rounded-full bg-background place-items-center">
                 <FaUser size={16} />
             </div>
             <div className="flex-1 space-y-4">

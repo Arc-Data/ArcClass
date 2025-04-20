@@ -139,7 +139,7 @@ const AssignmentDetail = () => {
                         Back
                     </Button>
                     <Link to={`/classroom/${assignment.classroom.id}`} className="hover:underline" >in: {assignment.classroom.subject}</Link>
-                    <Button className="ml-auto bg-primary-default hover:bg-secondary-default">View Submissions</Button>
+                    <Button className="ml-auto bg-primary hover:bg-secondary">View Submissions</Button>
                     {assignment.classroom.teacher.id == user.nameid
                     &&
                     <Dialog open={openDeleteModal} onOpenChange={setOpenDeleteModal}>
@@ -193,7 +193,7 @@ const AssignmentDetail = () => {
                                 <FaUser size={12}/> 
                             </div>  
                             <p className="text-text-600">{assignment.classroom.teacher.fullName}</p>
-                            <Separator orientation="vertical" className="text-primary-default bg-primary-default w-[20px]"/>
+                            <Separator orientation="vertical" className="text-primary bg-primary w-[20px]"/>
                             <p className="text-text-600">{assignment.maxGrade} pts.</p>
                         </div>  
                         <p className="py-4">{assignment.description}</p>
@@ -250,7 +250,7 @@ const AssignmentDetail = () => {
                     </div>
                     <div className="flex justify-end w-full gap-4">
                         <Button variant="outline" onClick={handleCancel}>Cancel</Button>
-                        <Button className="bg-primary-default" onClick={handleEditAssignment}>Submit</Button>
+                        <Button className="bg-primary" onClick={handleEditAssignment}>Submit</Button>
                     </div>
                 </div>
                 }

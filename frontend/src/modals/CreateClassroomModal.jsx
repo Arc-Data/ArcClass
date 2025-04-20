@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils"
 import { useNavigate } from "react-router-dom"
 import HomeContext from "@/context/HomeContext"
 
+// TODO: Update Primary Button Variant
+
 const CreateClassroomModal = () => {
     const [formData, setFormData] = useState({
         subject: '',
@@ -110,7 +112,7 @@ const CreateClassroomModal = () => {
                                                 : <span>Pick a date</span>}
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="z-50 w-auto p-0" align="start" sideOffset={4}>
+                                    <PopoverContent className="w-auto p-0 z-100" align="start" sideOffset={4}>
                                         <Calendar
                                             mode="single"
                                             selected={formData.semesterStart}
@@ -154,7 +156,7 @@ const CreateClassroomModal = () => {
                                                     : <span>Pick a date</span>}
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0">
+                                        <PopoverContent className="w-auto p-0 z-100">
                                             <Calendar
                                                 mode="single"
                                                 selected={formData.semesterEnd}
@@ -184,10 +186,9 @@ const CreateClassroomModal = () => {
                     </div>
 
                     <Button
-                        type="submit"
+                    type="submit"
                         disabled={loading}
                         className="w-full"
-                        variant={"primary"}
                     >
                         {loading ? "Creating..." : "Create Classroom"}
                     </Button>
