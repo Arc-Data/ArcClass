@@ -1,9 +1,9 @@
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom"
 import AuthContext from "../../context/AuthContext"
-import { Spinner } from "flowbite-react"
 import { useActionState } from "react"
 
+// TODO: Spinner update
 const SignIn = () => {
     const { loginUser } = useContext(AuthContext)
     const [error, submitAction, loading] = useActionState(loginUser, null)
@@ -35,7 +35,7 @@ const SignIn = () => {
             </div>
             {loading ? 
             <div className="text-center">
-                <Spinner/>
+                {/* <Spinner/> */}
             </div>
             :
             <button type="submit" disabled={loading} className="w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none">Login</button>

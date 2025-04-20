@@ -9,7 +9,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Clipboard, HR } from "flowbite-react"
 import { useParams } from "react-router-dom"
 
 const ShareClassroomModal = () => {
@@ -39,10 +38,10 @@ const ShareClassroomModal = () => {
                             disabled
                             readOnly
                         />
-                        <Clipboard.WithIcon valueToCopy={id} />
+                        {/* <Clipboard.WithIcon valueToCopy={id} /> */}
                     </div>
                 </div>
-                <HR className="my-4"/>
+                {/* <HR className="my-4"/> */}
                 <DialogDescription>
                     Alternatively, copy the link below for easier joining
                 </DialogDescription>
@@ -59,7 +58,7 @@ const ShareClassroomModal = () => {
                             disabled
                             readOnly
                         />
-                        <Clipboard.WithIcon valueToCopy={`http://localhost:5173/classroom/${id}/join`} />
+                        {/* <Clipboard.WithIcon valueToCopy={`http://localhost:5173/classroom/${id}/join`} /> */}
                     </div>
                 </div>
             </DialogContent>

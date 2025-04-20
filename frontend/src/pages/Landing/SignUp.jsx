@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import { MdNavigateNext } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
-import { Spinner } from "flowbite-react";
 import { useActionState } from "react";
+
+// TODO: Spinner update
 
 const SignUp = () => {
     const { registerUser } = useContext(AuthContext)
@@ -138,7 +139,7 @@ const SignUp = () => {
 
                         {loading ? 
                         <div className="text-center">
-                            <Spinner/>
+                            {/* <Spinner/> */}
                         </div>
                         :
                         <button type="submit" disabled={loading} className="w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none">Register</button>
