@@ -10,6 +10,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { useParams } from "react-router-dom"
+import ClipboardWithIcon from "@/components/ClipboardWithIcon"
+import { Separator } from "@/components/ui/separator"
 
 const ShareClassroomModal = () => {
     const { id } = useParams()
@@ -38,10 +40,10 @@ const ShareClassroomModal = () => {
                             disabled
                             readOnly
                         />
-                        {/* <Clipboard.WithIcon valueToCopy={id} /> */}
+                        <ClipboardWithIcon valueToCopy={id} />
                     </div>
                 </div>
-                {/* <HR className="my-4"/> */}
+                <Separator className="my-2"/>
                 <DialogDescription>
                     Alternatively, copy the link below for easier joining
                 </DialogDescription>
@@ -58,7 +60,7 @@ const ShareClassroomModal = () => {
                             disabled
                             readOnly
                         />
-                        {/* <Clipboard.WithIcon valueToCopy={`http://localhost:5173/classroom/${id}/join`} /> */}
+                        <ClipboardWithIcon valueToCopy={`http://localhost:5173/classroom/${id}/join`} />
                     </div>
                 </div>
             </DialogContent>

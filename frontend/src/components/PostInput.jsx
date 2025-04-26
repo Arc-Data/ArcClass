@@ -58,7 +58,7 @@ const PostInput = ({ onSubmitPost, placeholder, filesHidden }) => {
                         <button 
                             type="button" 
                             onClick={() => removeFile(file)}
-                            className="text-gray-500 hover:text-gray-700"
+                            className="text-gray-500 "
                             aria-label={`Remove ${file.name}`}
                         >
                             <FaTimes size={12} />

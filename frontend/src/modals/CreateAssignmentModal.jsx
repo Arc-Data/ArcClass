@@ -67,7 +67,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                         <span className="font-bold uppercase ">Add File</span>
                     </button>
                 </div>
-                <ScrollArea className="h-[160px] mt-4 p-2 bg-gray-200 rounded-lg flex flex-col">
+                <ScrollArea className="h-[160px] mt-4 p-2 bg-background rounded-lg flex flex-col">
                     <input 
                         type="file"
                         multiple
@@ -86,7 +86,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger className={`${isTeacher ? "block" : "hidden"}`} asChild>
-                <button className="px-5 py-2 rounded-full bg-primary">Create Assignment</button>
+                <Button variant={"primary"}>Create Assignment</Button>
             </DialogTrigger>
             <DialogContent className="max-w-6xl font-body">
                 <form onSubmit={handleSubmit}>
@@ -107,7 +107,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                                         type="text" 
                                         id="title" 
                                         name="title"
-                                        className="w-full font-body border bg-white border-gray-500  rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" 
+                                        className="w-full font-body border bg-background border-gray-500  rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" 
                                         placeholder="Activity Name"
                                         value={data.title}
                                         onChange={handleInputChange}
@@ -120,13 +120,13 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                                             <Button
                                                 variant={"outline"}
                                                 className={cn(
-                                                    "justify-start bg-white border-gray-500 py-2.5 text-left font-body  font-normal w-full pr-8")}
+                                                    "justify-start bg-background border-gray-500 py-2.5 text-left font-body  font-normal w-full pr-8")}
                                                 >
                                                     <FaCalendar className="w-4 h-4 mr-2"/>
                                                     {data.submissionDate ? format(data.submissionDate, "PPP") : <span>Pick a date</span>}
                                                 </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0">
+                                        <PopoverContent className="w-auto p-0 z-100 ">
                                             <Calendar 
                                                 mode="single"
                                                 selected={data.submissionDate}
@@ -143,7 +143,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                                         name="description"
                                         value={data.description}
                                         placeholder="Optional"
-                                        className="bg-white border-gray-500"
+                                        className="bg-background border-gray-500"
                                         onChange={handleInputChange}/>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@ const CreateAssignmentModal = ({ isTeacher }) => {
                                         type="number" 
                                         id="maxGrade" 
                                         name="maxGrade"
-                                        className="w-full font-body bg-white border border-gray-500   rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" 
+                                        className="w-full font-body bg-background border border-gray-500   rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" 
                                         value={data.maxGrade}
                                     min={1}
                                         onChange={handleInputChange}

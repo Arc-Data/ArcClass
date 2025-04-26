@@ -21,7 +21,7 @@ const Navigation = () => {
                     }
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                        <button className="p-4 ml-auto rounded-full hover:bg-gray-200">
+                        <button className="cursor-pointer p-4 ml-auto rounded-full hover:bg-gray-200">
                             <FaUser size={16}/>
                         </button>
                         </DropdownMenuTrigger>

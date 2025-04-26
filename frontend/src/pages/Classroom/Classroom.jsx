@@ -64,7 +64,7 @@ const Classroom = () => {
                     </div>
                 </div>
                 :
-                <div className="absolute inset-0 z-40 flex items-end bg-black/30 text-primary ">
+                <div className="absolute inset-0 z-30 flex items-end bg-black/30 text-primary ">
                     <div className="p-8">
                         <h2 className="text-2xl font-bold">{classroom.subject}</h2>
                         <p className="mt-2">{classroom.section}</p>
@@ -78,7 +78,7 @@ const Classroom = () => {
                 <PostSkeleton count={4} className="order-2"/>
                 :
                 <div className="space-y-10 ">
-                    <div className="px-8 py-4 border shadow-sm hover:bg-gray-200">
+                    <div className="px-8 py-4 border shadow-sm hover:bg-gray-200 hover:dark:bg-gray-800">
                         <PostInput onSubmitPost={handleCreatePost} placeholder={"Announce something to the class"} filesHidden={false}/>
                     </div>
                     {optimisticLoading && <PostSkeleton count={1} />}

@@ -162,14 +162,14 @@ const AssignmentDetail = () => {
                                 </DialogTrigger>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <DialogContent>
+                        <DialogContent className="max-w-md">
                             <DialogHeader>
                                 <DialogTitle>Deleting Assigment</DialogTitle>
                                 <DialogDescription>
                                     This action is irreversible and will also delete associated comments and files including submissions. Proceed?
                                 </DialogDescription>
                             </DialogHeader>
-                            <div className="flex flex-col p-4 text-sm text-text-600">
+                            <div className="flex flex-col p-4 text-sm text-text-600 ">
                                 {assignment.files.length > 0 &&
                                 <div className="flex gap-4">
                                     <MdOutlineInsertComment />
@@ -210,7 +210,7 @@ const AssignmentDetail = () => {
                             <input 
                                 type="number" 
                                 onChange={handleEditAssignmentInputChange} 
-                                className="w-20 py-1 border-t-0 border-x-0" 
+                                className=" px-2 py-1 text-base border-t-0 border-b border-black rounded-none cursor-pointer border-x-0" 
                                 name="maxGrade"
                                 value={editAssignment.maxGrade}/>
                         </div>
@@ -235,7 +235,7 @@ const AssignmentDetail = () => {
                         <div className="text-sm uppercase">Title</div>
                         <input 
                             type="text" 
-                            className="w-full py-4 text-2xl font-bold border-t-0 border-gray-800 border-x-0 font-heading" 
+                            className="w-full py-4 text-2xl font-bold border border-t-0 border-gray-800 border-x-0 font-heading" 
                             onChange={handleEditAssignmentInputChange} 
                             name="title"
                             value={editAssignment.title}/>

@@ -3,7 +3,7 @@ import { FaMinus } from "react-icons/fa"
 
 const FileEntry = ({ file, handleClick }) => {
     return (
-        <div className="flex items-center gap-4 p-2 bg-white border rounded-lg shadow-lg border-accent">
+        <div className="flex items-center gap-4 p-2 bg-background border rounded-lg shadow-lg border-accent">
             <div className="p-2 rounded-full shadow-lg cursor-pointer" onClick={handleClick}>
                 <FaMinus className="text-red-500"/>
             </div>

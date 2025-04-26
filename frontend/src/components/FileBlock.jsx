@@ -16,7 +16,7 @@ const FileBlock = ({ file, handleClick }) => {
     }, [file.file])
 
     return (
-        <div className="flex items-center w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-sm cursor-pointer" onClick={() => file.mimeType.startsWith("image") && handleClick(file)}>
+        <div className="flex items-center w-full max-w-sm overflow-hidden bg-background dark:bg-gray-800 rounded-lg shadow-sm cursor-pointer" onClick={() => file.mimeType.startsWith("image") && handleClick(file)}>
             {file.mimeType.startsWith("image") ? (
             <div className="shrink-0 w-20 h-20">
                 <img
@@ -31,7 +31,7 @@ const FileBlock = ({ file, handleClick }) => {
             </div>
             )}
             <div className="flex items-center justify-between grow w-full p-4 ">
-                <p className="text-sm font-medium text-gray-900">{file.filename}</p>
+                <p className="text-sm font-medium text-text">{file.filename}</p>
                 {!file.mimeType.startsWith("image") && 
                 <div className="p-2 rounded-full group hover:bg-background-400">
                     <IoMdDownload className="group-hover:text-white" onClick={() => handleClick(file)}/>

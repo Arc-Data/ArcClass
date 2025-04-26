@@ -31,6 +31,8 @@ const DisplayFiles = ({ materials }) => {
 		}
     }
 
+	console.log("Surely this triggers")
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -55,18 +57,18 @@ const DisplayFiles = ({ materials }) => {
             {files.map(file => <FileBlock file={file} handleClick={handleClick} key={file.id}/>)}
 			{image && 
 			<Dialog open={maximizeImage} onOpenChange={setMaximizeImage} className="overflow-hidden ">
-				<DialogContent className="sm:max-w-[80vh] md:max-w-[60vw] p-0 m-0">
+				<DialogContent className="sm:max-w-[80vh] bg-black md:max-w-[60vw] p-4 m-0">
 					<VisuallyHidden asChild>
 						<DialogHeader>
 							<DialogTitle/>
 							<DialogDescription/>
 						</DialogHeader>
 					</VisuallyHidden>
-					<div className="">
+					<div className="h-full max-h-[80vh]">
 						<img
 						src={URL.createObjectURL(image.file)}
 						alt={image.filename}
-						className="object-cover w-full h-full"
+						className="object-contain w-full h-full"
 						/>
 					</div>
 				</DialogContent>

@@ -35,7 +35,7 @@ const Home = () => {
                     value={searchQuery}
                     onChange={handleFilterClassroomList}
                     placeholder="Search Class Name"
-                    className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-gray-50"/>
+                    className="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg bg-background"/>
                 {role.includes("Student") && <JoinClassroomModal/>}
             </search>
             {loading ? 

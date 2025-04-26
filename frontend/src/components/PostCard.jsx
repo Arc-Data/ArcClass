@@ -196,7 +196,7 @@ const PostCard = ({ post }) => {
                                         comment={comment} 
                                         onDeleteComment={handleDeleteComment}
                                     />))}
-            <div className="px-8 py-4 hover:bg-gray-200">
+            <div className="px-8 py-4 hover:bg-gray-200 dark:hover:bg-gray-800">
                 <PostInput onSubmitPost={content => handleCreateComment(content)} placeholder={"Add a comment"} filesHidden={true}/>
             </div>
         </div>

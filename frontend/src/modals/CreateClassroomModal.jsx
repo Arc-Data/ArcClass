@@ -76,7 +76,7 @@ const CreateClassroomModal = () => {
                             onChange={handleInputChange}
                             placeholder="Enter subject name"
                             required
-                            className="w-full font-body bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                            className="w-full font-body bg-background border border-gray-300 text-text text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                         />
                     </div>
 
@@ -89,7 +89,7 @@ const CreateClassroomModal = () => {
                             onChange={handleInputChange}
                             placeholder="Enter class section"
                             required
-                            className="w-full font-body bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                            className="w-full font-body bg-background border border-gray-300 text-text text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                         />
                     </div>
 
@@ -188,6 +188,7 @@ const CreateClassroomModal = () => {
                     <Button
                     type="submit"
                         disabled={loading}
+                        variant={"primary"}
                         className="w-full"
                     >
                         {loading ? "Creating..." : "Create Classroom"}
