@@ -31,7 +31,11 @@ namespace backend.Controllers
 
         [HttpGet("assignments")]
         [Authorize]
-        public async Task<IActionResult> GetStudentAssignmentsInRange([FromQuery] string? start, [FromQuery] string? end) 
+        public async Task<IActionResult> GetStudentAssignmentsInRange(
+            [FromQuery] string? start, 
+            [FromQuery] string? end,
+            [FromQuery] string type = "all"
+            ) 
         {
             var userId = User.GetId();
             if (userId == null) return Forbid();
@@ -49,7 +53,7 @@ namespace backend.Controllers
                 endDate = parsedEnd;
             }
 
-            var assignments = await _studentClassroomRepo.GetStudentClassroomAssignments(userId, startDate, endDate);
+            var assignments = await _studentClassroomRepo.GetStudentClassroomAssignments(userId, startDate, endDate, type);
             var assignmentsDto = assignments.Select(a => a.ToAssignmentDto());
             return Ok(assignmentsDto);
         }

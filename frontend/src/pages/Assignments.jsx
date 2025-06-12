@@ -3,6 +3,8 @@ import useAssignmentManager from "@/hooks/useAssignmentManager"
 import { useContext, useEffect, useMemo, useState } from "react"
 import dayjs from "@/utils/dayjs"
 import AssignmentItem from "@/components/Assignments/AssignmentItem"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import AssignmentGroup from "@/components/Assignments/AssignmentGroup"
 
 const Assignments = () => {
     const { authTokens } = useContext(AuthContext)
@@ -10,25 +12,12 @@ const Assignments = () => {
     const [ loading, setLoading ] = useState(true)
     const [ error, setError ] = useState()
     const { getStudentAssignments } = useAssignmentManager(authTokens)
-
-    const assignmentsGroup = useMemo(() => {
-        const group = {}
-
-        if (assignments) {
-            assignments.forEach(assignment => {
-                const dateKey = dayjs.utc(assignment.submissionDate).local().format('MMM DD YYYY')
-                group[dateKey] ||= []
-                group[dateKey].push(assignment)
-            })
-        }
-
-        return group
-    }, [assignments])
+    const [ tab, setTab ] = useState("all")
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const assignments = await getStudentAssignments()
+                const assignments = await getStudentAssignments(null, null, tab)
                 setAssignments(assignments)
             }
             catch (error) {
@@ -40,7 +29,7 @@ const Assignments = () => {
         }
         
         fetchData()
-    }, [])
+    }, [tab])
 
     if (loading) { 
         return (<div>
@@ -56,19 +45,18 @@ const Assignments = () => {
 
     return (
         <div className="container w-full px-10 mx-auto">
-            <div className="space-y-6">
-                {assignmentsGroup && Object.keys(assignmentsGroup)
-                    .sort((a, b) => dayjs(b).diff(dayjs(a)))
-                    .map(dateKey =>
-                    (
-                        <div key={dateKey} className="">
-                            <p className="my-4 text-lg font-medium">{dateKey}</p>
-                            <div className="space-y-2">
-                                {assignmentsGroup[dateKey].map(assignment => <AssignmentItem assignment={assignment} key={assignment.id}/>)}
-                            </div>
-                        </div>
-                    ))}
-            </div>
+            <Tabs value={tab} onValueChange={setTab} className="w-full">
+                <TabsList>
+                    <TabsTrigger value="all">All</TabsTrigger>
+                    <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+                </TabsList>
+                <TabsContent value="all">
+                    <AssignmentGroup assignments={assignments} />
+                </TabsContent>
+                <TabsContent value="upcoming">
+                    <AssignmentGroup assignments={assignments} />
+                </TabsContent>
+            </Tabs>
         </div>
     )
 }

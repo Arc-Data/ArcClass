@@ -84,9 +84,9 @@ const Classroom = () => {
                     {optimisticLoading && <PostSkeleton count={1} />}
                     {posts && posts.map(post => post.assignment ? 
                         (
-                            <AssignmentCard 
-                                post={post} 
-                                key={post.id} />
+                        <AssignmentCard 
+                            post={post} 
+                            key={post.id} />
                         ) 
                         : 
                         (

@@ -59,8 +59,10 @@ namespace backend.Repositories
                 .CountAsync();
         }
 
-        public async Task<IList<Assignment>> GetStudentClassroomAssignments(string userId, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<IList<Assignment>> GetStudentClassroomAssignments(string userId, DateTime? startDate = null, DateTime? endDate = null, string type = "all")
         {
+            var now = DateTime.UtcNow;
+
             var query = _context.StudentClassrooms
                 .Where(sc => sc.StudentId == userId)
                 .Include(sc => sc.Classroom)
@@ -75,6 +77,12 @@ namespace backend.Repositories
             if (endDate.HasValue)
             {
                 query = query.Where(a => a.SubmissionDate <= endDate.Value);
+            }
+
+
+            if (type == "upcoming")
+            {
+                query = query.Where(a => a.SubmissionDate > now);
             }
                 
             return await query.ToListAsync();

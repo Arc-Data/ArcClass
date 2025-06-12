@@ -65,15 +65,15 @@ const useAssignmentManager = (authTokens) => {
         })
     }  
 
-    const getStudentAssignments = async (start = null, end = null) => {
-        console.log(start, end)
-        console.log("Im here")
+
+    // NOTE: Do i want to design it as if its gonna be big in the first place?
+    const getStudentAssignments = async (start = null, end = null, type = "all") => {
         const params = {}
 
         if (start) params.start = start.toISOString()
         if (end) params.end = end.toISOString()
 
-        const response = await axios.get(`api/student/classrooms/assignments`, {
+        const response = await axios.get(`api/student/classrooms/assignments?type=${type}`, {
             headers: {
                 Authorization: `Bearer ${authTokens.access}`
             },
