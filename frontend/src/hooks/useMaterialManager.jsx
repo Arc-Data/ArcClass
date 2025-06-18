@@ -12,7 +12,7 @@ const useMaterialManager = (authTokens) => {
     }
 
     const deleteMaterial = (assignmentId, id) => {
-        const response = axios.delete(`api/${assignmentId}/files/${id}`, {
+        const response = axios.delete(`api/assignments/${assignmentId}/files/${id}`, {
             headers: {
                 Authorization: `Bearer ${authTokens.access}`
             }

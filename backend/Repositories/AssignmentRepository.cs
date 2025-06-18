@@ -83,7 +83,6 @@ namespace backend.Repositories
             foreach (var material in assignment.Materials) {
                 _fileService.DeleteFileAsync(material.FilePath); 
                 _context.Materials.Remove(material);
-
             }
 
             if (assignment.Comments.Any()) {

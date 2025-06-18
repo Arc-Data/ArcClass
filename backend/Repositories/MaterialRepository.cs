@@ -9,20 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
-    public class MaterialRepository(ApplicationDBContext context) : IMaterialRepository
+    public class MaterialRepository(ApplicationDBContext context, IFileStorageService fileService) : IMaterialRepository
     {
         private readonly ApplicationDBContext _context = context;
+        private readonly IFileStorageService _fileService = fileService;
 
         public async Task<Material> CreateAsync(Material material)
         {
             _context.Materials.Add(material);
             await _context.SaveChangesAsync();
             return material;
-        }
-
-        public Task<Material> Delete(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<IList<Material>> GetByClassroomIdAsync(string id)
@@ -53,7 +49,9 @@ namespace backend.Repositories
                 return false;
             }
 
+            _fileService.DeleteFileAsync(existingMaterial.FilePath);
             _context.Materials.Remove(existingMaterial);
+
             await _context.SaveChangesAsync();
             return true;
         }

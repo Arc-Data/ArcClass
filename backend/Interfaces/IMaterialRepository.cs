@@ -9,7 +9,6 @@ namespace backend.Interfaces
     public interface IMaterialRepository
     {
         Task<Material> CreateAsync(Material material);
-        Task<Material> Delete(int id);
         Task<IList<Material>> GetByClassroomIdAsync(string id);
         Task<Material?> GetByIdAsync(int id);
         Task<IList<Material>> GetByPostIdAsync(int id);
