@@ -13,5 +13,7 @@ namespace backend.Interfaces
         Task<IList<Material>> GetByClassroomIdAsync(string id);
         Task<Material?> GetByIdAsync(int id);
         Task<IList<Material>> GetByPostIdAsync(int id);
+        Task<IList<Material>> GetByAssignmentIdAsync(int assignmentId);
+        Task<bool> DeleteAsync(Material material);
     }
 }

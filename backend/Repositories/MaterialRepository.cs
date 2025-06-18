@@ -39,5 +39,23 @@ namespace backend.Repositories
         {
             return await _context.Materials.Where(m => m.PostId == id).ToListAsync();
         }
+
+        public async Task<IList<Material>> GetByAssignmentIdAsync(int assignmentId)
+        {
+            return await _context.Materials.Where(m => m.AssignmentId == assignmentId).ToListAsync();
+        }
+
+        public async Task<bool> DeleteAsync(Material material)
+        {
+            var existingMaterial = await _context.Materials.FindAsync(material.Id);
+            if (existingMaterial == null)
+            {
+                return false;
+            }
+
+            _context.Materials.Remove(existingMaterial);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

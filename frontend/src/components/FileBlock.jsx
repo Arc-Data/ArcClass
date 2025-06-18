@@ -1,22 +1,24 @@
+import { Button } from "@/components/ui/button";
 import mimeTypeToIcon from "@/utils/mimeTypeToIcon";
-import { useEffect, useState } from "react"
+import { X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 
-
-const FileBlock = ({ file, handleClick }) => {
+const FileBlock = ({ file, handleClick, isEditing, onDelete }) => {
     const [ objectUrl, setObjectUrl ] = useState()
 
     useEffect(() => {
         const url = URL.createObjectURL(file.file)
         setObjectUrl(url)
-
         return () => {
             URL.revokeObjectURL(url)
         }
     }, [file.file])
 
+    console.log(file, isEditing)
+
     return (
-        <div className="flex items-center w-full max-w-sm overflow-hidden bg-background dark:bg-gray-800 rounded-lg shadow-sm cursor-pointer" onClick={() => file.mimeType.startsWith("image") && handleClick(file)}>
+        <div className={`flex items-center w-full max-w-sm bg-background dark:bg-gray-800 rounded-lg shadow-sm cursor-pointer relative`}>
             {file.mimeType.startsWith("image") ? (
             <div className="shrink-0 w-20 h-20">
                 <img
@@ -30,7 +32,19 @@ const FileBlock = ({ file, handleClick }) => {
                 {mimeTypeToIcon(file.mimeType)}
             </div>
             )}
-            <div className="flex items-center justify-between grow w-full p-4 ">
+            <div className="flex items-center justify-between grow w-full p-4 relative">
+                {isEditing &&
+                <Button
+                    variant="destructive"
+                    className="absolute -top-5 right-2 h-8 w-8 rounded-full"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(file.id);
+                    }}
+                >
+                    <X className="w-4 h-4 text-white" />
+                </Button>
+                }
                 <p className="text-sm font-medium text-text">{file.filename}</p>
                 {!file.mimeType.startsWith("image") && 
                 <div className="p-2 rounded-full group hover:bg-background-400">

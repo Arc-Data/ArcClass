@@ -5,8 +5,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader } from "./ui/dia
 import FileBlock from "./FileBlock"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+import useMaterialManager from "@/hooks/useMaterialManager"
 
-const DisplayFiles = ({ materials }) => {
+const DisplayFiles = ({ materials, isEditing, onDelete }) => {
     const [ files, setFiles ] = useState([])
 	const [ maximizeImage, setMaximizeImage ] = useState(false)
 	const [ image, setImage ] = useState()
@@ -14,6 +15,9 @@ const DisplayFiles = ({ materials }) => {
     const [ loading, setLoading ] = useState(true)
     const { authTokens } = useContext(AuthContext)
     const { getFiles } = useFileManager(authTokens)
+
+	// delete material function
+	
 
     const handleClick = (file) => {
 		if (file.mimeType === "image/png") {
@@ -31,14 +35,13 @@ const DisplayFiles = ({ materials }) => {
 		}
     }
 
-	console.log("Surely this triggers")
-
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
             try {
                 const fetchedFiles = await getFiles(materials)
-                setFiles(fetchedFiles)
+                console.log(fetchedFiles)
+				setFiles(fetchedFiles)
             }
             catch (error) {
 				console.log(error)
@@ -48,13 +51,14 @@ const DisplayFiles = ({ materials }) => {
             }
         }
         fetchData()
-    }, [])
+    }, [materials])
 
 	if (loading) return (<div></div>)
 
     return (
+		// If user is editing, show delete button
         <div className="grid w-full gap-4 md:grid-cols-2">
-            {files.map(file => <FileBlock file={file} handleClick={handleClick} key={file.id}/>)}
+            {files.map(file => <FileBlock file={file} handleClick={handleClick} key={file.id} isEditing={isEditing} onDelete={() => onDelete(file.id)}/>)}
 			{image && 
 			<Dialog open={maximizeImage} onOpenChange={setMaximizeImage} className="overflow-hidden ">
 				<DialogContent className="sm:max-w-[80vh] bg-black md:max-w-[60vw] p-4 m-0">

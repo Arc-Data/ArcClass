@@ -252,8 +252,7 @@ namespace backend.Controllers
             return Ok(postsDto);
         }
 
-        // TODO : Research whether its possible to return a <b></b> html
-
+        // FIXME: Create Assignment Wrong Date of Creation
         [HttpPost("{id}/assignment")]
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromForm] CreateAssignmentDto assignmentDto)

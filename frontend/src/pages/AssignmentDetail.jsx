@@ -3,7 +3,7 @@ import DisplayFiles from "@/components/DisplayFiles"
 import { Skeleton } from "@/components/ui/skeleton"
 import AuthContext from "@/context/AuthContext"
 import useAssignmentManager from "@/hooks/useAssignmentManager"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { FaArrowLeft, FaPencil } from "react-icons/fa6"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { getDeadline } from "@/utils/dayjs"
@@ -20,9 +20,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import dayjs from "@/utils/dayjs"
 import { Calendar } from "@/components/ui/calendar"
+import useMaterialManager from "@/hooks/useMaterialManager"
+import { set } from "date-fns"
 
 
-// TODO : Close dialog on delete
 const AssignmentDetail = () => {
     const { id } = useParams()
     const { user, authTokens } = useContext(AuthContext)
@@ -31,6 +32,12 @@ const AssignmentDetail = () => {
     const [ openDeleteModal, setOpenDeleteModal ] = useState(false)
     const { getAssignment, deleteAssignment, updateAssignment } = useAssignmentManager(authTokens)
     const [ isEditing, setEditing ] = useState(false)
+    const [ assignmentFiles, setAssignmentFiles ] = useState()
+
+    const { 
+        attachMaterials,
+        deleteMaterial,
+    } = useMaterialManager(authTokens)
 
     const [ editAssignment, setEditAssignment ] = useState({
         maxGrade: '',
@@ -40,13 +47,22 @@ const AssignmentDetail = () => {
     })
 
     const [ error, setError ] = useState()
+    const fileInputRef = useRef()
     const navigate = useNavigate()
 
     const handleBack = () => {
         navigate(-1)
     }
 
-    // TODO : File Uploads
+    const handleAddFilesClick = () => {
+        fileInputRef.current.click()
+    }
+
+    // how do i do an optimistic update (delete) here?
+    const handleDeleteFile = async (fileId) => {
+        await deleteMaterial(id, fileId)
+        setAssignmentFiles(prevFiles => prevFiles.filter(file => file.id !== fileId))
+    }
 
     const handleCancel = () => {
         setEditAssignment({
@@ -89,6 +105,30 @@ const AssignmentDetail = () => {
         setError({ status: 404} )
     }
 
+    const handleFilesChange = async (e) => {
+        const files = Array.from(e.target.files)
+        for (const file of files) {
+            try {
+                await attachMaterials(id, file)
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+
+        const updatedAssignment = await getAssignment(id)
+        setAssignment(updatedAssignment)
+        setEditAssignment({
+            title: updatedAssignment.title,
+            maxGrade: updatedAssignment.maxGrade,
+            description: updatedAssignment.description, 
+            submissionDate: updatedAssignment.submissionDate,
+        })
+        setAssignmentFiles(updatedAssignment.files)
+
+        e.target.value = null // Reset the input value
+    }
+
     useEffect(() => {
         const fetchAssignmentData = async () => {
             try {
@@ -100,6 +140,8 @@ const AssignmentDetail = () => {
                     description: fetchAssignment.description,
                     submissionDate: fetchAssignment.submissionDate,
                 })
+
+                setAssignmentFiles(fetchAssignment.files)
             }
             catch (error) {
                 console.log(error)
@@ -254,14 +296,31 @@ const AssignmentDetail = () => {
                     </div>
                 </div>
                 }
-                {assignment.files && assignment.files.length > 0 && 
+                {assignmentFiles && assignmentFiles.length > 0 && 
                 <div className="pt-8 pb-4 space-y-4 border-t">
                     {isEditing && 
                     <div className="text-right">
-                        <Button className="" variant="outline"><FaPlus className="mr-2"/>Add more files</Button>
+                        <Button 
+                            variant="outline"
+                            onClick={handleAddFilesClick}
+                            >
+                            <FaPlus className="mr-2"/>
+                            Add more files
+                        </Button>
+                        <input 
+                            type="file" 
+                            ref={fileInputRef} 
+                            multiple
+                            className="hidden" 
+                            onChange={handleFilesChange}
+                            />
                     </div>
                     }
-                    <DisplayFiles materials={assignment.files}/>
+                    <DisplayFiles 
+                        materials={assignmentFiles} 
+                        isEditing={isEditing} 
+                        onDelete={handleDeleteFile}
+                        />
                 </div>
                 }
                 {!isEditing && 

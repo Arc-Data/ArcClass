@@ -17,19 +17,31 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/assignments")]
-    public class AssignmentController(
-        IAssignmentRepository assignmentRepo,
-        ICommentRepository commentRepo, 
-        UserManager<AppUser> userManager,
-        IStudentClassroomRepository studentClassroomRepo,
-        IPostRepository postRepo
-        ) : ControllerBase
+    public class AssignmentController : ControllerBase
     {
-        private readonly IAssignmentRepository _assignmentRepo = assignmentRepo;
-        private readonly UserManager<AppUser> _userManager = userManager;
-        private readonly ICommentRepository _commentRepo = commentRepo;
-        private readonly IStudentClassroomRepository _studentClassroomRepo = studentClassroomRepo;
-        private readonly IPostRepository _postRepo = postRepo;
+        private readonly IAssignmentRepository _assignmentRepo;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly ICommentRepository _commentRepo;
+        private readonly IPostRepository _postRepo;
+        private readonly IMaterialRepository _materialRepo;
+        private readonly IFileStorageService _fileStorageService;
+
+        public AssignmentController(
+            IAssignmentRepository assignmentRepo,
+            ICommentRepository commentRepo, 
+            UserManager<AppUser> userManager,
+            IPostRepository postRepo,
+            IMaterialRepository materialRepo,
+            IFileStorageService fileStorageService
+        )
+        {
+            _assignmentRepo = assignmentRepo;
+            _userManager = userManager;
+            _commentRepo = commentRepo;
+            _postRepo = postRepo;
+            _materialRepo = materialRepo;
+            _fileStorageService = fileStorageService;
+        }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Teacher")]
@@ -42,6 +54,7 @@ namespace backend.Controllers
             return NoContent();
         }
 
+        // FIXME: Get assignments should be limited to teachers and students from a specific class
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetById([FromRoute] int id)
@@ -104,6 +117,60 @@ namespace backend.Controllers
 
             await _commentRepo.CreateAsync(comment);
             return Ok(comment.ToCommentDto());
+        }
+
+        [HttpPost("{id}/files")]
+        [Authorize]
+        public async Task<IActionResult> AttachMaterial([FromRoute] int id, [FromForm] IFormFile file) 
+        {
+            if (file == null || file.Length == 0) 
+                return BadRequest("No file uploaded.");
+
+            var assignment = await _assignmentRepo.GetByIdAsync(id);
+            if (assignment == null)
+                return NotFound("Assignment not found");
+
+            // Save file to storage
+            var filePath = await _fileStorageService.SaveFileAsync(file, assignment.ClassroomId);
+
+            // Create material record
+            var material = new Material {
+                FileName = file.FileName,
+                FilePath = filePath,
+                AssignmentId = id,
+                ClassroomId = assignment.ClassroomId
+            };
+            await _materialRepo.CreateAsync(material);
+
+            return Ok("File attached successfully");
+        }
+
+        [HttpGet("{id}/files")]
+        [Authorize]
+        public async Task<IActionResult> GetMaterials([FromRoute] int id) 
+        {
+            var assignment = await _assignmentRepo.GetByIdAsync(id);
+            if (assignment == null)
+                return NotFound("Assignment not found");
+
+            var materials = await _materialRepo.GetByAssignmentIdAsync(id);
+            return Ok(materials);
+        }
+
+        [HttpDelete("{assignmentId}/files/{materialId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteMaterial([FromRoute] int assignmentId, [FromRoute] int materialId) 
+        {
+            var assignment = await _assignmentRepo.GetByIdAsync(assignmentId);
+            if (assignment == null)
+                return NotFound("Assignment not found");
+
+            var material = await _materialRepo.GetByIdAsync(materialId);
+            if (material == null || material.AssignmentId != assignmentId)
+                return NotFound("Material not found");
+
+            await _materialRepo.DeleteAsync(material);
+            return NoContent();
         }
     }
 }
