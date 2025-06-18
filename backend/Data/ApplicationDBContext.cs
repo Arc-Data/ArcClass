@@ -94,14 +94,12 @@ namespace backend.Data
                 .HasForeignKey(a => a.AssignmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // TODO : Delete material files on classroom deletion
             builder.Entity<Classroom>()
                 .HasMany(c => c.Materials)
                 .WithOne(m => m.Classroom)
                 .HasForeignKey(m => m.ClassroomId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // TODO : Delete material files on post delete
             builder.Entity<Post>()
                 .HasMany(p => p.Materials)
                 .WithOne(m => m.Post)

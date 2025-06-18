@@ -19,7 +19,7 @@ namespace backend.Services
                 throw new ArgumentException("BaseUploadPath configuration is missing or invalid.");
             }
         }
-        public void DeleteFileAsync(string filePath)
+        public void DeleteFile(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
             {

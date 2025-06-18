@@ -9,8 +9,6 @@ import { cn } from "@/lib/utils"
 import { useNavigate } from "react-router-dom"
 import HomeContext from "@/context/HomeContext"
 
-// TODO: Update Primary Button Variant
-
 const CreateClassroomModal = () => {
     const [formData, setFormData] = useState({
         subject: '',

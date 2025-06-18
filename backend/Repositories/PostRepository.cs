@@ -9,9 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
-    public class PostRepository(ApplicationDBContext context) : IPostRepository
+    public class PostRepository(ApplicationDBContext context, IFileStorageService fileService) : IPostRepository
     {
         private readonly ApplicationDBContext _context = context;
+        private readonly IFileStorageService _fileService = fileService;
 
         public async Task<Post?> CreateAsync(Post post)
         {
@@ -76,7 +77,8 @@ namespace backend.Repositories
 
                 foreach (var material in materials)
                 {
-                    material.PostId = null;
+                    _fileService.DeleteFile(material.FilePath);
+                    _context.Materials.Remove(material);
                 }
 
                 _context.Posts.Remove(post);

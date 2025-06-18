@@ -49,7 +49,7 @@ namespace backend.Repositories
                 return false;
             }
 
-            _fileService.DeleteFileAsync(existingMaterial.FilePath);
+            _fileService.DeleteFile(existingMaterial.FilePath);
             _context.Materials.Remove(existingMaterial);
 
             await _context.SaveChangesAsync();

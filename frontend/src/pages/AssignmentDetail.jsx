@@ -1,27 +1,25 @@
-import { Button } from "@/components/ui/button"
+import CommentSection from "@/components/AssignmentDetail/CommentSection"
 import DisplayFiles from "@/components/DisplayFiles"
+import Assignment404 from "@/components/errors/Assignment404"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Textarea } from "@/components/ui/textarea"
 import AuthContext from "@/context/AuthContext"
 import useAssignmentManager from "@/hooks/useAssignmentManager"
-import { useContext, useEffect, useRef, useState } from "react"
-import { FaArrowLeft, FaPencil } from "react-icons/fa6"
-import { Link, useNavigate, useParams } from "react-router-dom"
-import { getDeadline } from "@/utils/dayjs"
-import { FaClock, FaEllipsisV, FaPlus, FaRegClock, FaTrash, FaUser } from "react-icons/fa"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import CommentSection from "@/components/AssignmentDetail/CommentSection"
-import { BiAlarmExclamation } from "react-icons/bi";
-import { Separator } from "@/components/ui/separator"
-import { MdOutlineInsertComment } from "react-icons/md";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog"
-import Assignment404 from "@/components/errors/Assignment404"
-import { Textarea } from "@/components/ui/textarea"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import dayjs from "@/utils/dayjs"
-import { Calendar } from "@/components/ui/calendar"
 import useMaterialManager from "@/hooks/useMaterialManager"
-import { set } from "date-fns"
+import dayjs, { getDeadline } from "@/utils/dayjs"
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { useContext, useEffect, useRef, useState } from "react"
+import { BiAlarmExclamation } from "react-icons/bi"
+import { FaEllipsisV, FaPlus, FaRegClock, FaTrash, FaUser } from "react-icons/fa"
+import { FaArrowLeft, FaPencil } from "react-icons/fa6"
+import { MdOutlineInsertComment } from "react-icons/md"
+import { Link, useNavigate, useParams } from "react-router-dom"
 
 
 const AssignmentDetail = () => {
@@ -36,7 +34,6 @@ const AssignmentDetail = () => {
 
     const { 
         attachMaterials,
-        deleteMaterial,
     } = useMaterialManager(authTokens)
 
     const [ editAssignment, setEditAssignment ] = useState({
@@ -56,12 +53,6 @@ const AssignmentDetail = () => {
 
     const handleAddFilesClick = () => {
         fileInputRef.current.click()
-    }
-
-    // how do i do an optimistic update (delete) here?
-    const handleDeleteFile = async (fileId) => {
-        await deleteMaterial(id, fileId)
-        setAssignmentFiles(prevFiles => prevFiles.filter(file => file.id !== fileId))
     }
 
     const handleCancel = () => {
@@ -319,7 +310,6 @@ const AssignmentDetail = () => {
                     <DisplayFiles 
                         materials={assignmentFiles} 
                         isEditing={isEditing} 
-                        onDelete={handleDeleteFile}
                         />
                 </div>
                 }

@@ -24,7 +24,6 @@ import CalendarView from "./pages/CalendarView"
 /* 
 // [ ] : Create Profile Customization Section
 // Optionally a mobile menu option similar to anilist 
-// [ ] : Centralized button designs
 // [ ] : Toasters!
 // [ ] : Custom default page
 // [ ] : Add a feature in progress component

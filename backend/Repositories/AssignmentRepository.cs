@@ -57,11 +57,6 @@ namespace backend.Repositories
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        /* NOTE: Regarding Repository Function Distinctions
-        // Would it be better to regard classroom assignments as a method 
-        // of the classroom repository or does it work best as a method within
-        // the assignment repository
-        */
         public async Task<IList<Assignment>> GetClassroomAssignments(string id)
         {
             return await _context.Assignments
@@ -81,7 +76,7 @@ namespace backend.Repositories
             if (assignment == null) return false;
 
             foreach (var material in assignment.Materials) {
-                _fileService.DeleteFileAsync(material.FilePath); 
+                _fileService.DeleteFile(material.FilePath); 
                 _context.Materials.Remove(material);
             }
 

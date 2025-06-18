@@ -15,16 +15,14 @@ const FileBlock = ({ file, handleClick, isEditing, onDelete }) => {
         }
     }, [file.file])
 
-    console.log(file, isEditing)
-
     return (
-        <div className={`flex items-center w-full max-w-sm bg-background dark:bg-gray-800 rounded-lg shadow-sm cursor-pointer relative`}>
+        <div className={`flex items-center w-full  bg-background-100 dark:bg-gray-800 rounded-lg shadow-lg cursor-pointer relative`}>
             {file.mimeType.startsWith("image") ? (
-            <div className="shrink-0 w-20 h-20">
+            <div className="shrink-0 w-20 h-20 overflow-hidden" onClick={() => handleClick(file)}>
                 <img
                 src={objectUrl}
                 alt={file.filename}
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full rounded-tl-lg rounded-bl-lg"
                 />
             </div>
             ) : (

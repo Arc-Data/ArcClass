@@ -1,26 +1,38 @@
 import AuthContext from "@/context/AuthContext"
-import useFileManager from "@/hooks/useFileManager"
-import { useContext, useEffect, useMemo, useState } from "react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader } from "./ui/dialog"
-import FileBlock from "./FileBlock"
+import useMaterialManager from "@/hooks/useMaterialManager"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
-import useMaterialManager from "@/hooks/useMaterialManager"
+import { useContext, useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import FileBlock from "./FileBlock"
+import { Dialog, DialogContent, DialogDescription, DialogHeader } from "./ui/dialog"
 
-const DisplayFiles = ({ materials, isEditing, onDelete }) => {
+const DisplayFiles = ({ materials, isEditing }) => {
+	const { id } = useParams()
     const [ files, setFiles ] = useState([])
 	const [ maximizeImage, setMaximizeImage ] = useState(false)
 	const [ image, setImage ] = useState()
 
     const [ loading, setLoading ] = useState(true)
     const { authTokens } = useContext(AuthContext)
-    const { getFiles } = useFileManager(authTokens)
+    
+	const { 
+		getMaterials, 
+		deleteMaterial,
+	} = useMaterialManager(authTokens)
 
-	// delete material function
-	
+	const handleDeleteFile = async (materialId) => {
+		try {
+			await deleteMaterial(id, materialId)
+			setFiles(files.filter(file => file.id !== materialId))
+		} catch (error) {
+			console.error("Error deleting file:", error)
+		}
+	}
 
     const handleClick = (file) => {
-		if (file.mimeType === "image/png") {
+		console.log(file)
+		if (file.mimeType === "image/png" || file.mimeType === "image/jpeg" || file.mimeType === "image/gif") {
 			setImage(file)
 			setMaximizeImage(prev => !prev)
 			
@@ -31,7 +43,6 @@ const DisplayFiles = ({ materials, isEditing, onDelete }) => {
 			link.download = file.filename
 			link.click()
 			URL.createObjectURL(blobUrl)
-			
 		}
     }
 
@@ -39,8 +50,7 @@ const DisplayFiles = ({ materials, isEditing, onDelete }) => {
         const fetchData = async () => {
             setLoading(true)
             try {
-                const fetchedFiles = await getFiles(materials)
-                console.log(fetchedFiles)
+                const fetchedFiles = await getMaterials(materials)
 				setFiles(fetchedFiles)
             }
             catch (error) {
@@ -58,7 +68,7 @@ const DisplayFiles = ({ materials, isEditing, onDelete }) => {
     return (
 		// If user is editing, show delete button
         <div className="grid w-full gap-4 md:grid-cols-2">
-            {files.map(file => <FileBlock file={file} handleClick={handleClick} key={file.id} isEditing={isEditing} onDelete={() => onDelete(file.id)}/>)}
+            {files.map(file => <FileBlock file={file} handleClick={handleClick} key={file.id} isEditing={isEditing} onDelete={() => handleDeleteFile(file.id)}/>)}
 			{image && 
 			<Dialog open={maximizeImage} onOpenChange={setMaximizeImage} className="overflow-hidden ">
 				<DialogContent className="sm:max-w-[80vh] bg-black md:max-w-[60vw] p-4 m-0">

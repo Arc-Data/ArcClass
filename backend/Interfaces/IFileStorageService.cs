@@ -8,6 +8,6 @@ namespace backend.Interfaces
     public interface IFileStorageService
     {
         Task<string> SaveFileAsync(IFormFile file, string classroomId);
-        void DeleteFileAsync(string filePath);
+        void DeleteFile(string filePath);
     }
 }

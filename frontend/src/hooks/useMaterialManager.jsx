@@ -1,14 +1,31 @@
 import axios from "@/utils/axios"
 
 const useMaterialManager = (authTokens) => {
-    const getMaterials = (id) => {
-        const response = axios.get(`api/${id}/files`, {
-            headers: {
-                Authorization: `Bearer ${authTokens.access}`
+    const getMaterials = async (materials) => {
+        const filePromises = materials.map(async (material) => {
+            try {
+                const response = await axios.get(`api/file/${material.id}`, {
+                    headers: {
+                        Authorization: `Bearer ${authTokens.access}`
+                    },
+                    responseType: "blob"
+                })
+
+                return {
+                    id: material.id,
+                    filename: material.fileName,
+                    file: response.data,
+                    mimeType: response.headers["content-type"]
+                }
+            }
+            catch (e) {
+                console.error("Error fetching file", e)
+                return null
             }
         })
 
-        return response.data
+        const filesResults = await Promise.all(filePromises)
+        return filesResults
     }
 
     const deleteMaterial = (assignmentId, id) => {

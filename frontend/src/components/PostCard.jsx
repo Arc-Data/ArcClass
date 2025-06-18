@@ -1,20 +1,18 @@
-import { FaEllipsisV, FaTrash, FaUser } from "react-icons/fa"
-import dayjs from "@/utils/dayjs"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import PostInput from "./PostInput"
-import { useContext, useEffect, useState } from "react"
-import PostComment from "./PostComment"
-import useCommentManager from "@/hooks/useCommentManager"
 import AuthContext from "@/context/AuthContext"
-import { FaPencil, FaUserGroup } from "react-icons/fa6"
-import { Textarea } from "./ui/textarea"
+import ClassroomContext from "@/context/ClassroomContext"
+import useCommentManager from "@/hooks/useCommentManager"
 import usePostManager from "@/hooks/usePostManager"
+import dayjs from "@/utils/dayjs"
+import { useContext, useState } from "react"
+import { FaEllipsisV, FaTrash, FaUser } from "react-icons/fa"
+import { FaPencil, FaUserGroup } from "react-icons/fa6"
+import DisplayFiles from "./DisplayFiles"
+import PostComment from "./PostComment"
+import PostInput from "./PostInput"
 import PostSkeleton from "./Skeleton/PostSkeleton"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
-import ClassroomContext from "@/context/ClassroomContext"
-import axios from "@/utils/axios"
-import useFileManager from "@/hooks/useFileManager"
-import DisplayFiles from "./DisplayFiles"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { Textarea } from "./ui/textarea"
 
 /* 
 // [ ]: Confirmation to delete associated materials
@@ -43,7 +41,6 @@ const PostCard = ({ post }) => {
     const createdAt = dayjs(post.createdAt)
     const dateModified = dayjs(post.dateModified)
 
-    // TODO : Updating posts should put them at the top of the posts (reflecting recency)
     const handleCancel = () => {
         setEditing(false)
         setContent(post.content)
@@ -138,12 +135,11 @@ const PostCard = ({ post }) => {
                                     
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            <DialogContent>
+                            <DialogContent className="max-w-md">
                                 <DialogHeader>
-                                    <DialogTitle>Are you absolutely sure</DialogTitle>
+                                    <DialogTitle>Deleting Post</DialogTitle>
                                     <DialogDescription>
-                                        This action cannot be undone. This will permanently delete your account
-                                        and remove your data from our servers.
+                                        This action is irreversible and will also delete associated comments and files. Proceed?
                                     </DialogDescription>
                                 </DialogHeader>
                                 <DialogFooter>
