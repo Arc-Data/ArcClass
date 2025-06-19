@@ -252,7 +252,6 @@ namespace backend.Controllers
             return Ok(postsDto);
         }
 
-        // FIXME: Create Assignment Wrong Date of Creation
         [HttpPost("{id}/assignment")]
         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> CreateAssignment([FromRoute] string id, [FromForm] CreateAssignmentDto assignmentDto)
@@ -260,13 +259,13 @@ namespace backend.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userId = User.GetId();
-
             var classroom = await _classroomRepo.GetByIdAsync(id);
             if (classroom == null) return NotFound();
             
             if (classroom.TeacherId != User.GetId()) return Unauthorized();
             
             var now = DateTime.UtcNow;
+            Console.WriteLine($"Saving time: {now}");
 
             var assignment = new Assignment 
             {
@@ -323,7 +322,6 @@ namespace backend.Controllers
             return Ok(assignmentsDto);
         }
 
-        // TODO : Debug Date Modified not reflecting the same default time as created at or more recent
         [HttpPost("{id}/post")]
         [Authorize]
         public async Task<IActionResult> CreatePost([FromRoute] string id, [FromForm] CreatePostDto postDto)

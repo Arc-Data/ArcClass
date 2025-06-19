@@ -105,7 +105,7 @@ const PostCard = ({ post }) => {
                     <div className="flex justify-between text-bold">
                         <div className="">
                             <p>{post.user.fullName}</p>
-                            <p className="text-sm">{dayjs(post.createdAt).format('MMM DD, h:mm A')}</p>
+                            <p className="text-sm">{dayjs.utc(post.createdAt).local().format('MMM DD, h:mm A')}</p>
                             {dateModified.isAfter(createdAt) && " (edited)"}
                         </div>
                         <Dialog>

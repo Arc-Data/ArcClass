@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 /*
 // [ ] - Reduce data fetches on delete methods
 // Refer to TryDeletePost for validating on fetch
-// [ ] - Delete related materials from the server on specific delete requests
 */
 namespace backend.Controllers
 {
