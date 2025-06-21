@@ -10,5 +10,6 @@ namespace backend.Models
     public class Student : AppUser
     {
         public IList<StudentClassroom> StudentClassrooms { get; set; } = [];
+        public IList<AssignmentSubmission> AssignmentSubmissions { get; set; } = [];
     }
 }

@@ -19,5 +19,6 @@ namespace backend.Models
         public int MaxGrade { get; set; }   
         public IList<Material> Materials { get; set; } = [];
         public IList<Comment> Comments { get; set; } = [];
+        public IList<AssignmentSubmission> AssignmentSubmissions { get; set; } = [];
     }
 }

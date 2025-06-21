@@ -27,6 +27,7 @@ namespace backend.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Material> Materials { get; set; }
+        public DbSet<AssignmentSubmission> AssignmentSubmissions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -136,6 +137,24 @@ namespace backend.Data
                 .HasOne(sc => sc.Classroom)
                 .WithMany(c => c.StudentClassrooms)
                 .HasForeignKey(sc => sc.ClassroomId);
+
+            builder.Entity<AssignmentSubmission>()
+                .HasOne(a => a.Student)
+                .WithMany(s => s.AssignmentSubmissions)
+                .HasForeignKey(a => a.StudentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<AssignmentSubmission>()
+                .HasOne(a => a.Assignment)
+                .WithMany(a => a.AssignmentSubmissions)
+                .HasForeignKey(a => a.AssignmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<AssignmentSubmission>()
+                .HasMany(a => a.Materials)
+                .WithOne(m => m.AssignmentSubmission)
+                .HasForeignKey(m => m.AssignmentSubmissionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

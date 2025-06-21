@@ -82,7 +82,6 @@ namespace backend.Controllers
             assignment.Title = assignmentDto.Title;
             assignment.MaxGrade = assignmentDto.MaxGrade;
 
-            // TODO : Update the Post connected to the Assignment
             var post = await _postRepo.GetByAssignmentId(id);
             if (post == null) return StatusCode(500, "How the hell did you even trigger this edge case");
             post.DateModified = DateTime.UtcNow;
@@ -126,6 +125,7 @@ namespace backend.Controllers
             if (file == null || file.Length == 0) 
                 return BadRequest("No file uploaded.");
 
+            // the post related to the assignment should have dateModified be updated when a file is added
             var assignment = await _assignmentRepo.GetByIdAsync(id);
             if (assignment == null)
                 return NotFound("Assignment not found");
@@ -141,6 +141,12 @@ namespace backend.Controllers
                 ClassroomId = assignment.ClassroomId
             };
             await _materialRepo.CreateAsync(material);
+
+            var post = await _postRepo.GetByAssignmentId(id);
+            if (post != null) {
+                post.DateModified = DateTime.UtcNow;
+                await _postRepo.UpdateAsync(post);
+            }
 
             return Ok("File attached successfully");
         }
