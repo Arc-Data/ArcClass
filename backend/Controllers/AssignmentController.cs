@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Dtos.Assignment;
+using backend.Dtos.AssignmentSubmission;
 using backend.Dtos.Post;
 using backend.Extensions;
 using backend.Interfaces;
@@ -17,31 +18,23 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/assignments")]
-    public class AssignmentController : ControllerBase
+    public class AssignmentController(
+        IAssignmentRepository assignmentRepo,
+        ICommentRepository commentRepo,
+        UserManager<AppUser> userManager,
+        IPostRepository postRepo,
+        IMaterialRepository materialRepo,
+        IFileStorageService fileStorageService,
+        IAssignmentSubmissionRepository assignmentSubmissionRepo
+        ) : ControllerBase
     {
-        private readonly IAssignmentRepository _assignmentRepo;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly ICommentRepository _commentRepo;
-        private readonly IPostRepository _postRepo;
-        private readonly IMaterialRepository _materialRepo;
-        private readonly IFileStorageService _fileStorageService;
-
-        public AssignmentController(
-            IAssignmentRepository assignmentRepo,
-            ICommentRepository commentRepo, 
-            UserManager<AppUser> userManager,
-            IPostRepository postRepo,
-            IMaterialRepository materialRepo,
-            IFileStorageService fileStorageService
-        )
-        {
-            _assignmentRepo = assignmentRepo;
-            _userManager = userManager;
-            _commentRepo = commentRepo;
-            _postRepo = postRepo;
-            _materialRepo = materialRepo;
-            _fileStorageService = fileStorageService;
-        }
+        private readonly IAssignmentRepository _assignmentRepo = assignmentRepo;
+        private readonly UserManager<AppUser> _userManager = userManager;
+        private readonly ICommentRepository _commentRepo = commentRepo;
+        private readonly IPostRepository _postRepo = postRepo;
+        private readonly IMaterialRepository _materialRepo = materialRepo;
+        private readonly IFileStorageService _fileStorageService = fileStorageService;
+        private readonly IAssignmentSubmissionRepository _assignmentSubmissionRepo = assignmentSubmissionRepo;
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Teacher")]
@@ -178,5 +171,49 @@ namespace backend.Controllers
             await _materialRepo.DeleteAsync(material);
             return NoContent();
         }
+
+        [HttpPost("{id}/submit")]
+        [Authorize]
+        public async Task<IActionResult> SubmitAssignment([FromRoute] int id, [FromForm] CreateAssignmentSubmissionDto submissionDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var userId = User.GetId();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound();
+
+            var assignment = await _assignmentRepo.GetByIdAsync(id);
+            if (assignment == null) return NotFound();
+
+            var assignmentSubmission = new AssignmentSubmission
+            {
+                AssignmentId = id,
+                StudentId = userId,
+                SubmissionDate = DateTime.UtcNow,
+                Description = submissionDto.Description,
+                SubmissionUrl = submissionDto.SubmissionUrl
+            };
+
+
+            foreach (var file in submissionDto.Files)
+            {
+                if (file == null || file.Length == 0) continue;
+
+                // Save each file to storage
+                var filePath = await _fileStorageService.SaveFileAsync(file, assignment.ClassroomId);
+                var material = new Material
+                {
+                    FileName = file.FileName,
+                    FilePath = filePath,
+                    AssignmentSubmissionId = assignmentSubmission.Id,
+                    ClassroomId = assignment.ClassroomId
+                };
+                await _materialRepo.CreateAsync(material);
+            }
+
+            await _assignmentSubmissionRepo.CreateAsync(assignmentSubmission);
+            return Ok(assignmentSubmission.ToAssignmentSubmissionDto());
+        }
+
     }
 }
