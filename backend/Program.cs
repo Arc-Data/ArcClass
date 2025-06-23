@@ -116,6 +116,7 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>(); 
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
+builder.Services.AddScoped<IAssignmentSubmissionRepository, AssignmentSubmissionRepository>();
 
 /* NOTE : Background Service
 // Consider uncommenting the line down below when hosted. Haven't tried it yet if it works

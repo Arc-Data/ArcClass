@@ -11,10 +11,8 @@ namespace backend.Interfaces
         Task<Assignment?> CreateAsync(Assignment assignment); 
         Task<bool> TryDeleteAsync(int id, string userId);
         Task<Assignment?> UpdateAsync(Assignment assignment);
-        Task<IList<Assignment>> GetAll();
         Task<Assignment?> GetByIdAsync(int id);
         Task<Assignment?> GetAssignmentDetailAsync(int id);
-        Task<int> GetAssignmentCounts();
         Task<bool> ExistsAsync(int id);
         Task<IList<Assignment>> GetClassroomAssignments(string id); 
     }

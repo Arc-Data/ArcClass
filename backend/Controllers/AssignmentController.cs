@@ -157,7 +157,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{assignmentId}/files/{materialId}")]
-        [Authorize]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> DeleteMaterial([FromRoute] int assignmentId, [FromRoute] int materialId) 
         {
             var assignment = await _assignmentRepo.GetByIdAsync(assignmentId);
@@ -194,7 +194,13 @@ namespace backend.Controllers
                 SubmissionUrl = submissionDto.SubmissionUrl
             };
 
+            // Save the submission FIRST to get a valid ID
+            var savedSubmission = await _assignmentSubmissionRepo.CreateAsync(assignmentSubmission);
+            if (savedSubmission == null) return StatusCode(500, "Failed to create submission");
 
+            // Now the submission has an ID and exists in the database
+
+            // Then create and save the materials
             foreach (var file in submissionDto.Files)
             {
                 if (file == null || file.Length == 0) continue;
@@ -205,14 +211,13 @@ namespace backend.Controllers
                 {
                     FileName = file.FileName,
                     FilePath = filePath,
-                    AssignmentSubmissionId = assignmentSubmission.Id,
+                    AssignmentSubmissionId = savedSubmission.Id, // Now we have a valid ID
                     ClassroomId = assignment.ClassroomId
                 };
                 await _materialRepo.CreateAsync(material);
             }
 
-            await _assignmentSubmissionRepo.CreateAsync(assignmentSubmission);
-            return Ok(assignmentSubmission.ToAssignmentSubmissionDto());
+            return Ok(savedSubmission.ToAssignmentSubmissionDto());
         }
 
     }

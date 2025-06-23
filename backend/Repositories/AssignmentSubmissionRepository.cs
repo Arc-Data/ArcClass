@@ -5,25 +5,47 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
     public class AssignmentSubmissionRepository(ApplicationDBContext context) : IAssignmentSubmissionRepository
     {
         private readonly ApplicationDBContext _context = context;
-        public Task<AssignmentSubmission?> CreateAsync(AssignmentSubmission assignmentSubmission)
+        public async Task<AssignmentSubmission?> CreateAsync(AssignmentSubmission assignmentSubmission)
         {
-            throw new NotImplementedException();
+            await _context.AssignmentSubmissions.AddAsync(assignmentSubmission);
+            await _context.SaveChangesAsync();
+            return assignmentSubmission;
         }
 
-        public Task<bool> DeleteAsync(int id, string userId)
+        public async Task<bool> DeleteAsync(int id, string userId)
         {
-            throw new NotImplementedException();
+            // i can just include the materials in the submission
+            var submission = await _context.AssignmentSubmissions
+                .Include(s => s.Materials)
+                .FirstOrDefaultAsync(s => s.Id == id);
+            if (submission == null || submission.StudentId != userId) return false;
+
+            foreach (var material in submission.Materials)
+            {
+                _context.Materials.Remove(material);
+            }
+            _context.AssignmentSubmissions.Remove(submission);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<AssignmentSubmission?> UpdateAsync(AssignmentSubmission assignmentSubmission)
+        public async Task<AssignmentSubmission?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.AssignmentSubmissions.FindAsync(id);
+        }
+
+        public async Task<AssignmentSubmission?> UpdateAsync(AssignmentSubmission assignmentSubmission)
+        {
+            _context.AssignmentSubmissions.Update(assignmentSubmission);
+            await _context.SaveChangesAsync();
+            return assignmentSubmission;
         }
     }
 }
