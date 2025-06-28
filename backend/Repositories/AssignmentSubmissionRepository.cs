@@ -12,6 +12,13 @@ namespace backend.Repositories
     public class AssignmentSubmissionRepository(ApplicationDBContext context) : IAssignmentSubmissionRepository
     {
         private readonly ApplicationDBContext _context = context;
+
+        public async Task<bool> AssignmentSubmissionExists(int assignmentId, string user)
+        {
+            return await _context.AssignmentSubmissions
+                .AnyAsync(s => s.AssignmentId == assignmentId && s.StudentId == user);
+        }
+
         public async Task<AssignmentSubmission?> CreateAsync(AssignmentSubmission assignmentSubmission)
         {
             await _context.AssignmentSubmissions.AddAsync(assignmentSubmission);
@@ -57,6 +64,12 @@ namespace backend.Repositories
         public Task<AssignmentSubmission?> GetByStudentIdAsync(string userId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> GetSubmissionCount(int id)
+        {
+            return await _context.AssignmentSubmissions
+                .CountAsync(s => s.AssignmentId == id);
         }
 
         public async Task<AssignmentSubmission?> UpdateAsync(AssignmentSubmission assignmentSubmission)

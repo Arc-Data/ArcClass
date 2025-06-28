@@ -17,5 +17,8 @@ namespace backend.Dtos.Assignment
         public IList<CommentDto> Comments { get; set; } = [];
         public IList<MaterialDto> Files { get; set; } = [];
         public AssignmentClassroomDto? Classroom { get; set; }
+        public bool IsTeacherView { get; set; } = false;
+        public int SubmissionCount { get; set; } = 0;
+        public string SubmissionStatus { get; set; } = "Not Submitted";
     }
 }

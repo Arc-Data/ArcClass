@@ -52,10 +52,24 @@ namespace backend.Controllers
         [Authorize]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            var user = User.GetId();
+
             var assignment = await _assignmentRepo.GetAssignmentDetailAsync(id);  
             if (assignment == null) return NotFound();
 
-            return Ok(assignment.ToAssignmentDetailDto());
+            // if teacher view, then the 
+            bool isTeacherView = assignment.Classroom?.TeacherId == user;
+            int submissionCount = await _assignmentSubmissionRepo.GetSubmissionCount(id);
+            string submissionStatus = "N/A";
+
+            if (!isTeacherView)
+            {
+                bool userSubmitted = await _assignmentSubmissionRepo.AssignmentSubmissionExists(id, user);
+                Console.WriteLine("Somehow you got here", userSubmitted);
+                submissionStatus = userSubmitted ? "Submitted" : "Not Submitted";
+            }
+            
+            return Ok(assignment.ToAssignmentDetailDto(isTeacherView, submissionStatus, submissionCount));
         }
         
         [HttpPut("{id}")]

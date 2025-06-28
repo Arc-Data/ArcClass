@@ -11,5 +11,8 @@ namespace backend.Dtos.Assignment
         public string Title { get; set; } = string.Empty;
         public DateTime? SubmissionDate { get; set; } 
         public int MaxGrade { get; set; }
+        public string SubmissionStatus { get; set; } = string.Empty;
+        public bool IsTeacherView { get; set; } = false;
+        public int SubmissionCount { get; set; } = 0;
     }
 }

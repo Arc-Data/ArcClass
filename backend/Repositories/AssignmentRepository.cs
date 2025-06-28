@@ -33,6 +33,7 @@ namespace backend.Repositories
         {
             return await _context.Assignments
                 .Include(a => a.Comments)
+                    .ThenInclude(c => c.AppUser)    
                 .Include(a => a.Classroom)
                     .ThenInclude(c => c!.Teacher)
                 .Include(a => a.Materials)

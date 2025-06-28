@@ -20,19 +20,25 @@ namespace backend.Mappers
             };
         }
 
-        public static AssignmentDetailDto ToAssignmentDetailDto(this Assignment assignment)
+        public static AssignmentDetailDto ToAssignmentDetailDto(this Assignment assignment,  bool isTeacherView, string submissionStatus = "", int submissionCount = 0)
         {
-            return new AssignmentDetailDto
+            var dto = new AssignmentDetailDto
             {
                 Id = assignment.Id,
                 Title = assignment.Title,
                 Description = assignment.Description,
                 SubmissionDate = assignment.SubmissionDate,
-                MaxGrade = assignment.MaxGrade, 
+                MaxGrade = assignment.MaxGrade,
                 Comments = assignment.Comments.Select(comment => comment.ToCommentDto()).ToList(),
                 Files = assignment.Materials.Select(material => material.ToMaterialDto()).ToList(),
-                Classroom = assignment.Classroom!.ToAssignmentClassroomDto()
+                Classroom = assignment.Classroom!.ToAssignmentClassroomDto(),
+
+                SubmissionCount = submissionCount,
+                SubmissionStatus = submissionStatus,
+                IsTeacherView = isTeacherView
             };
+
+            return dto;
         }
     }
 }
