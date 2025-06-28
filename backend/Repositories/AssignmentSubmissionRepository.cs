@@ -36,9 +36,27 @@ namespace backend.Repositories
             return true;
         }
 
+        public async Task<IList<AssignmentSubmission>> GetAssignmentSubmissions(string userId)
+        {
+            return await _context.AssignmentSubmissions
+                .Where(s => s.StudentId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<AssignmentSubmission?> GetByAssignmentAndStudentAsync(int assignmentId, string studentId)
+        {
+            return await _context.AssignmentSubmissions
+                .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.StudentId == studentId);
+        }
+
         public async Task<AssignmentSubmission?> GetByIdAsync(int id)
         {
             return await _context.AssignmentSubmissions.FindAsync(id);
+        }
+
+        public Task<AssignmentSubmission?> GetByStudentIdAsync(string userId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<AssignmentSubmission?> UpdateAsync(AssignmentSubmission assignmentSubmission)

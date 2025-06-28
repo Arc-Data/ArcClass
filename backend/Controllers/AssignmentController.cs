@@ -179,8 +179,11 @@ namespace backend.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userId = User.GetId();
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return NotFound();
+            var existingSubmission = await _assignmentSubmissionRepo.GetByAssignmentAndStudentAsync(id, userId);
+            if (existingSubmission != null)
+            {
+                return BadRequest("You have already submitted this assignment.");
+            }
 
             var assignment = await _assignmentRepo.GetByIdAsync(id);
             if (assignment == null) return NotFound();
@@ -194,24 +197,19 @@ namespace backend.Controllers
                 SubmissionUrl = submissionDto.SubmissionUrl
             };
 
-            // Save the submission FIRST to get a valid ID
             var savedSubmission = await _assignmentSubmissionRepo.CreateAsync(assignmentSubmission);
             if (savedSubmission == null) return StatusCode(500, "Failed to create submission");
 
-            // Now the submission has an ID and exists in the database
-
-            // Then create and save the materials
             foreach (var file in submissionDto.Files)
             {
                 if (file == null || file.Length == 0) continue;
 
-                // Save each file to storage
                 var filePath = await _fileStorageService.SaveFileAsync(file, assignment.ClassroomId);
                 var material = new Material
                 {
                     FileName = file.FileName,
                     FilePath = filePath,
-                    AssignmentSubmissionId = savedSubmission.Id, // Now we have a valid ID
+                    AssignmentSubmissionId = savedSubmission.Id, 
                     ClassroomId = assignment.ClassroomId
                 };
                 await _materialRepo.CreateAsync(material);

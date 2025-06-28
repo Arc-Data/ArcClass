@@ -155,6 +155,10 @@ namespace backend.Data
                 .WithOne(m => m.AssignmentSubmission)
                 .HasForeignKey(m => m.AssignmentSubmissionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<AssignmentSubmission>()
+                .HasIndex(a => new { a.AssignmentId, a.StudentId })
+                .IsUnique();
         }
     }
 }

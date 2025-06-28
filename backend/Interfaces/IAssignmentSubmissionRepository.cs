@@ -12,5 +12,7 @@ namespace backend.Interfaces
         Task<AssignmentSubmission?> UpdateAsync(AssignmentSubmission assignmentSubmission);
         Task<AssignmentSubmission?> GetByIdAsync(int id);
         Task<bool> DeleteAsync(int id, string userId);
+        Task<AssignmentSubmission?> GetByAssignmentAndStudentAsync(int assignmentId, string studentId);
+        Task<IList<AssignmentSubmission>> GetAssignmentSubmissions(string userId);
     }
 }

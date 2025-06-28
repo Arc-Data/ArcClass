@@ -16,6 +16,15 @@ namespace backend.Controllers
     {
         private readonly IAssignmentSubmissionRepository _assignmentSubmissionRepo = assignmentSubmissionRepository;
 
+        [HttpGet]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetSubmissions()
+        {
+            var userId = User.GetId();
+            var submissions = await _assignmentSubmissionRepo.GetAssignmentSubmissions(userId);
+            return Ok(submissions);
+        }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> UpdateSubmission([FromRoute] int id, [FromBody] CreateAssignmentSubmissionDto submissionDto)
