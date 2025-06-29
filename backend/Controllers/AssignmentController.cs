@@ -171,12 +171,16 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{assignmentId}/files/{materialId}")]
-        [Authorize(Roles = "Student")]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> DeleteMaterial([FromRoute] int assignmentId, [FromRoute] int materialId) 
         {
             var assignment = await _assignmentRepo.GetByIdAsync(assignmentId);
             if (assignment == null)
                 return NotFound("Assignment not found");
+
+            var user = User.GetId();
+            if (user != assignment.Classroom!.TeacherId)
+                return Forbid("You do not have permission to delete this material");
 
             var material = await _materialRepo.GetByIdAsync(materialId);
             if (material == null || material.AssignmentId != assignmentId)

@@ -20,6 +20,8 @@ import AssignmentDetail from "./pages/AssignmentDetail"
 import ClassroomAssignments from "./pages/Classroom/ClassroomAssignments"
 import Assignments from "./pages/Assignments"
 import CalendarView from "./pages/CalendarView"
+import { AssignmentDetailProvider } from "./context/AssignmentDetailContext"
+import AssignmentLayout from "./layouts/AssignmentLayout"
 
 /* 
 // [ ] : Create Profile Customization Section
@@ -51,6 +53,14 @@ function App() {
 							<Route path="/home" element={<Home/>} />	
 							<Route path="/calendar" element={<CalendarView />} />
 							<Route path="/assignments" element={<Assignments/>} />
+							<Route element={
+							<AssignmentDetailProvider>
+								<AssignmentLayout />
+							</AssignmentDetailProvider>}>
+								{/* <Route element={<AssignmentLayout />}> */}
+									<Route path="/assignments/:id" element={<AssignmentDetail/>} />
+								{/* </Route> */}
+							</Route>
 							
 							<Route path="/classroom/:id" element={
 								<ClassroomProvider><ClassroomLayout /></ClassroomProvider>} >
@@ -61,7 +71,6 @@ function App() {
 							<Route path="/classroom/:id/join" element={<Home />}> {/* New route to handle modal */}
 								<Route index element={<JoinClassroomModal />} /> {/* Open the modal on this route */}
                             </Route>
-							<Route path="/assignments/:id" element={<AssignmentDetail/>} />
 						</Route>
 					</Route>
 					

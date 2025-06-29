@@ -1,20 +1,25 @@
-import AuthContext from "@/context/AuthContext"
+import { useAuth } from "@/context/AuthContext"
 import useMaterialManager from "@/hooks/useMaterialManager"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import FileBlock from "./FileBlock"
 import { Dialog, DialogContent, DialogDescription, DialogHeader } from "./ui/dialog"
+import { useAssignmentDetailContext } from "@/context/AssignmentDetailContext"
 
 const DisplayFiles = ({ materials, isEditing }) => {
 	const { id } = useParams()
     const [ files, setFiles ] = useState([])
 	const [ maximizeImage, setMaximizeImage ] = useState(false)
 	const [ image, setImage ] = useState()
+	
+	const {
+		getAssignmentLocal,
+	} = useAssignmentDetailContext()
 
     const [ loading, setLoading ] = useState(true)
-    const { authTokens } = useContext(AuthContext)
+    const { authTokens } = useAuth()
     
 	const { 
 		getMaterials, 
@@ -24,7 +29,8 @@ const DisplayFiles = ({ materials, isEditing }) => {
 	const handleDeleteFile = async (materialId) => {
 		try {
 			await deleteMaterial(id, materialId)
-			setFiles(files.filter(file => file.id !== materialId))
+			getAssignmentLocal(id)
+			
 		} catch (error) {
 			console.error("Error deleting file:", error)
 		}

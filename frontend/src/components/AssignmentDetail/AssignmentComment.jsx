@@ -9,7 +9,7 @@ const AssignmentComment = ({ comment, loading }) => {
             </div>
             <div className="flex-1 space-y-4">
                 <div>
-                    <p>{comment.user.fullName}</p>
+                    <p>{comment.user?.fullName}</p>
                     <p className="text-sm">{dayjs(comment.createdAt).format("MMM DD, h:mm A")}</p>
                 </div>
                 <p>{comment.content}</p>

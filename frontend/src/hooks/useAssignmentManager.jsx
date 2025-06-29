@@ -28,13 +28,13 @@ const useAssignmentManager = (authTokens) => {
     }
 
     const updateAssignment = async (id, data) => {
-        const resposne = await axios.put(`api/assignments/${id}`, data, {
+        const response = await axios.put(`api/assignments/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${authTokens.access}`
             }
         })
 
-        return resposne.data
+        return response.data
     }
 
     const getAssignmentList = async (id) => {

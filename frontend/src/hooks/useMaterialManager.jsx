@@ -11,6 +11,7 @@ const useMaterialManager = (authTokens) => {
                     responseType: "blob"
                 })
 
+
                 return {
                     id: material.id,
                     filename: material.fileName,
@@ -48,6 +49,9 @@ const useMaterialManager = (authTokens) => {
                 'Authorization': `Bearer ${authTokens.access}`
             }
         });
+
+        console.log(response)
+
 
         return response.data;
     }
