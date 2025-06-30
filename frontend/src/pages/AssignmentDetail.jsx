@@ -3,23 +3,17 @@ import DisplayFiles from "@/components/DisplayFiles"
 import Assignment404 from "@/components/errors/Assignment404"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
 import { useAssignmentDetailContext } from "@/context/AssignmentDetailContext"
 import AuthContext from "@/context/AuthContext"
-import useAssignmentManager from "@/hooks/useAssignmentManager"
 import useMaterialManager from "@/hooks/useMaterialManager"
 import dayjs, { getDeadline } from "@/utils/dayjs"
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { useContext, useEffect, useRef, useState } from "react"
 import { BiAlarmExclamation } from "react-icons/bi"
-import { FaEllipsisV, FaPlus, FaRegClock, FaTrash, FaUser } from "react-icons/fa"
-import { FaPencil } from "react-icons/fa6"
-import { MdOutlineInsertComment } from "react-icons/md"
+import { FaPlus, FaRegClock, FaUser } from "react-icons/fa"
 import { useParams } from "react-router-dom"
 
 
@@ -226,6 +220,7 @@ const AssignmentDetail = () => {
                     <DisplayFiles
                         materials={assignmentFiles}
                         isEditing={isEditing}
+                        getAssignmentLocal={getAssignmentLocal}
                     />
                 </div>
             {!isEditing &&

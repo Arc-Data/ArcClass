@@ -22,6 +22,9 @@ import Assignments from "./pages/Assignments"
 import CalendarView from "./pages/CalendarView"
 import { AssignmentDetailProvider } from "./context/AssignmentDetailContext"
 import AssignmentLayout from "./layouts/AssignmentLayout"
+import AssignmentSubmissions from "./components/AssignmentDetail/AssignmentSubmissions"
+import AssignmentSubmission from "./components/AssignmentDetail/AssignmentSubmission"
+import AssignmentPerformance from "./components/AssignmentDetail/AssignmentPerformance"
 
 /* 
 // [ ] : Create Profile Customization Section
@@ -59,6 +62,9 @@ function App() {
 							</AssignmentDetailProvider>}>
 								{/* <Route element={<AssignmentLayout />}> */}
 									<Route path="/assignments/:id" element={<AssignmentDetail/>} />
+									<Route path="/assignments/:id/submission" element={<AssignmentSubmission/>} />
+									<Route path="/assignments/:id/submissions" element={<AssignmentSubmissions/>} />
+									<Route path="/assignments/:id/performance" element={<AssignmentPerformance/>} />
 								{/* </Route> */}
 							</Route>
 							

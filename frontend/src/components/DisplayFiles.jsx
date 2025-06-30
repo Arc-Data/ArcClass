@@ -6,18 +6,13 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import FileBlock from "./FileBlock"
 import { Dialog, DialogContent, DialogDescription, DialogHeader } from "./ui/dialog"
-import { useAssignmentDetailContext } from "@/context/AssignmentDetailContext"
 
-const DisplayFiles = ({ materials, isEditing }) => {
+const DisplayFiles = ({ materials, isEditing, getAssignmentLocal }) => {
 	const { id } = useParams()
     const [ files, setFiles ] = useState([])
 	const [ maximizeImage, setMaximizeImage ] = useState(false)
 	const [ image, setImage ] = useState()
 	
-	const {
-		getAssignmentLocal,
-	} = useAssignmentDetailContext()
-
     const [ loading, setLoading ] = useState(true)
     const { authTokens } = useAuth()
     
