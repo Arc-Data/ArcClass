@@ -3,6 +3,8 @@ import DisplayFiles from "@/components/DisplayFiles"
 import Assignment404 from "@/components/errors/Assignment404"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -13,7 +15,9 @@ import useMaterialManager from "@/hooks/useMaterialManager"
 import dayjs, { getDeadline } from "@/utils/dayjs"
 import { useContext, useEffect, useRef, useState } from "react"
 import { BiAlarmExclamation } from "react-icons/bi"
-import { FaPlus, FaRegClock, FaUser } from "react-icons/fa"
+import { FaEllipsisV, FaPlus, FaRegClock, FaTrash, FaUser } from "react-icons/fa"
+import { FaPencil } from "react-icons/fa6"
+import { MdOutlineInsertComment } from "react-icons/md"
 import { useParams } from "react-router-dom"
 
 
@@ -27,10 +31,7 @@ const AssignmentDetail = () => {
         assignment,
         assignmentLoading: loading,
         assignmentFiles,
-        getAssignment,
-
-        isEditing,
-        setEditing,
+        deleteAssignment,
 
         updateAssignmentLocal,
         getAssignmentLocal,
@@ -38,6 +39,8 @@ const AssignmentDetail = () => {
         error,
     } = useAssignmentDetailContext()
     const { authTokens } = useContext(AuthContext)
+
+    const [ isEditing, setEditing ] = useState(false)
 
     const {
         attachMaterials,
@@ -49,6 +52,11 @@ const AssignmentDetail = () => {
         title: '',
         description: '',
     })
+
+    const handleDeleteAssignment = () => {
+        deleteAssignment(assignment.id)
+        setError({ status: 404 })
+    }
 
     const fileInputRef = useRef()
 
@@ -93,9 +101,9 @@ const AssignmentDetail = () => {
                 console.log(error)
             }
         }
-        
-        getAssignmentLocal() 
-        e.target.value = null 
+
+        getAssignmentLocal()
+        e.target.value = null
     }
 
     useEffect(() => {
@@ -131,7 +139,59 @@ const AssignmentDetail = () => {
             {!isEditing ?
                 <div className="flex gap-8 py-4">
                     <div className="flex-1 space-y-4" >
-                        <h1 className="text-2xl font-bold font-heading">{assignment.title}</h1>
+                        <div className="flex flex-col-reverse gap-4 md:flex-row md:items-center justify-between">
+                            <h1 className="text-2xl font-bold font-heading">{assignment.title}</h1>
+                            <div className="flex items-center gap-2 self-end">
+                                <Button variant="outline" className="text-base">
+                                    <BiAlarmExclamation className="mr-2" />
+                                    Deadline: {getDeadline(assignment.submissionDate)}
+                                </Button>
+
+                                {assignment.isTeacherView && (
+                                    <Dialog>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <button className="grid p-2 rounded-full cursor-pointer hover:bg-gray-200 place-items-center">
+                                                    <FaEllipsisV size={12} />
+                                                </button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end" className="*:cursor-pointer">
+                                                <DropdownMenuItem className="z-30 flex items-center gap-2" onClick={() => setEditing(prev => !prev)}>
+                                                    <FaPencil />
+                                                    <span>Edit</span>
+                                                </DropdownMenuItem>
+                                                <DialogTrigger asChild>
+                                                    <DropdownMenuItem className="z-30 flex items-center gap-2">
+                                                        <FaTrash />
+                                                        <span>Delete</span>
+                                                    </DropdownMenuItem>
+                                                </DialogTrigger>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                        <DialogContent className="max-w-md">
+                                            <DialogHeader>
+                                                <DialogTitle>Deleting Assignment</DialogTitle>
+                                                <DialogDescription>
+                                                    This action is irreversible and will also delete associated comments and files including submissions. Proceed?
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="flex flex-col p-4 text-sm text-text-600">
+                                                {assignmentFiles.length > 0 &&
+                                                    <div className="flex gap-4">
+                                                        <MdOutlineInsertComment />
+                                                        <p>{assignmentFiles.length} files</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <DialogFooter>
+                                                <Button variant="destructive" type="submit" onClick={handleDeleteAssignment}>Delete</Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                )}
+                            </div>
+
+                        </div>
                         <div className="flex gap-2 mt-4">
                             <div className="grid w-6 h-6 border rounded-full place-items-center">
                                 <FaUser size={12} />
@@ -142,9 +202,7 @@ const AssignmentDetail = () => {
                         </div>
                         <p className="py-4">{assignment.description}</p>
                     </div>
-                    <Button variant="outline" className="text-base ">
-                        <BiAlarmExclamation className="mr-2" />Deadline: {getDeadline(assignment.submissionDate)}
-                    </Button>
+
                 </div>
                 :
                 <div className="space-y-8">
@@ -198,31 +256,31 @@ const AssignmentDetail = () => {
                     </div>
                 </div>
             }
-                <div className="pt-8 pb-4 space-y-4 border-t">
-                    {isEditing &&
-                        <div className="text-right">
-                            <Button
-                                variant="outline"
-                                onClick={handleAddFilesClick}
-                            >
-                                <FaPlus className="mr-2" />
-                                Add more files
-                            </Button>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                multiple
-                                className="hidden"
-                                onChange={handleFilesChange}
-                            />
-                        </div>
-                    }
-                    <DisplayFiles
-                        materials={assignmentFiles}
-                        isEditing={isEditing}
-                        getAssignmentLocal={getAssignmentLocal}
-                    />
-                </div>
+            <div className="pt-8 pb-4 space-y-4 border-t">
+                {isEditing &&
+                    <div className="text-right">
+                        <Button
+                            variant="outline"
+                            onClick={handleAddFilesClick}
+                        >
+                            <FaPlus className="mr-2" />
+                            Add more files
+                        </Button>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            multiple
+                            className="hidden"
+                            onChange={handleFilesChange}
+                        />
+                    </div>
+                }
+                <DisplayFiles
+                    materials={assignmentFiles}
+                    isEditing={isEditing}
+                    getAssignmentLocal={getAssignmentLocal}
+                />
+            </div>
             {!isEditing &&
                 <CommentSection commentsData={assignment.comments} />
             }
