@@ -56,6 +56,13 @@ namespace backend.Repositories
                 .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.StudentId == studentId);
         }
 
+        public async Task<IList<AssignmentSubmission>> GetByAssignmentIdAsync(int id)
+        {
+            return await _context.AssignmentSubmissions
+                .Where(s => s.AssignmentId == id)
+                .ToListAsync();
+        }
+
         public async Task<AssignmentSubmission?> GetByIdAsync(int id)
         {
             return await _context.AssignmentSubmissions.FindAsync(id);

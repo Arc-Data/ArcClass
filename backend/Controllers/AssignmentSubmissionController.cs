@@ -25,6 +25,24 @@ namespace backend.Controllers
             return Ok(submissions);
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetSubmissionById([FromRoute] int id)
+        {
+            var submission = await _assignmentSubmissionRepo.GetByIdAsync(id);
+            if (submission == null)
+            {
+                return NotFound("Submission not found.");
+            }
+
+            if (User.IsInRole("Student") && submission.StudentId != User.GetId())
+            {
+                return Forbid("You do not have permission to view this submission.");
+            }
+            
+            return Ok(submission);
+        }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> UpdateSubmission([FromRoute] int id, [FromBody] CreateAssignmentSubmissionDto submissionDto)

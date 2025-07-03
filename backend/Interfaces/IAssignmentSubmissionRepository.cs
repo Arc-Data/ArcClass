@@ -16,5 +16,6 @@ namespace backend.Interfaces
         Task<IList<AssignmentSubmission>> GetAssignmentSubmissions(string userId);
         Task<int> GetSubmissionCount(int id);
         Task<bool> AssignmentSubmissionExists(int assignmentId, string user);
+        Task<IList<AssignmentSubmission>> GetByAssignmentIdAsync(int id);
     }
 }

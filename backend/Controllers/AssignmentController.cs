@@ -236,5 +236,32 @@ namespace backend.Controllers
             return Ok(savedSubmission.ToAssignmentSubmissionDto());
         }
 
+        [HttpGet("{id}/my-submission")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetSubmission([FromRoute] int id)
+        {
+            var userId = User.GetId();
+            var submission = await _assignmentSubmissionRepo.GetByAssignmentAndStudentAsync(id, userId);
+            if (submission == null) return NotFound();
+
+            return Ok(submission.ToAssignmentSubmissionDto());
+        }
+
+        [HttpGet("{id}/submissions")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> GetSubmissions([FromRoute] int id)
+        {
+            var assignment = await _assignmentRepo.GetByIdAsync(id);
+            if (assignment == null) return NotFound("Assignment not found");
+
+            var userId = User.GetId();
+            if (assignment.Classroom!.TeacherId != userId)
+            {
+                return Forbid("You do not have permission to view submissions for this assignment.");
+            }
+
+            var submissions = await _assignmentSubmissionRepo.GetByAssignmentIdAsync(id);
+            return Ok(submissions.Select(s => s.ToAssignmentSubmissionDto()));
+        }
     }
 }
