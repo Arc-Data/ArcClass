@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.Dtos.Assignment;
 using backend.Dtos.AssignmentSubmission;
@@ -171,7 +172,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{assignmentId}/files/{materialId}")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize]
         public async Task<IActionResult> DeleteMaterial([FromRoute] int assignmentId, [FromRoute] int materialId) 
         {
             var assignment = await _assignmentRepo.GetByIdAsync(assignmentId);
@@ -179,12 +180,36 @@ namespace backend.Controllers
                 return NotFound("Assignment not found");
 
             var user = User.GetId();
-            if (user != assignment.Classroom!.TeacherId)
-                return Forbid("You do not have permission to delete this material");
-
+            var userRoles = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();
+            
             var material = await _materialRepo.GetByIdAsync(materialId);
-            if (material == null || material.AssignmentId != assignmentId)
+            if (material == null)
                 return NotFound("Material not found");
+
+            if (userRoles.Contains("Teacher"))
+            {
+                if (user != assignment.Classroom!.TeacherId)
+                    return Forbid("You do not have permission to delete this material");
+                    
+                if (material.AssignmentId != assignmentId)
+                    return NotFound("Material not found in this assignment");
+            }
+            else if (userRoles.Contains("Student"))
+            {
+                if (material.AssignmentSubmissionId == null)
+                    return Forbid("You can only delete materials from your submissions");
+                    
+                var submission = await _assignmentSubmissionRepo.GetByIdAsync(material.AssignmentSubmissionId.Value);
+                if (submission == null || submission.StudentId != user)
+                    return Forbid("You can only delete materials from your own submissions");
+                    
+                if (submission.AssignmentId != assignmentId)
+                    return NotFound("Material not found in this assignment");
+            }
+            else
+            {
+                return Forbid("Insufficient permissions");
+            }
 
             await _materialRepo.DeleteAsync(material);
             return NoContent();
@@ -211,13 +236,13 @@ namespace backend.Controllers
                 AssignmentId = id,
                 StudentId = userId,
                 SubmissionDate = DateTime.UtcNow,
-                Description = submissionDto.Description,
-                SubmissionUrl = submissionDto.SubmissionUrl
+                Description = submissionDto.Description
             };
 
             var savedSubmission = await _assignmentSubmissionRepo.CreateAsync(assignmentSubmission);
             if (savedSubmission == null) return StatusCode(500, "Failed to create submission");
 
+            // Handle file uploads
             foreach (var file in submissionDto.Files)
             {
                 if (file == null || file.Length == 0) continue;

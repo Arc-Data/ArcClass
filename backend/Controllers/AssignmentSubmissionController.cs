@@ -55,7 +55,6 @@ namespace backend.Controllers
             }
 
             submission.Description = submissionDto.Description;
-            submission.SubmissionUrl = submissionDto.SubmissionUrl;
 
             await _assignmentSubmissionRepo.UpdateAsync(submission);
             return NoContent();
