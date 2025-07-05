@@ -2,28 +2,26 @@ import StudentAssignmentStatus from '@/components/AssignmentDetail/StudentAssign
 import TeacherAssignmentStatus from '@/components/AssignmentDetail/TeacherAssignmentStatus'
 import { Button } from '@/components/ui/button'
 import { useAssignmentDetailContext } from '@/context/AssignmentDetailContext'
+import { useSmartNavigation } from '@/hooks/useSmartNavigation'
 import { FaArrowLeft } from 'react-icons/fa'
-import { Link, NavLink, Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
 
 const AssignmentLayout = () => {
-	const navigate = useNavigate()
 	const { id } = useParams()
+	const handleSmartBack = useSmartNavigation()
+	
 	const { 
 		assignment, 
 		assignmentLoading,
 		error,
 	} = useAssignmentDetailContext()
 
-	const handleBack = () => {
-		navigate(-1)
-	}
-
 	return (
 		<div className='grid w-full grid-cols-1 gap-12 p-4 md:px-16'>
 			<div className='col-span-2 space-y-4'>
 				<div className="pb-4">
 					<div className="flex items-center gap-8 py-4">
-						<Button onClick={handleBack} variant="outline">
+						<Button onClick={handleSmartBack} variant="outline">
 							<FaArrowLeft className="mr-2" />
 							Back
 						</Button>

@@ -2,31 +2,40 @@ import axios from "@/utils/axios"
 
 const useMaterialManager = (authTokens) => {
     const getMaterials = async (materials) => {
-        const filePromises = materials.map(async (material) => {
-            try {
-                const response = await axios.get(`api/file/${material.id}`, {
-                    headers: {
-                        Authorization: `Bearer ${authTokens.access}`
-                    },
-                    responseType: "blob"
-                })
+        if (!materials || materials.length === 0) {
+            return []
+        }
 
-
-                return {
-                    id: material.id,
-                    filename: material.fileName,
-                    file: response.data,
-                    mimeType: response.headers["content-type"]
+        try {
+            const filePromises = materials.map(async (material) => {
+                try {
+                    const response = await axios.get(`api/file/${material.id}`, {
+                        responseType: 'blob',
+                        headers: {
+                            Authorization: `Bearer ${authTokens.access}`
+                        }
+                    })
+                    
+                    return {
+                        id: material.id,
+                        filename: material.fileName,
+                        file: response.data,
+                        mimeType: response.data.type,
+                        ...material
+                    }
+                } catch (error) {
+                    console.warn(`File ${material.id} not found, skipping...`)
+                    return null // Return null for missing files
                 }
-            }
-            catch (e) {
-                console.error("Error fetching file", e)
-                return null
-            }
-        })
+            })
 
-        const filesResults = await Promise.all(filePromises)
-        return filesResults
+            const results = await Promise.all(filePromises)
+            return results // Let DisplayFiles filter out nulls
+            
+        } catch (error) {
+            console.error("Error fetching materials:", error)
+            throw error
+        }
     }
 
     const deleteMaterial = (assignmentId, id) => {
@@ -55,11 +64,29 @@ const useMaterialManager = (authTokens) => {
 
         return response.data;
     }
-  
+
+    const attachSubmissionFiles = async (submissionId, files) => {
+        const formData = new FormData()
+
+        files.forEach(file => {
+            formData.append('files', file)
+        })
+
+        const response = await axios.post(`api/assignment/submissions/${submissionId}/files`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${authTokens.access}`
+            }
+        })
+
+        return response.data
+    }
+
     return {
         getMaterials,
         deleteMaterial,
-        attachMaterials
+        attachMaterials,
+        attachSubmissionFiles
     }
 }
 

@@ -49,11 +49,15 @@ const Assignments = () => {
                 <TabsList>
                     <TabsTrigger value="all">All</TabsTrigger>
                     <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+                    <TabsTrigger value="completed">Completed</TabsTrigger>
                 </TabsList>
                 <TabsContent value="all">
                     <AssignmentGroup assignments={assignments} />
                 </TabsContent>
                 <TabsContent value="upcoming">
+                    <AssignmentGroup assignments={assignments} />
+                </TabsContent>
+                <TabsContent value="completed">
                     <AssignmentGroup assignments={assignments} />
                 </TabsContent>
             </Tabs>

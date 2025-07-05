@@ -13,6 +13,7 @@ namespace backend.Mappers
         {
             return new AssignmentSubmissionDto
             {
+                Id = assignmentSubmission.Id,
                 AssignmentId = assignmentSubmission.AssignmentId,
                 StudentId = assignmentSubmission.StudentId,
                 Grade = assignmentSubmission.Grade,

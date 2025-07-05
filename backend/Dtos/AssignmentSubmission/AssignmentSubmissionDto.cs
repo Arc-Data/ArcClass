@@ -7,6 +7,7 @@ namespace backend.Dtos.AssignmentSubmission
 {
     public class AssignmentSubmissionDto
     {
+        public int Id { get; set; }
         public int AssignmentId { get; set; }
         public string StudentId { get; set; } = string.Empty;
         public int Grade { get; set; }

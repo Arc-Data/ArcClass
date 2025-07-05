@@ -10,25 +10,40 @@ export const useSmartNavigation = () => {
     const isAssignmentSubPage = /^\/assignments\/\d+\/(submission|submissions|performance)$/.test(currentPath)
     const isAssignmentOverview = /^\/assignments\/\d+$/.test(currentPath)
     
-    // Don't save assignment-related paths as previous location
+    // Only save non-assignment pages as previous location
     if (!isAssignmentSubPage && !isAssignmentOverview) {
       sessionStorage.setItem('previousLocation', currentPath)
     }
     
     // For direct URL access to assignment pages, set a reasonable fallback
     if ((isAssignmentOverview || isAssignmentSubPage) && !sessionStorage.getItem('previousLocation')) {
-      // Check if user came from external source
-      const hasHistoryEntries = window.history.length > 1
-      if (!hasHistoryEntries) {
-        // Direct access (typed URL, bookmark, new tab)
-        sessionStorage.setItem('previousLocation', '/assignments')
-      }
+      const intelligentFallback = getIntelligentFallback()
+      sessionStorage.setItem('previousLocation', intelligentFallback)
     }
   }, [location])
+
+  const getIntelligentFallback = () => {
+    const referrer = document.referrer
+    const isInternalReferrer = referrer && referrer.includes(window.location.origin)
+    const hasHistoryEntries = window.history.length > 1
+    
+    if (isInternalReferrer) {
+      // User came from within the app, likely from assignments page
+      return '/assignments'
+    } else if (hasHistoryEntries) {
+      // User has browser history but no internal referrer
+      // Could be from bookmarks or direct navigation within our app
+      return '/assignments'
+    } else {
+      // External access (Google, direct URL typing, new tab)
+      return '/home'
+    }
+  }
 
   const handleSmartBack = () => {
     const currentPath = location.pathname
     const isAssignmentSubPage = /^\/assignments\/\d+\/(submission|submissions|performance)$/.test(currentPath)
+    const isAssignmentOverview = /^\/assignments\/\d+$/.test(currentPath)
     
     if (isAssignmentSubPage) {
       // Go back to assignment overview
@@ -39,18 +54,25 @@ export const useSmartNavigation = () => {
       }
     }
     
-    // For overview page, go to saved previous location or intelligent fallback
-    const previousLocation = sessionStorage.getItem('previousLocation')
-    if (previousLocation && previousLocation !== currentPath) {
-      navigate(previousLocation)
-    } else {
-      // Intelligent fallback based on user's likely intent
-      const hasHistoryEntries = window.history.length > 1
-      if (hasHistoryEntries) {
-        navigate(-1) // Go back in browser history
+    if (isAssignmentOverview) {
+      // From overview, go to the saved previous location
+      const previousLocation = sessionStorage.getItem('previousLocation')
+      if (previousLocation && previousLocation !== currentPath) {
+        navigate(previousLocation)
       } else {
-        navigate('/assignments') // Safe fallback for direct access
+        // Fallback based on likely source
+        const fallback = getIntelligentFallback()
+        navigate(fallback)
       }
+      return
+    }
+    
+    // For any other page, use browser history or go home
+    const hasHistoryEntries = window.history.length > 1
+    if (hasHistoryEntries) {
+      navigate(-1)
+    } else {
+      navigate('/home')
     }
   }
 

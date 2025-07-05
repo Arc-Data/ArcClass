@@ -2,6 +2,7 @@ import useAssignmentManager from "@/hooks/useAssignmentManager"
 import { useAuth } from "./AuthContext"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import useSubmissionManager from "@/hooks/useSubmissionManager"
 
 const AssignmentDetailContext = createContext()
 
@@ -13,7 +14,9 @@ export const AssignmentDetailProvider = ({ children }) => {
     const [ assignmentLoading, setAssignmentLoading ] = useState(true)
     const [ error, setError ] = useState()
 
-    const [ isEditing, setEditing ] = useState(false)
+    const [ submission, setSubmission ] = useState()
+    const [ submissions, setSubmissions ] = useState([])
+    const [ submissionLoading, setSubmissionLoading ] = useState(true)
 
     const {
         getAssignment,
@@ -21,6 +24,13 @@ export const AssignmentDetailProvider = ({ children }) => {
         updateAssignment,
         deleteAssignment,
     } = useAssignmentManager(authTokens)
+
+    const { 
+        getSubmission, 
+        getSubmissions,
+        createSubmission,
+        updateSubmissionDescription,
+    } = useSubmissionManager(authTokens)
 
     const getAssignmentLocal = async () => {
         try {
@@ -51,6 +61,47 @@ export const AssignmentDetailProvider = ({ children }) => {
         }
     }
 
+    const getSubmissionLocal = async () => {
+        try {
+            console.log("Getting local")
+            setSubmissionLoading(true)
+            const response = await getSubmission(id)
+            setSubmission(response)
+        }
+        catch (error) {
+            console.log(error)
+        } 
+
+        setSubmissionLoading(false)
+    }
+
+    const createSubmissionLocal = async (submissionData) => {
+        try {
+            setSubmissionLoading(true)
+            const response = await createSubmission(id, submissionData)
+            setSubmission(response)
+
+            const updatedAssignment = await getAssignmentLocal()
+            setAssignment(updatedAssignment)
+        }
+        catch (error) {
+            console.log(error)
+        }
+
+        setSubmissionLoading(false)
+    }
+
+    const updateSubmissionDescriptionLocal = async (submissionId, description) => {
+        try {
+            await updateSubmissionDescription(submissionId, description)
+            // Refresh submission data
+            await getSubmissionLocal(id)
+        } catch (error) {
+            console.log("Error updating submission description:", error)
+            throw error
+        }
+    }
+
     useEffect(() => {
         setAssignmentLoading(true)
         const fetchAssignment = async () => {
@@ -60,6 +111,12 @@ export const AssignmentDetailProvider = ({ children }) => {
                 setAssignment(data)
                 setAssignmentLoading(false)
                 setAssignmentFiles(data.files)
+                
+                // ADD THIS: Auto-fetch submission if assignment is submitted
+                if (data.submissionStatus === "Submitted") {
+                    console.log("Assignment is submitted, fetching submission...")
+                    await getSubmissionLocal()
+                }
             }
             catch (error) {
                 setError(error)
@@ -80,12 +137,15 @@ export const AssignmentDetailProvider = ({ children }) => {
         updateAssignment,
         deleteAssignment,
 
-        isEditing,
-        setEditing, 
-    
+        submission,
+        submissionLoading,
 
         updateAssignmentLocal,
         getAssignmentLocal,
+        createSubmissionLocal,
+        updateSubmissionDescriptionLocal,
+
+        getSubmissionLocal,
 
         error,
         setError,

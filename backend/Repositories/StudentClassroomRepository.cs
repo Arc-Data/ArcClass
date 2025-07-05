@@ -49,13 +49,14 @@ namespace backend.Repositories
 
         public async Task<int> GetStudentClassroomAssignmentCounts(string id)
         {
-            // NOTE : Would it be safe to put a not null operator in here 
             return await _context.StudentClassrooms
                 .Where(sc => sc.StudentId == id)
                 .Include(sc => sc.Classroom)
                     .ThenInclude(c => c!.Assignments)
+                        .ThenInclude(a => a.AssignmentSubmissions)
                 .AsSplitQuery()
                 .SelectMany(sc => sc.Classroom!.Assignments)
+                .Where(a => !a.AssignmentSubmissions.Any(sub => sub.StudentId == id))
                 .CountAsync();
         }
 
