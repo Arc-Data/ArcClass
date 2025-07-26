@@ -8,6 +8,8 @@ import FileBlock from "./FileBlock"
 import { Dialog, DialogContent, DialogDescription, DialogHeader } from "./ui/dialog"
 
 const DisplayFiles = ({ materials, isEditing, getAssignmentLocal }) => {
+    console.log("Mentioned pogs")
+    console.log(materials)
     const { id } = useParams()
     const [files, setFiles] = useState([])
     const [maximizeImage, setMaximizeImage] = useState(false)
