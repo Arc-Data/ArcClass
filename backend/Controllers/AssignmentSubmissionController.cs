@@ -5,12 +5,16 @@ using System.Threading.Tasks;
 using backend.Dtos.AssignmentSubmission;
 using backend.Extensions;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
+    /* NOTE: Might need to consider separating teacher and student related submission functionalities
+    // into different controllers or methods for better organization and clarity.
+    */
     [ApiController]
     [Route("api/assignment/submissions")]
     public class AssignmentSubmissionController(
@@ -25,6 +29,9 @@ namespace backend.Controllers
         private readonly IFileStorageService _fileStorageService = fileStorageService;
         private readonly IAssignmentRepository _assignmentRepo = assignmentRepository;
 
+        /*
+        // This is specifically for Students to get their own submissions.
+        */
         [HttpGet]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetSubmissions()
@@ -48,8 +55,8 @@ namespace backend.Controllers
             {
                 return Forbid("You do not have permission to view this submission.");
             }
-            
-            return Ok(submission);
+
+            return Ok(submission.ToAssignmentSubmissionDto());
         }
 
         [HttpPut("{id}")]
