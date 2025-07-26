@@ -75,6 +75,21 @@ export const AssignmentDetailProvider = ({ children }) => {
         setSubmissionLoading(false)
     }
 
+    const getSubmissionsLocal = async () => {
+        try {
+            setSubmissionLoading(true)
+            console.log("This is running")
+            const response = await getSubmissions(id)
+            console.log(response)
+            setSubmissions(response)
+        }  
+        catch (error) {
+            console.log(error)
+        }   
+
+        setSubmissionLoading(false)
+    }
+
     const createSubmissionLocal = async (submissionData) => {
         try {
             setSubmissionLoading(true)
@@ -138,6 +153,7 @@ export const AssignmentDetailProvider = ({ children }) => {
         deleteAssignment,
 
         submission,
+        submissions,
         submissionLoading,
 
         updateAssignmentLocal,
@@ -146,6 +162,7 @@ export const AssignmentDetailProvider = ({ children }) => {
         updateSubmissionDescriptionLocal,
 
         getSubmissionLocal,
+        getSubmissionsLocal,
 
         error,
         setError,
