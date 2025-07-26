@@ -54,6 +54,7 @@ namespace backend.Repositories
         {
             return await _context.AssignmentSubmissions
                 .Include(s => s.Materials) 
+                .Include(s => s.Student)
                 .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.StudentId == studentId);
         }
 

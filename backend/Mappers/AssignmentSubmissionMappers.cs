@@ -15,8 +15,9 @@ namespace backend.Mappers
             {
                 Id = assignmentSubmission.Id,
                 AssignmentId = assignmentSubmission.AssignmentId,
-                Student = assignmentSubmission.Student?.ToStudentDto(),
+                Student = assignmentSubmission.Student.ToStudentDto(),
                 Grade = assignmentSubmission.Grade,
+                SubmissionDate = assignmentSubmission.SubmissionDate,
                 Materials = assignmentSubmission.Materials.Select(m => m.ToMaterialDto()).ToList(),
                 Description = assignmentSubmission.Description
             };

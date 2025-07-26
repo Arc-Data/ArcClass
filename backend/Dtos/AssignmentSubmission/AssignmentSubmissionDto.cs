@@ -13,6 +13,7 @@ namespace backend.Dtos.AssignmentSubmission
         public int AssignmentId { get; set; }
         public StudentDto Student { get; set; } = new StudentDto();
         public int Grade { get; set; }
+        public DateTime SubmissionDate { get; set; }
         public List<MaterialDto> Materials { get; set; } = new List<MaterialDto>();
         public string? Description { get; set; } = string.Empty;
     }
