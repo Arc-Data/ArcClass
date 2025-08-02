@@ -1,13 +1,14 @@
 import dayjs, { formatDateTime } from "@/utils/dayjs"
-import { Calendar, Download, FileText, ArrowLeft, Save } from "lucide-react"
+import { ArrowLeft, Calendar, Download, FileText, Save } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import { Card, CardContent } from "../ui/card"
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet"
 import { Input } from "../ui/input"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet"
 import { Textarea } from "../ui/textarea"
-import { useState, useEffect } from "react"
 
+// NOTE: Feedback is not a real property in the backend for now
 const getSubmissionStatus = (submission) => {
     if (!submission) return "Missing"
     if (submission.isGraded) return "Graded"
@@ -20,27 +21,51 @@ const getSubmissionStatusColor = (submission) => {
     return "bg-green-100 text-green-800 border-green-200"
 }
 
-const SubmissionSheet = ({ selectedStudent, onClose }) => {
+const SubmissionSheet = ({ selectedStudent, maxGrade, gradeSubmission, onClose }) => {
     const [gradingMode, setGradingMode] = useState(false)
-    const [grade, setGrade] = useState(0)
-    const [feedback, setFeedback] = useState("")
+    const [gradeData, setGradeData] = useState({
+        grade: 0,
+        feedback: ""
+    })
+    const [loading, setLoading] = useState(false)
 
     // Reset state when student changes
     useEffect(() => {
         if (selectedStudent?.submission) {
-            setGrade(selectedStudent.submission.grade || 0)
-            setFeedback(selectedStudent.submission.feedback || "")
+            setGradeData({
+                grade: selectedStudent.submission.grade || 0,
+                feedback: selectedStudent.submission.feedback || ""
+            })
         } else {
-            setGrade(0)
-            setFeedback("")
+            setGradeData({
+                grade: 0,
+                feedback: ""
+            })
         }
         setGradingMode(false)
     }, [selectedStudent])
 
-    const handleSaveGrade = () => {
-        // TODO: Implement API call to save grade
-        console.log("Saving grade:", grade, "Feedback:", feedback)
-        setGradingMode(false)
+    const handleGradeSubmission = async () => {
+        setLoading(true)
+        if (gradeData.grade < 0 || gradeData.grade > maxGrade) {
+            console.error("Grade must be between 0 and", maxGrade)
+            setLoading(false)
+            // replace with a toast or sonner later on
+            alert(`Grade must be between 0 and ${maxGrade}`)
+            return
+        }
+
+        try {
+            console.log("Saving grade:", gradeData.grade, "Feedback:", gradeData.feedback)
+            await gradeSubmission(selectedStudent.submission.id, gradeData)
+            setGradingMode(false)
+            // Optionally show success message or refresh data
+        } catch (error) {
+            console.error("Error grading submission:", error)
+            // Handle error (show toast, etc.)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const renderSubmissionContent = () => (
@@ -118,8 +143,8 @@ const SubmissionSheet = ({ selectedStudent, onClose }) => {
 
             <div className="flex items-center justify-between">
                 {selectedStudent.submission ? (
-                    <Button 
-                        variant="primary" 
+                    <Button
+                        variant="primary"
                         className="flex-1"
                         onClick={() => setGradingMode(true)}
                     >
@@ -134,11 +159,12 @@ const SubmissionSheet = ({ selectedStudent, onClose }) => {
         </div>
     )
 
+    // Fix the grading form inputs - replace undefined variables with gradeData state
     const renderGradingContent = () => (
         <div className="mt-6 space-y-6">
             <div className="flex items-center justify-between mb-4">
-                <Button 
-                    variant="ghost" 
+                <Button
+                    variant="ghost"
                     size="sm"
                     onClick={() => setGradingMode(false)}
                     className="flex items-center gap-2"
@@ -162,8 +188,11 @@ const SubmissionSheet = ({ selectedStudent, onClose }) => {
                             type="number"
                             min="0"
                             max="100"
-                            value={grade}
-                            onChange={(e) => setGrade(parseInt(e.target.value) || 0)}
+                            value={gradeData.grade}
+                            onChange={(e) => setGradeData(prev => ({
+                                ...prev,
+                                grade: e.target.value === "" ? "" : parseInt(e.target.value) || 0
+                            }))}
                             className="w-full"
                             placeholder="Enter grade..."
                         />
@@ -175,8 +204,11 @@ const SubmissionSheet = ({ selectedStudent, onClose }) => {
                         </label>
                         <Textarea
                             id="feedback"
-                            value={feedback}
-                            onChange={(e) => setFeedback(e.target.value)}
+                            value={gradeData.feedback}
+                            onChange={(e) => setGradeData(prev => ({
+                                ...prev,
+                                feedback: e.target.value
+                            }))}
                             className="w-full min-h-[120px]"
                             placeholder="Provide feedback for the student..."
                         />
@@ -185,20 +217,22 @@ const SubmissionSheet = ({ selectedStudent, onClose }) => {
             </Card>
 
             <div className="flex gap-3">
-                <Button 
-                    variant="outline" 
+                <Button
+                    variant="outline"
                     className="flex-1"
                     onClick={() => setGradingMode(false)}
+                    disabled={loading}
                 >
                     Cancel
                 </Button>
-                <Button 
-                    variant="primary" 
+                <Button
+                    variant="primary"
                     className="flex-1"
-                    onClick={handleSaveGrade}
+                    onClick={handleGradeSubmission}
+                    disabled={loading}
                 >
                     <Save className="w-4 h-4 mr-2" />
-                    Save Grade
+                    {loading ? "Saving..." : "Save Grade"}
                 </Button>
             </div>
         </div>
@@ -214,7 +248,6 @@ const SubmissionSheet = ({ selectedStudent, onClose }) => {
                                 {gradingMode ? "Grade Submission" : `${selectedStudent.student.fullName}'s Submission`}
                             </SheetTitle>
                         </SheetHeader>
-                        
                         {gradingMode ? renderGradingContent() : renderSubmissionContent()}
                     </>
                 )}

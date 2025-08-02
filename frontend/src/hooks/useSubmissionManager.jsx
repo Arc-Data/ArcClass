@@ -10,6 +10,15 @@ const useSubmissionManager = (authTokens) => {
         return response.data
     }
 
+    const gradeSubmission = async (submissionId, gradeData) => {
+        const response = await axios.put(`api/assignment/submissions/${submissionId}/grade`, gradeData, {
+            headers: {
+                Authorization: `Bearer ${authTokens.access}`
+            }
+        });
+        return response.data
+    }
+
     const getSubmissions = async (id) => {
         const response = await axios.get(`api/assignments/${id}/submissions`, {
             headers: {
@@ -69,7 +78,8 @@ const useSubmissionManager = (authTokens) => {
         getSubmissions,
         createSubmission,
         updateSubmissionDescription,
-        deleteSubmission
+        deleteSubmission,
+        gradeSubmission,
     }
 }
 

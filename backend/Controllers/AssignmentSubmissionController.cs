@@ -59,6 +59,30 @@ namespace backend.Controllers
             return Ok(submission.ToAssignmentSubmissionDto());
         }
 
+        [HttpPut("{id}/grade")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> GradeSubmission([FromRoute] int id, [FromBody] GradeSubmissionDto submissionDto)
+        {
+            var submission = await _assignmentSubmissionRepo.GetByIdAsync(id);
+            if (submission == null)
+            {
+                return NotFound("Submission not found.");
+            }
+
+            var assignment = await _assignmentRepo.GetByIdAsync(submission.AssignmentId);
+            if (assignment == null || assignment.Classroom?.TeacherId != User.GetId())
+            {
+                return Forbid("You do not have permission to grade this submission.");
+            }
+
+            submission.Grade = submissionDto.Grade;
+            submission.IsGraded = true;
+            submission.EvaluatedAt = DateTime.UtcNow;
+
+            await _assignmentSubmissionRepo.UpdateAsync(submission);
+            return NoContent();
+        }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> UpdateSubmission([FromRoute] int id, [FromBody] CreateAssignmentSubmissionDto submissionDto)
