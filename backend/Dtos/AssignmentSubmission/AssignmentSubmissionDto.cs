@@ -15,6 +15,7 @@ namespace backend.Dtos.AssignmentSubmission
         public int Grade { get; set; }
         public DateTime SubmissionDate { get; set; }
         public List<MaterialDto> Materials { get; set; } = new List<MaterialDto>();
+        public bool IsGraded { get; set; }
         public string? Description { get; set; } = string.Empty;
     }
 }

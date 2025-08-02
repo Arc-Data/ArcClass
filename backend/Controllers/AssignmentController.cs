@@ -26,7 +26,8 @@ namespace backend.Controllers
         IPostRepository postRepo,
         IMaterialRepository materialRepo,
         IFileStorageService fileStorageService,
-        IAssignmentSubmissionRepository assignmentSubmissionRepo
+        IAssignmentSubmissionRepository assignmentSubmissionRepo,
+        IStudentClassroomRepository studentClassroomRepo
         ) : ControllerBase
     {
         private readonly IAssignmentRepository _assignmentRepo = assignmentRepo;
@@ -36,6 +37,7 @@ namespace backend.Controllers
         private readonly IMaterialRepository _materialRepo = materialRepo;
         private readonly IFileStorageService _fileStorageService = fileStorageService;
         private readonly IAssignmentSubmissionRepository _assignmentSubmissionRepo = assignmentSubmissionRepo;
+        private readonly IStudentClassroomRepository _studentClassroomRepo = studentClassroomRepo;
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Teacher")]
@@ -285,8 +287,25 @@ namespace backend.Controllers
                 return Forbid("You do not have permission to view submissions for this assignment.");
             }
 
+            // Get all students in the classroom
+            var students = await _studentClassroomRepo.GetClassroomParticipants(assignment.ClassroomId);
+            
+            // Get all submissions for this assignment
             var submissions = await _assignmentSubmissionRepo.GetByAssignmentIdAsync(id);
-            return Ok(submissions.Select(s => s.ToAssignmentSubmissionDto()));
+            
+            // Create a dictionary for fast lookup of submissions by student ID
+            var submissionsByStudentId = submissions.ToDictionary(s => s.StudentId, s => s);
+            
+            // Build the response with all students and their submission status
+            var studentSubmissionStatuses = students.Select(student => new StudentSubmissionStatusDto
+            {
+                Student = student.ToStudentDto(),
+                Submission = submissionsByStudentId.ContainsKey(student.Id) 
+                    ? submissionsByStudentId[student.Id].ToAssignmentSubmissionDto() 
+                    : null
+            }).ToList();
+
+            return Ok(studentSubmissionStatuses);
         }
     }
 }

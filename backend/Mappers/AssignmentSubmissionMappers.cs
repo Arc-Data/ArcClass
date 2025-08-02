@@ -18,6 +18,7 @@ namespace backend.Mappers
                 Student = assignmentSubmission.Student.ToStudentDto(),
                 Grade = assignmentSubmission.Grade,
                 SubmissionDate = assignmentSubmission.SubmissionDate,
+                IsGraded = assignmentSubmission.IsGraded,
                 Materials = assignmentSubmission.Materials.Select(m => m.ToMaterialDto()).ToList(),
                 Description = assignmentSubmission.Description
             };

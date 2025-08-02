@@ -14,7 +14,8 @@ namespace backend.Models
         public DateTime SubmissionDate { get; set; }
         public string? Description { get; set; }
         public int Grade { get; set; }
-        
+        public bool IsGraded { get; set; } = false;
+        public DateTime? EvaluatedAt { get; set; }
         // Navigation properties
         public Assignment Assignment { get; set; } = null!;
         public Student Student { get; set; } = null!;
